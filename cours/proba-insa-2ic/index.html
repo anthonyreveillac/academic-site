@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Probabilités &amp; Statistique — INSA Toulouse 2025-2026</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+    :root {
+      --tc-brick: #C1440E;
+      --tc-rust: #A0320A;
+      --tc-sand: #F5EFE6;
+      --tc-warm: #EDE0D0;
+      --tc-gold: #D4853A;
+      --tc-dark: #2C1810;
+      --tc-cream: #FAF6F0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--tc-cream);
+      color: var(--tc-dark);
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--tc-brick), var(--tc-rust));
+      color: white;
+      padding: 2.5em 2em 2em;
+      text-align: center;
+    }
+
+    header .institution {
+      font-size: 0.85em;
+      opacity: 0.8;
+      margin-bottom: 0.3em;
+    }
+
+    header h1 {
+      font-family: 'Lora', serif;
+      font-size: 2em;
+      font-weight: 700;
+      margin-bottom: 0.2em;
+    }
+
+    header .subtitle {
+      font-size: 0.95em;
+      opacity: 0.85;
+      margin-bottom: 0.5em;
+    }
+
+    header .author {
+      font-size: 0.85em;
+      opacity: 0.75;
+      font-style: italic;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2em 1.5em;
+    }
+
+    .intro {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5em;
+      margin-bottom: 2em;
+      border-left: 4px solid var(--tc-gold);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .intro p {
+      line-height: 1.7;
+      font-size: 0.92em;
+      color: #444;
+    }
+
+    h2.section-title {
+      font-family: 'Lora', serif;
+      color: var(--tc-brick);
+      font-size: 1.3em;
+      margin-bottom: 1em;
+      padding-bottom: 0.3em;
+      border-bottom: 2px solid var(--tc-warm);
+    }
+
+    .chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 1.2em;
+    }
+
+    .chapter-card {
+      background: white;
+      border-radius: 10px;
+      padding: 1.2em 1.4em;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      border-top: 3px solid var(--tc-brick);
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .chapter-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 18px rgba(193,68,14,0.15);
+    }
+
+    .chapter-card .num {
+      display: inline-block;
+      background: var(--tc-brick);
+      color: white;
+      border-radius: 50%;
+      width: 2em;
+      height: 2em;
+      line-height: 2em;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.9em;
+      margin-bottom: 0.6em;
+    }
+
+    .chapter-card h3 {
+      font-family: 'Lora', serif;
+      color: var(--tc-dark);
+      font-size: 1.05em;
+      margin-bottom: 0.4em;
+    }
+
+    .chapter-card .topics {
+      font-size: 0.8em;
+      color: #777;
+      line-height: 1.6;
+    }
+
+    .chapter-card .topics span {
+      display: inline-block;
+      background: var(--tc-sand);
+      border-radius: 3px;
+      padding: 0.1em 0.4em;
+      margin: 0.1em 0.2em 0.1em 0;
+      font-size: 0.9em;
+    }
+
+    .chapter-card .arrow {
+      float: right;
+      color: var(--tc-brick);
+      font-size: 1.2em;
+      margin-top: -0.3em;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2em;
+      font-size: 0.82em;
+      color: #999;
+      border-top: 1px solid var(--tc-warm);
+      margin-top: 3em;
+    }
+
+    @media (max-width: 600px) {
+      .chapters-grid { grid-template-columns: 1fr; }
+      header h1 { font-size: 1.5em; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="institution">INSA Toulouse — Département Génie Civil — 2-IC — 2025-2026</div>
+  <h1>Probabilités &amp; Statistique</h1>
+  <div class="subtitle">Une introduction aux probabilités et à la statistique</div>
+  <div class="author">Anthony Réveillac</div>
+</header>
+
+<main>
+  <div class="intro">
+    <p>Ce cours introduit les outils fondamentaux de la modélisation probabiliste et de l'inférence statistique, avec des applications concrètes au génie civil : fiabilité des structures, propagation d'incertitude, résistance caractéristique des matériaux, probabilité de défaillance.</p>
+  </div>
+
+  <h2 class="section-title">Cours — Transparents par chapitre</h2>
+
+  <div class="chapters-grid">
+
+    <a href="chapitre1/index.html" class="chapter-card">
+      <div class="num">1</div>
+      <span class="arrow">→</span>
+      <h3>Introduction à la théorie des probabilités</h3>
+      <div class="topics">
+        <span>Univers Ω</span>
+        <span>Événements</span>
+        <span>Axiomes de Kolmogorov</span>
+        <span>Probabilité uniforme</span>
+      </div>
+    </a>
+
+    <a href="chapitre2/index.html" class="chapter-card">
+      <div class="num">2</div>
+      <span class="arrow">→</span>
+      <h3>Probabilités conditionnelles &amp; Indépendance</h3>
+      <div class="topics">
+        <span>P[A|B]</span>
+        <span>Probabilités totales</span>
+        <span>Formule de Bayes</span>
+        <span>Indépendance</span>
+      </div>
+    </a>
+
+    <a href="chapitre3/index.html" class="chapter-card">
+      <div class="num">3</div>
+      <span class="arrow">→</span>
+      <h3>Variables aléatoires</h3>
+      <div class="topics">
+        <span>V.a.r. discrètes</span>
+        <span>V.a.r. continues</span>
+        <span>Densité</span>
+        <span>Bernoulli / Binomiale / Poisson / Normale</span>
+      </div>
+    </a>
+
+    <a href="chapitre4/index.html" class="chapter-card">
+      <div class="num">4</div>
+      <span class="arrow">→</span>
+      <h3>Manipulation de variables aléatoires</h3>
+      <div class="topics">
+        <span>Espérance</span>
+        <span>Variance</span>
+        <span>Loi d'un couple</span>
+        <span>Indépendance de v.a.r.</span>
+        <span>Gaussiennes</span>
+      </div>
+    </a>
+
+    <a href="chapitre5/index.html" class="chapter-card">
+      <div class="num">5</div>
+      <span class="arrow">→</span>
+      <h3>Théorèmes limites</h3>
+      <div class="topics">
+        <span>Inégalité de Chebychev</span>
+        <span>Loi des grands nombres</span>
+        <span>Théorème central limite</span>
+        <span>Approximation binomiale</span>
+      </div>
+    </a>
+
+    <a href="chapitre6/index.html" class="chapter-card">
+      <div class="num">6</div>
+      <span class="arrow">→</span>
+      <h3>Estimation statistique</h3>
+      <div class="topics">
+        <span>Estimateur consistant</span>
+        <span>Sans biais</span>
+        <span>Intervalles de confiance</span>
+        <span>Loi de Student / χ²</span>
+      </div>
+    </a>
+
+    <a href="chapitre7/index.html" class="chapter-card">
+      <div class="num">7</div>
+      <span class="arrow">→</span>
+      <h3>Tests d'hypothèses</h3>
+      <div class="topics">
+        <span>H₀ vs H₁</span>
+        <span>Risque α et β</span>
+        <span>Test de Student</span>
+        <span>Puissance</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div style="margin-top:2em;background:white;border-radius:10px;padding:1.2em 1.4em;border-left:4px solid var(--tc-gold);box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+    <strong style="color:var(--tc-brick);">Navigation dans les slides :</strong>
+    <span style="font-size:0.88em;color:#555;"> Flèches ← → pour naviguer entre slides · Barre espace pour avancer · F pour plein écran · S pour les notes orateur</span>
+    <br/><strong style="color:var(--tc-brick);">Preuves :</strong>
+    <span style="font-size:0.88em;color:#555;"> Cliquer sur "▶ Voir la preuve" pour afficher/masquer les démonstrations.</span>
+  </div>
+</main>
+
+<footer>
+  Cours de Probabilités &amp; Statistique — INSA Toulouse — Anthony Réveillac<br/>
+  Basé sur les polycopiés de T. Benoist, G. Copros, S. Grusea, B. Laquerrière et C-E. Rabier
+</footer>
+
+</body>
+</html>

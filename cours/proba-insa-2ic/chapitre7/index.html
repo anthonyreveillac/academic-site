@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chapitre 7 — Tests d'hypothèses</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/white.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"/>
+  <link rel="stylesheet" href="../assets/theme-terracotta.css"/>
+  <style>.reveal-viewport{background:#FAF6F0;}.reveal .slides section{padding:0.5em 1em;}</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- TITRE -->
+<section>
+  <div class="chapter-title" style="margin-top:1em;">
+    <div style="font-size:0.65em;color:rgba(255,255,255,0.75);margin-bottom:0.3em;">INSA Toulouse — Génie Civil 2-IC — 2026-2027</div>
+    <h1 style="font-size:1.4em;margin-bottom:0.2em;">Probabilités &amp; Statistique</h1>
+    <hr style="border-color:rgba(255,255,255,0.3);margin:0.5em 0;"/>
+    <h2 style="font-size:1.1em;color:rgba(255,255,255,0.95);border:none;">Chapitre 7</h2>
+    <h2 style="font-size:1.3em;color:white;border:none;margin-top:0.1em;">Tests d'hypothèses</h2>
+    <p class="subtitle">Anthony Réveillac</p>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section>
+  <h2>Plan du chapitre</h2>
+  <ol style="font-size:0.9em;line-height:2.1;">
+    <li>Exemple introductif — les faiseurs de pluie</li>
+    <li>Les deux types d'erreur</li>
+    <li>Démarche générale d'un test</li>
+    <li>Tests sur la moyenne (variance connue)</li>
+    <li>Tests sur la moyenne (variance inconnue)</li>
+    <li>Cas non gaussien</li>
+  </ol>
+</section>
+
+<!-- MOTIVATION -->
+<section>
+  <h2>7.1 — Motivation : qu'est-ce qu'un test ?</h2>
+  <div class="box-rem" style="margin-bottom:0.6em;font-size:0.85em;">
+    Dans tous ces transparents on se place sur un espace probabilisé $(\Omega, \mathcal{A}, \mathbb{P})$.
+  </div>
+  <div class="cols-2" style="gap:0.7em;font-size:0.85em;">
+    <div>
+      <div class="box-rem">
+        <div class="box-title">Estimation vs Test</div>
+        <ul style="margin-left:1em;">
+          <li><strong>Estimation</strong> : réponse <em>quantitative</em> (valeur numérique)</li>
+          <li><strong>Test</strong> : réponse <em>qualitative</em> (rejet / acceptation d'une hypothèse)</li>
+        </ul>
+      </div>
+      <div class="box-def" style="margin-top:0.5em;">
+        <div class="box-title">Structure d'un test</div>
+        On oppose deux hypothèses :
+        <ul style="margin-left:1em;margin-top:0.3em;">
+          <li>$H_0$ : <strong>hypothèse nulle</strong> (statu quo)</li>
+          <li>$H_1$ : <strong>hypothèse alternative</strong></li>
+        </ul>
+        On décide de rejeter $H_0$ ou non.
+      </div>
+    </div>
+    <div>
+      <div class="box-ex">
+        <div class="box-title">☁️ Exemple introductif — Les faiseurs de pluie</div>
+        Niveau naturel de pluie en Beauce : $X \sim \mathcal{N}(600, 100^2)$ (mm/an).
+        <br/>Des entrepreneurs prétendent augmenter la moyenne de 50mm. On teste :
+        $$H_0 : m = 600 \quad \text{contre} \quad H_1 : m = 650$$
+        Données sur 9 ans : $\bar{x}_9 = 610.2$ mm.
+        <br/>Que conclure ?
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEUX TYPES D'ERREUR -->
+<section>
+  <h2>7.2 — Les deux types d'erreur</h2>
+  <div style="display:flex;justify-content:center;margin:0.4em 0;">
+    <table style="border-collapse:collapse;font-size:0.82em;width:80%;">
+      <thead>
+        <tr style="background:var(--tc-brick);color:white;">
+          <th style="padding:0.5em;border:1px solid #ddd;"></th>
+          <th style="padding:0.5em;border:1px solid #ddd;">$H_0$ vraie</th>
+          <th style="padding:0.5em;border:1px solid #ddd;">$H_0$ fausse</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:var(--tc-warm);">
+          <td style="padding:0.45em;border:1px solid #ddd;font-weight:600;">On rejette $H_0$</td>
+          <td style="padding:0.45em;border:1px solid #ddd;text-align:center;color:#C1440E;font-weight:600;">Erreur de type I<br/>(risque $\alpha$)</td>
+          <td style="padding:0.45em;border:1px solid #ddd;text-align:center;color:#3D7A4A;font-weight:600;">Décision correcte<br/>(puissance $1-\beta$)</td>
+        </tr>
+        <tr>
+          <td style="padding:0.45em;border:1px solid #ddd;font-weight:600;">On accepte $H_0$</td>
+          <td style="padding:0.45em;border:1px solid #ddd;text-align:center;color:#3D7A4A;font-weight:600;">Décision correcte</td>
+          <td style="padding:0.45em;border:1px solid #ddd;text-align:center;color:#2A5C8A;font-weight:600;">Erreur de type II<br/>(risque $\beta$)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="cols-2" style="font-size:0.8em;gap:0.6em;margin-top:0.4em;">
+    <div class="box-ex" style="border-left-color:var(--tc-brick);">
+      <div class="box-title" style="color:var(--tc-brick);">⚠️ Erreur de type I ($\alpha$, maîtrisée)</div>
+      Rejeter $H_0$ alors qu'elle est vraie.
+      <br/><em>Ex : croire les faiseurs de pluie qui sont des charlatans.</em>
+      <br/>On fixe $\alpha$ (souvent 5%) et on calibre le test en conséquence.
+    </div>
+    <div class="box-ex" style="border-left-color:var(--tc-blue);">
+      <div class="box-title" style="color:var(--tc-blue);">ℹ️ Erreur de type II ($\beta$, non maîtrisée)</div>
+      Accepter $H_0$ alors qu'elle est fausse.
+      <br/><em>Ex : ne pas croire des faiseurs de pluie efficaces.</em>
+      <br/>La <strong>puissance</strong> $1-\beta$ mesure la capacité du test à détecter $H_1$.
+    </div>
+  </div>
+</section>
+
+<!-- DÉMARCHE GÉNÉRALE -->
+<section>
+  <h2>7.3 — Démarche générale d'un test</h2>
+  <div style="display:flex;flex-direction:column;gap:0.4em;font-size:0.83em;">
+    <div style="display:flex;align-items:flex-start;gap:0.7em;">
+      <div style="background:var(--tc-brick);color:white;border-radius:50%;width:1.8em;height:1.8em;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:0.9em;">1</div>
+      <div>Choisir $H_0$ et $H_1$. <strong>Fixer le risque $\alpha$</strong> (souvent 5%).</div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:0.7em;">
+      <div style="background:var(--tc-brick);color:white;border-radius:50%;width:1.8em;height:1.8em;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:0.9em;">2</div>
+      <div>Choisir la <strong>statistique de test</strong> $T_n$ (cohérente avec le paramètre à tester).</div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:0.7em;">
+      <div style="background:var(--tc-brick);color:white;border-radius:50%;width:1.8em;height:1.8em;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:0.9em;">3</div>
+      <div>Construire la <strong>règle de décision</strong> (forme de la région de rejet, dictée par $H_1$).</div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:0.7em;">
+      <div style="background:var(--tc-brick);color:white;border-radius:50%;width:1.8em;height:1.8em;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:0.9em;">4</div>
+      <div><strong>Calibrer</strong> le seuil $t$ à partir de $\alpha$ et de la loi de $T_n$ sous $H_0$.</div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:0.7em;">
+      <div style="background:var(--tc-brick);color:white;border-radius:50%;width:1.8em;height:1.8em;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:0.9em;">5</div>
+      <div>Calculer la <strong>valeur observée</strong> $t_n^{\text{obs}}$ de $T_n$ sur les données.</div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:0.7em;">
+      <div style="background:var(--tc-brick);color:white;border-radius:50%;width:1.8em;height:1.8em;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:0.9em;">6</div>
+      <div><strong>Conclure</strong> : rejeter $H_0$ si la valeur observée est dans la région de rejet.</div>
+    </div>
+    <div style="display:flex;align-items:flex-start;gap:0.7em;">
+      <div style="background:var(--tc-brick);color:white;border-radius:50%;width:1.8em;height:1.8em;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:0.9em;">7</div>
+      <div>Calculer la <strong>puissance</strong> $1-\beta$ du test.</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTS VARIANCE CONNUE -->
+<section>
+  <h2>7.4 — Test sur la moyenne (variance connue)</h2>
+  <p style="font-size:0.82em;">$X_i \sim \mathcal{N}(m, \sigma^2)$, $\sigma$ connu. $H_0 : m = m_0$.</p>
+  <p style="font-size:0.82em;"><strong>Statistique de test :</strong> $Z_n = \dfrac{\bar{X}_n - m_0}{\sigma/\sqrt{n}}$, qui suit $\mathcal{N}(0,1)$ sous $H_0$.</p>
+
+  <div style="overflow-x:auto;font-size:0.78em;margin-top:0.4em;">
+    <table style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="background:var(--tc-brick);color:white;">
+          <th style="padding:0.4em;">$H_1$</th>
+          <th style="padding:0.4em;">Région de rejet</th>
+          <th style="padding:0.4em;">Seuil critique</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:var(--tc-warm);">
+          <td style="padding:0.4em;">$m > m_0$ (unilatéral droite)</td>
+          <td style="padding:0.4em;text-align:center;">$\bar{X}_n > t$</td>
+          <td style="padding:0.4em;text-align:center;">$t = m_0 + z_{1-\alpha}\dfrac{\sigma}{\sqrt{n}}$</td>
+        </tr>
+        <tr>
+          <td style="padding:0.4em;">$m &lt; m_0$ (unilatéral gauche)</td>
+          <td style="padding:0.4em;text-align:center;">$\bar{X}_n &lt; t$</td>
+          <td style="padding:0.4em;text-align:center;">$t = m_0 - z_{1-\alpha}\dfrac{\sigma}{\sqrt{n}}$</td>
+        </tr>
+        <tr style="background:var(--tc-warm);">
+          <td style="padding:0.4em;">$m \neq m_0$ (bilatéral)</td>
+          <td style="padding:0.4em;text-align:center;">$|\bar{X}_n - m_0| > t$</td>
+          <td style="padding:0.4em;text-align:center;">$t = z_{1-\alpha/2}\dfrac{\sigma}{\sqrt{n}}$</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box-ex" style="margin-top:0.5em;font-size:0.8em;">
+    <div class="box-title">☁️ Retour sur l'exemple — faiseurs de pluie ($\alpha = 5\%$, $H_1 : m > 600$)</div>
+    $t = 600 + 1.64 \times 100/3 \approx 655$ mm.
+    <br/>$\bar{x}_9 = 610.2 < 655$ → <strong>On n'est pas en mesure de rejeter $H_0$</strong>.
+    <br/><em>L'insémination n'a pas prouvé son efficacité au risque 5%.</em>
+  </div>
+</section>
+
+<!-- TEST STUDENT -->
+<section>
+  <h2>7.5 — Test de Student (variance inconnue)</h2>
+  <p style="font-size:0.82em;">$X_i \sim \mathcal{N}(m, \sigma^2)$, $\sigma$ <strong>inconnu</strong>. $H_0 : m = m_0$.</p>
+
+  <div class="box-thm">
+    <div class="box-title">Statistique de test — Test de Student</div>
+    $$T_n = \frac{\bar{X}_n - m_0}{S_n/\sqrt{n}} \;\sim\; \mathcal{T}_{n-1} \text{ sous } H_0$$
+    On remplace $\sigma$ par la variance empirique $S_n$.
+  </div>
+
+  <div style="overflow-x:auto;font-size:0.8em;margin-top:0.5em;">
+    <table style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="background:var(--tc-brick);color:white;">
+          <th style="padding:0.4em;">$H_1$</th>
+          <th style="padding:0.4em;">Région de rejet</th>
+          <th style="padding:0.4em;">Seuil critique</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:var(--tc-warm);">
+          <td style="padding:0.4em;">$m > m_0$</td>
+          <td style="padding:0.4em;text-align:center;">$T_n > t$</td>
+          <td style="padding:0.4em;text-align:center;">$t = t_{1-\alpha,n-1}$ (table Student)</td>
+        </tr>
+        <tr>
+          <td style="padding:0.4em;">$m &lt; m_0$</td>
+          <td style="padding:0.4em;text-align:center;">$T_n &lt; -t$</td>
+          <td style="padding:0.4em;text-align:center;">$t = t_{1-\alpha,n-1}$</td>
+        </tr>
+        <tr style="background:var(--tc-warm);">
+          <td style="padding:0.4em;">$m \neq m_0$</td>
+          <td style="padding:0.4em;text-align:center;">$|T_n| > t$</td>
+          <td style="padding:0.4em;text-align:center;">$t = t_{1-\alpha/2,n-1}$</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="box-rem" style="margin-top:0.5em;font-size:0.8em;">
+    Pour $n$ grand ($\geq 30$) : $\mathcal{T}_{n-1} \approx \mathcal{N}(0,1)$. On peut utiliser les quantiles de la loi normale.
+  </div>
+</section>
+
+<!-- CAS NON GAUSSIEN -->
+<section>
+  <h2>7.6 — Cas non gaussien</h2>
+  <div class="box-rem" style="font-size:0.85em;">
+    Si les $X_i$ ne sont pas gaussiens mais $n$ est grand (en pratique $n \geq 30$) :
+    <br/>Par le <strong>TCL</strong>, $\bar{X}_n \approx \mathcal{N}\!\left(m, \dfrac{\sigma^2}{n}\right)$.
+    <br/>Les mêmes procédures de test s'appliquent <strong>asymptotiquement</strong>.
+  </div>
+
+  <div class="box-ex" style="margin-top:0.7em;font-size:0.82em;">
+    <div class="box-title">⚛️ Exemple — Eau potable</div>
+    Niveau de radioactivité $m$ (picocuries/L). Seuil : $m = 5$.
+    $$H_0 : m \geq 5 \quad \text{(eau non potable)} \quad \text{contre} \quad H_1 : m &lt; 5 \quad \text{(eau potable)}$$
+    <div class="cols-2" style="margin-top:0.4em;">
+      <div>
+        <strong>Erreur de type I :</strong> déclarer l'eau potable alors qu'elle est toxique.
+        <br/>→ <em>Conséquence grave !</em>
+      </div>
+      <div>
+        <strong>Erreur de type II :</strong> jeter de l'eau potable par précaution.
+        <br/>→ <em>Moins grave.</em>
+      </div>
+    </div>
+    <br/><strong>L'erreur de type I doit être maîtrisée en priorité.</strong>
+  </div>
+</section>
+
+<!-- RÉSUMÉ GLOBAL -->
+<section>
+  <h2>Résumé du Chapitre 7</h2>
+  <div class="cols-2" style="font-size:0.78em;gap:0.7em;">
+    <div>
+      <div class="box-def">
+        <div class="box-title">🔑 Structure d'un test</div>
+        $H_0$ vs $H_1$ — Fixer $\alpha$ — Statistique de test — Seuil — Conclure
+      </div>
+      <div class="box-prop" style="margin-top:0.5em;">
+        <div class="box-title">📊 Tests sur $m$ ($\sigma$ connu)</div>
+        Stat. de test : $Z_n = \dfrac{\bar{X}_n - m_0}{\sigma/\sqrt{n}} \sim \mathcal{N}(0,1)$
+      </div>
+      <div class="box-prop" style="margin-top:0.5em;">
+        <div class="box-title">📊 Tests de Student ($\sigma$ inconnu)</div>
+        Stat. de test : $T_n = \dfrac{\bar{X}_n - m_0}{S_n/\sqrt{n}} \sim \mathcal{T}_{n-1}$
+      </div>
+    </div>
+    <div>
+      <div class="box-rem">
+        <div class="box-title">⚡ Erreurs</div>
+        <ul style="margin-left:1em;">
+          <li>Type I ($\alpha$) : rejeter $H_0$ vraie → <em>maîtrisée</em></li>
+          <li>Type II ($\beta$) : accepter $H_0$ fausse → <em>non maîtrisée</em></li>
+          <li>Puissance = $1-\beta$</li>
+        </ul>
+      </div>
+      <div style="margin-top:0.7em;text-align:center;">
+        <div style="background:var(--tc-green);color:white;border-radius:8px;padding:0.8em;font-size:0.85em;">
+          🎓 <strong>Fin du cours</strong><br/>Probabilités &amp; Statistique<br/>INSA Toulouse 2026-2027
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ILLUSTRATION ACCEPTATION / REJET -->
+<section>
+  <h2>Illustration — Acceptation et rejet d'un test</h2>
+  <p style="font-size:0.8em;margin-bottom:0.4em;">Test unilatéral droit : $H_0 : m = m_0$ contre $H_1 : m > m_0$, au niveau $\alpha = 5\%$ ($z_{95\%} = 1.645$).</p>
+
+  <div class="cols-2" style="gap:1em;">
+
+    <!-- CAS 1 : ACCEPTATION -->
+    <div>
+      <div style="text-align:center;font-size:0.82em;font-weight:600;color:#3D7A4A;margin-bottom:0.3em;">✅ On ne rejette pas $H_0$ — $Z_{obs} = 0.8$</div>
+      <svg viewBox="0 0 300 185" width="100%" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif;display:block;">
+        <!-- Acceptance zone -->
+        <polygon points="17.0,160 19.4,159.7 21.9,159.6 24.3,159.5 26.8,159.4 29.2,159.3 31.7,159.2 34.1,159.0 36.6,158.8 39.0,158.5 41.4,158.2 43.9,157.8 46.3,157.4 48.8,156.9 51.2,156.3 53.7,155.7 56.1,154.9 58.5,154.0 61.0,153.1 63.4,152.0 65.9,150.7 68.3,149.3 70.8,147.7 73.2,146.0 75.7,144.1 78.1,142.0 80.5,139.7 83.0,137.3 85.4,134.6 87.9,131.7 90.3,128.6 92.8,125.4 95.2,121.9 97.6,118.3 100.1,114.5 102.5,110.6 105.0,106.6 107.4,102.5 109.9,98.3 112.3,94.1 114.8,89.9 117.2,85.8 119.6,81.7 122.1,77.8 124.5,74.0 127.0,70.4 129.4,67.0 131.9,63.9 134.3,61.1 136.7,58.6 139.2,56.6 141.6,54.9 144.1,53.6 146.5,52.7 149.0,52.3 151.4,52.4 153.9,52.8 156.3,53.8 158.7,55.1 161.2,56.9 163.6,59.0 166.1,61.5 168.5,64.3 171.0,67.5 173.4,70.9 175.9,74.5 178.3,78.4 180.7,82.3 183.2,86.4 185.6,90.6 188.1,94.8 190.5,99.0 193.0,103.1 195.4,107.2 197.8,111.2 200.3,115.1 202.7,118.9 205.2,122.5 207.6,125.9 210.1,129.1 212.5,132.2 212.5,160 17.0,160" fill="rgba(61,122,74,0.15)"/>
+        <!-- Rejection zone -->
+        <polygon points="212.5,160 212.5,132.2 213.4,133.2 214.3,134.2 215.2,135.2 216.0,136.2 216.9,137.1 217.8,138.1 218.7,139.0 219.6,139.8 220.4,140.7 221.3,141.5 222.2,142.3 223.1,143.1 224.0,143.8 224.8,144.5 225.7,145.2 226.6,145.9 227.5,146.5 228.4,147.2 229.3,147.8 230.1,148.3 231.0,148.9 231.9,149.4 232.8,150.0 233.7,150.5 234.5,150.9 235.4,151.4 236.3,151.8 237.2,152.3 238.1,152.7 238.9,153.0 239.8,153.4 240.7,153.8 241.6,154.1 242.5,154.4 243.3,154.7 244.2,155.0 245.1,155.3 246.0,155.6 246.9,155.8 247.8,156.1 248.6,156.3 249.5,156.5 250.4,156.7 251.3,156.9 252.2,157.1 253.0,157.3 253.9,157.4 254.8,157.6 255.7,157.7 256.6,157.9 257.4,158.0 258.3,158.1 259.2,158.3 260.1,158.4 261.0,158.5 261.9,158.6 262.7,158.7 263.6,158.8 264.5,158.8 265.4,158.9 266.3,159.0 267.1,159.1 268.0,159.1 268.9,159.2 269.8,159.3 270.7,159.3 271.5,159.4 272.4,159.4 273.3,159.4 274.2,159.5 275.1,159.5 276.0,159.6 276.8,159.6 277.7,159.6 278.6,159.6 279.5,159.7 280.4,159.7 281.2,159.7 282.1,159.7 283.0,159.8 283.0,160" fill="rgba(193,68,14,0.3)"/>
+        <!-- Curve -->
+        <polyline points="17.0,159.8 18.8,159.7 20.5,159.7 22.3,159.6 24.1,159.6 25.9,159.5 27.6,159.4 29.4,159.3 31.2,159.2 33.0,159.1 34.7,158.9 36.5,158.8 38.3,158.6 40.1,158.4 41.8,158.1 43.6,157.9 45.4,157.6 47.1,157.2 48.9,156.9 50.7,156.5 52.5,156.0 54.2,155.5 56.0,154.9 57.8,154.3 59.6,153.7 61.3,152.9 63.1,152.1 64.9,151.2 66.7,150.3 68.4,149.2 70.2,148.1 72.0,146.9 73.7,145.6 75.5,144.2 77.3,142.7 79.1,141.1 80.8,139.4 82.6,137.6 84.4,135.7 86.2,133.7 87.9,131.6 89.7,129.4 91.5,127.1 93.3,124.7 95.0,122.2 96.8,119.6 98.6,116.9 100.3,114.1 102.1,111.3 103.9,108.4 105.7,105.5 107.4,102.5 109.2,99.5 111.0,96.4 112.8,93.4 114.5,90.3 116.3,87.3 118.1,84.3 119.9,81.4 121.6,78.5 123.4,75.7 125.2,73.0 126.9,70.4 128.7,67.9 130.5,65.6 132.3,63.4 134.0,61.4 135.8,59.5 137.6,57.9 139.4,56.4 141.1,55.2 142.9,54.1 144.7,53.3 146.5,52.8 148.2,52.4 150.0,52.3 151.8,52.4 153.5,52.8 155.3,53.3 157.1,54.1 158.9,55.2 160.6,56.4 162.4,57.9 164.2,59.5 166.0,61.4 167.7,63.4 169.5,65.6 171.3,67.9 173.1,70.4 174.8,73.0 176.6,75.7 178.4,78.5 180.1,81.4 181.9,84.3 183.7,87.3 185.5,90.3 187.2,93.4 189.0,96.4 190.8,99.5 192.6,102.5 194.3,105.5 196.1,108.4 197.9,111.3 199.7,114.1 201.4,116.9 203.2,119.6 205.0,122.2 206.7,124.7 208.5,127.1 210.3,129.4 212.1,131.6 213.8,133.7 215.6,135.7 217.4,137.6 219.2,139.4 220.9,141.1 222.7,142.7 224.5,144.2 226.3,145.6 228.0,146.9 229.8,148.1 231.6,149.2 233.3,150.3 235.1,151.2 236.9,152.1 238.7,152.9 240.4,153.7 242.2,154.3 244.0,154.9 245.8,155.5 247.5,156.0 249.3,156.5 251.1,156.9 252.9,157.2 254.6,157.6 256.4,157.9 258.2,158.1 259.9,158.4 261.7,158.6 263.5,158.8 265.3,158.9 267.0,159.1 268.8,159.2 270.6,159.3 272.4,159.4 274.1,159.5 275.9,159.6 277.7,159.6 279.5,159.7 281.2,159.7 283.0,159.8" fill="none" stroke="#2C1810" stroke-width="2"/>
+        <!-- Axis -->
+        <line x1="10" y1="160" x2="290" y2="160" stroke="#6B3A2A" stroke-width="1.5"/>
+        <!-- Quantile line -->
+        <line x1="212.5" y1="132.2" x2="212.5" y2="160" stroke="#C1440E" stroke-width="2"/>
+        <text x="212.5" y="172" font-size="10" fill="#C1440E" text-anchor="middle" font-weight="700">z₉₅%</text>
+        <text x="212.5" y="183" font-size="9" fill="#C1440E" text-anchor="middle">=1.645</text>
+        <!-- Z_obs -->
+        <line x1="180.4" y1="81.4" x2="180.4" y2="160" stroke="#3D7A4A" stroke-width="2" stroke-dasharray="5,3"/>
+        <circle cx="180.4" cy="81.4" r="5" fill="#3D7A4A"/>
+        <text x="165" y="172" font-size="10" fill="#3D7A4A" text-anchor="middle" font-weight="700">Zobs</text>
+        <text x="165" y="183" font-size="9" fill="#3D7A4A" text-anchor="middle">=0.8</text>
+        <!-- Labels -->
+        <text x="0" y="160" font-size="9" fill="#6B3A2A">0</text>
+        <text x="100" y="130" font-size="10" fill="#3D7A4A" text-anchor="middle">Zone d'acceptation</text>
+        <text x="255" y="148" font-size="9" fill="#C1440E" text-anchor="middle">Rejet</text>
+        <text x="255" y="158" font-size="9" fill="#C1440E" text-anchor="middle">α=5%</text>
+      </svg>
+    </div>
+
+    <!-- CAS 2 : REJET -->
+    <div>
+      <div style="text-align:center;font-size:0.82em;font-weight:600;color:#C1440E;margin-bottom:0.3em;">❌ On rejette $H_0$ — $Z_{obs} = 2.3$</div>
+      <svg viewBox="0 0 300 185" width="100%" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif;display:block;">
+        <!-- Acceptance zone -->
+        <polygon points="17.0,160 19.4,159.7 21.9,159.6 24.3,159.5 26.8,159.4 29.2,159.3 31.7,159.2 34.1,159.0 36.6,158.8 39.0,158.5 41.4,158.2 43.9,157.8 46.3,157.4 48.8,156.9 51.2,156.3 53.7,155.7 56.1,154.9 58.5,154.0 61.0,153.1 63.4,152.0 65.9,150.7 68.3,149.3 70.8,147.7 73.2,146.0 75.7,144.1 78.1,142.0 80.5,139.7 83.0,137.3 85.4,134.6 87.9,131.7 90.3,128.6 92.8,125.4 95.2,121.9 97.6,118.3 100.1,114.5 102.5,110.6 105.0,106.6 107.4,102.5 109.9,98.3 112.3,94.1 114.8,89.9 117.2,85.8 119.6,81.7 122.1,77.8 124.5,74.0 127.0,70.4 129.4,67.0 131.9,63.9 134.3,61.1 136.7,58.6 139.2,56.6 141.6,54.9 144.1,53.6 146.5,52.7 149.0,52.3 151.4,52.4 153.9,52.8 156.3,53.8 158.7,55.1 161.2,56.9 163.6,59.0 166.1,61.5 168.5,64.3 171.0,67.5 173.4,70.9 175.9,74.5 178.3,78.4 180.7,82.3 183.2,86.4 185.6,90.6 188.1,94.8 190.5,99.0 193.0,103.1 195.4,107.2 197.8,111.2 200.3,115.1 202.7,118.9 205.2,122.5 207.6,125.9 210.1,129.1 212.5,132.2 212.5,160 17.0,160" fill="rgba(61,122,74,0.15)"/>
+        <!-- Rejection zone -->
+        <polygon points="212.5,160 212.5,132.2 213.4,133.2 214.3,134.2 215.2,135.2 216.0,136.2 216.9,137.1 217.8,138.1 218.7,139.0 219.6,139.8 220.4,140.7 221.3,141.5 222.2,142.3 223.1,143.1 224.0,143.8 224.8,144.5 225.7,145.2 226.6,145.9 227.5,146.5 228.4,147.2 229.3,147.8 230.1,148.3 231.0,148.9 231.9,149.4 232.8,150.0 233.7,150.5 234.5,150.9 235.4,151.4 236.3,151.8 237.2,152.3 238.1,152.7 238.9,153.0 239.8,153.4 240.7,153.8 241.6,154.1 242.5,154.4 243.3,154.7 244.2,155.0 245.1,155.3 246.0,155.6 246.9,155.8 247.8,156.1 248.6,156.3 249.5,156.5 250.4,156.7 251.3,156.9 252.2,157.1 253.0,157.3 253.9,157.4 254.8,157.6 255.7,157.7 256.6,157.9 257.4,158.0 258.3,158.1 259.2,158.3 260.1,158.4 261.0,158.5 261.9,158.6 262.7,158.7 263.6,158.8 264.5,158.8 265.4,158.9 266.3,159.0 267.1,159.1 268.0,159.1 268.9,159.2 269.8,159.3 270.7,159.3 271.5,159.4 272.4,159.4 273.3,159.4 274.2,159.5 275.1,159.5 276.0,159.6 276.8,159.6 277.7,159.6 278.6,159.6 279.5,159.7 280.4,159.7 281.2,159.7 282.1,159.7 283.0,159.8 283.0,160" fill="rgba(193,68,14,0.3)"/>
+        <!-- Curve -->
+        <polyline points="17.0,159.8 18.8,159.7 20.5,159.7 22.3,159.6 24.1,159.6 25.9,159.5 27.6,159.4 29.4,159.3 31.2,159.2 33.0,159.1 34.7,158.9 36.5,158.8 38.3,158.6 40.1,158.4 41.8,158.1 43.6,157.9 45.4,157.6 47.1,157.2 48.9,156.9 50.7,156.5 52.5,156.0 54.2,155.5 56.0,154.9 57.8,154.3 59.6,153.7 61.3,152.9 63.1,152.1 64.9,151.2 66.7,150.3 68.4,149.2 70.2,148.1 72.0,146.9 73.7,145.6 75.5,144.2 77.3,142.7 79.1,141.1 80.8,139.4 82.6,137.6 84.4,135.7 86.2,133.7 87.9,131.6 89.7,129.4 91.5,127.1 93.3,124.7 95.0,122.2 96.8,119.6 98.6,116.9 100.3,114.1 102.1,111.3 103.9,108.4 105.7,105.5 107.4,102.5 109.2,99.5 111.0,96.4 112.8,93.4 114.5,90.3 116.3,87.3 118.1,84.3 119.9,81.4 121.6,78.5 123.4,75.7 125.2,73.0 126.9,70.4 128.7,67.9 130.5,65.6 132.3,63.4 134.0,61.4 135.8,59.5 137.6,57.9 139.4,56.4 141.1,55.2 142.9,54.1 144.7,53.3 146.5,52.8 148.2,52.4 150.0,52.3 151.8,52.4 153.5,52.8 155.3,53.3 157.1,54.1 158.9,55.2 160.6,56.4 162.4,57.9 164.2,59.5 166.0,61.4 167.7,63.4 169.5,65.6 171.3,67.9 173.1,70.4 174.8,73.0 176.6,75.7 178.4,78.5 180.1,81.4 181.9,84.3 183.7,87.3 185.5,90.3 187.2,93.4 189.0,96.4 190.8,99.5 192.6,102.5 194.3,105.5 196.1,108.4 197.9,111.3 199.7,114.1 201.4,116.9 203.2,119.6 205.0,122.2 206.7,124.7 208.5,127.1 210.3,129.4 212.1,131.6 213.8,133.7 215.6,135.7 217.4,137.6 219.2,139.4 220.9,141.1 222.7,142.7 224.5,144.2 226.3,145.6 228.0,146.9 229.8,148.1 231.6,149.2 233.3,150.3 235.1,151.2 236.9,152.1 238.7,152.9 240.4,153.7 242.2,154.3 244.0,154.9 245.8,155.5 247.5,156.0 249.3,156.5 251.1,156.9 252.9,157.2 254.6,157.6 256.4,157.9 258.2,158.1 259.9,158.4 261.7,158.6 263.5,158.8 265.3,158.9 267.0,159.1 268.8,159.2 270.6,159.3 272.4,159.4 274.1,159.5 275.9,159.6 277.7,159.6 279.5,159.7 281.2,159.7 283.0,159.8" fill="none" stroke="#2C1810" stroke-width="2"/>
+        <!-- Axis -->
+        <line x1="10" y1="160" x2="290" y2="160" stroke="#6B3A2A" stroke-width="1.5"/>
+        <!-- Quantile line -->
+        <line x1="212.5" y1="132.2" x2="212.5" y2="160" stroke="#C1440E" stroke-width="2"/>
+        <text x="200" y="172" font-size="10" fill="#C1440E" text-anchor="middle" font-weight="700">z₉₅%</text>
+        <text x="200" y="183" font-size="9" fill="#C1440E" text-anchor="middle">=1.645</text>
+        <!-- Z_obs dans la zone de rejet -->
+        <line x1="237.4" y1="152.3" x2="237.4" y2="160" stroke="#8B0000" stroke-width="2.5" stroke-dasharray="5,3"/>
+        <circle cx="237.4" cy="152.3" r="5" fill="#8B0000"/>
+        <text x="251" y="172" font-size="10" fill="#8B0000" text-anchor="middle" font-weight="700">Zobs</text>
+        <text x="251" y="183" font-size="9" fill="#8B0000" text-anchor="middle">=2.3</text>
+        <!-- Labels -->
+        <text x="0" y="160" font-size="9" fill="#6B3A2A">0</text>
+        <text x="100" y="130" font-size="10" fill="#3D7A4A" text-anchor="middle">Zone d'acceptation</text>
+        <text x="255" y="148" font-size="9" fill="#C1440E" text-anchor="middle">Rejet</text>
+        <text x="255" y="158" font-size="9" fill="#C1440E" text-anchor="middle">α=5%</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== QCM ==================== -->
+<section>
+  <h2>🎯 Quiz — Chapitre 7</h2>
+  <div class="cols-2" style="font-size:0.78em;gap:0.6em;">
+    <div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q1.</strong>
+        <p style="margin:0.2em 0;">L'erreur de type I, c'est :</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>Accepter $H_0$ alors qu'elle est fausse</li>
+          <li>Rejeter $H_0$ alors qu'elle est vraie</li>
+          <li>Se tromper dans le calcul de la statistique</li>
+          <li>Choisir un mauvais $\alpha$</li>
+        </ol>
+      </div>
+      <div class="box-exo">
+        <strong>Q2.</strong>
+        <p style="margin:0.2em 0;">$H_0 : m=10$, $\sigma=2$, $n=25$, $\bar{x}=10.8$. Test $H_1 : m > 10$ à $\alpha=5\%$. Rejette-t-on $H_0$ ? ($z_{95\%}=1.645$)</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>Oui, car $Z_{obs} = 2 > 1.645$</li>
+          <li>Non, car $Z_{obs} = 0.8 < 1.645$</li>
+          <li>Oui, car $\bar{x} > m_0$</li>
+          <li>Non, car $n$ est trop petit</li>
+        </ol>
+      </div>
+    </div>
+    <div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q3.</strong>
+        <p style="margin:0.2em 0;">La puissance d'un test, c'est :</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$\alpha$, le risque de 1ère espèce</li>
+          <li>$1-\alpha$</li>
+          <li>$1-\beta$, la probabilité de rejeter $H_0$ quand elle est fausse</li>
+          <li>$\beta$, le risque de 2ème espèce</li>
+        </ol>
+      </div>
+      <div class="box-exo">
+        <strong>Q4.</strong>
+        <p style="margin:0.2em 0;">Pour le test de Student ($\sigma$ inconnu), la statistique $T_n = \frac{\bar{X}_n - m_0}{S_n/\sqrt{n}}$ suit sous $H_0$ :</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$\mathcal{N}(0,1)$</li>
+          <li>$\mathcal{T}_{n}$</li>
+          <li>$\mathcal{T}_{n-1}$</li>
+          <li>$\chi^2_{(n-1)}$</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CORRECTION QCM ==================== -->
+<section>
+  <h2>✅ Correction du Quiz</h2>
+  <div style="font-size:0.8em;display:flex;flex-direction:column;gap:0.5em;">
+    <div class="box-rem">
+      <strong>Q1 — Réponse : b)</strong><br/>
+      L'erreur de type I = rejeter $H_0$ alors qu'elle est vraie. C'est le risque $\alpha$, que l'on fixe et maîtrise.
+    </div>
+    <div class="box-rem">
+      <strong>Q2 — Réponse : a) Oui</strong><br/>
+      $Z_{obs} = \dfrac{10.8 - 10}{2/\sqrt{25}} = \dfrac{0.8}{0.4} = 2 > 1.645$ → on rejette $H_0$.
+    </div>
+    <div class="box-rem">
+      <strong>Q3 — Réponse : c) $1-\beta$</strong><br/>
+      La puissance = probabilité de rejeter $H_0$ quand elle est effectivement fausse. Un bon test a une puissance élevée.
+    </div>
+    <div class="box-rem">
+      <strong>Q4 — Réponse : c) $\mathcal{T}_{n-1}$</strong><br/>
+      Quand $\sigma$ est inconnu et estimé par $S_n$, la statistique de test suit une loi de Student à $n-1$ degrés de liberté sous $H_0$.
+    </div>
+  </div>
+  <div style="margin-top:1em;text-align:right;font-size:0.65em;color:#999;font-style:italic;">
+    Transparents réalisés avec l'assistance de Claude AI
+  </div>
+</section>
+
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="../assets/preuves.js"></script>
+<script>
+  Reveal.initialize({hash:true,slideNumber:'c/t',progress:true,controls:true,transition:'slide',transitionSpeed:'fast',center:false,width:1100,height:700,margin:0.06});
+  function renderMath(){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}],throwOnError:false,strict:false});}
+  Reveal.on('ready',renderMath);
+  Reveal.on('slidechanged',renderMath);
+</script>
+</body></html>

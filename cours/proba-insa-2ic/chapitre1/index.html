@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapitre 1 — Introduction à la théorie des probabilités</title>
+
+  <!-- Reveal.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/white.min.css" id="theme" />
+
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+
+  <!-- Thème terra cotta -->
+  <link rel="stylesheet" href="../assets/theme-terracotta.css" />
+
+  <style>
+    /* Overrides reveal white theme */
+    .reveal-viewport { background: #FAF6F0; }
+    .reveal .slides section { padding: 0.5em 1em; }
+  </style>
+</head>
+<body>
+
+<div class="reveal">
+<div class="slides">
+
+<!-- ==================== SLIDE TITRE ==================== -->
+<section style="padding:0 !important;">
+  <div style="background:white;padding:0.5em 1.4em;display:flex;align-items:center;border-bottom:3px solid #C1440E;">
+    <img src="data:image/png;base64,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" alt="Logo INSA Toulouse" style="height:48px;"/>
+  </div>
+  <div class="chapter-title" style="margin-top:0.8em;">
+    <div style="font-size:0.65em;color:rgba(255,255,255,0.75);margin-bottom:0.3em;">INSA Toulouse — Génie Civil 2-IC — 2026-2027</div>
+    <h1 style="font-size:1.4em;margin-bottom:0.2em;">Probabilités &amp; Statistique</h1>
+    <hr style="border-color:rgba(255,255,255,0.3);margin:0.5em 0;"/>
+    <h2 style="font-size:1.1em;color:rgba(255,255,255,0.95);border:none;">Chapitre 1</h2>
+    <h2 style="font-size:1.3em;color:white;border:none;margin-top:0.1em;">Introduction à la théorie des probabilités</h2>
+    <p class="subtitle">Anthony Réveillac</p>
+  </div>
+</section>
+
+<!-- ==================== PLAN ==================== -->
+<section>
+  <h2>Plan du chapitre</h2>
+  <ol style="font-size:0.9em;line-height:2;">
+    <li>Pourquoi les probabilités en Génie Civil ?</li>
+    <li>Modélisation d'un phénomène aléatoire</li>
+    <li>Univers et événements</li>
+    <li>Opérations sur les événements</li>
+    <li>Probabilité : définition axiomatique</li>
+    <li>Propriétés et probabilité uniforme</li>
+  </ol>
+</section>
+
+<!-- ==================== MOTIVATION ==================== -->
+<section>
+  <h2>1.1 — Pourquoi les probabilités en IC ?</h2>
+  <p style="font-size:0.85em;">Dans de nombreux systèmes physiques ou industriels, on ne peut pas connaître tous les paramètres :</p>
+  <div class="cols-2" style="margin-top:0.5em;">
+    <div>
+      <div class="box-ex">
+        <div class="box-title">🏗 Exemple — Pont</div>
+        La force du vent sur un pont est imprévisible. On ne peut pas inclure tous les facteurs réalistes dans un modèle physique.
+      </div>
+      <div class="box-ex" style="margin-top:0.6em;">
+        <div class="box-title">⚙️ Exemple — Composant</div>
+        Durée de vie d'un composant, résistance du béton, propagation d'incertitude dans la fabrication.
+      </div>
+    </div>
+    <div>
+      <div class="box-rem">
+        <div class="box-title">🎯 Objectif du cours</div>
+        <ol style="font-size:0.9em;margin-left:1em;">
+          <li>Modéliser la source d'incertitude</li>
+          <li>Évaluer le <strong>risque induit</strong></li>
+        </ol>
+      </div>
+      <div class="box-rem" style="margin-top:0.6em;">
+        <div class="box-title">📐 Applications IC</div>
+        <ul style="font-size:0.85em;margin-left:1em;">
+          <li>Probabilité de défaillance</li>
+          <li>Propagation d'incertitude</li>
+          <li>Résistance caractéristique du béton</li>
+          <li>Chargement aléatoire d'un lanceur</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== MODÉLISATION ==================== -->
+<section>
+  <h2>1.2 — Modélisation d'un phénomène aléatoire</h2>
+  <p style="font-size:0.85em;">Trois étapes pour modéliser un facteur aléatoire :</p>
+
+  <div style="display:flex;flex-direction:column;gap:0.5em;margin-top:0.6em;">
+    <div style="display:flex;align-items:center;gap:0.8em;">
+      <div style="background:var(--tc-brick);color:white;border-radius:50%;width:2em;height:2em;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">1</div>
+      <div class="box-def" style="flex:1;margin:0;">
+        <div class="box-title">Univers $\Omega$</div>
+        Lister l'ensemble de tous les résultats possibles.
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.8em;">
+      <div style="background:var(--tc-brick);color:white;border-radius:50%;width:2em;height:2em;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">2</div>
+      <div class="box-def" style="flex:1;margin:0;">
+        <div class="box-title">Événements $\mathcal{A}$</div>
+        Définir les sous-ensembles de $\Omega$ modélisant des situations d'intérêt.
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:0.8em;">
+      <div style="background:var(--tc-brick);color:white;border-radius:50%;width:2em;height:2em;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">3</div>
+      <div class="box-def" style="flex:1;margin:0;">
+        <div class="box-title">Probabilité $\mathbb{P}$</div>
+        Associer à chaque événement un nombre mesurant sa probabilité de réalisation.
+      </div>
+    </div>
+  </div>
+
+  <div class="box-rem" style="margin-top:0.8em;font-size:0.8em;">
+    Le triplet $(\Omega, \mathcal{A}, \mathbb{P})$ est appelé <strong>espace de probabilité</strong>.
+  </div>
+</section>
+
+<!-- ==================== UNIVERS ==================== -->
+<section>
+  <h2>1.3 — L'univers $\Omega$</h2>
+  <div class="box-def">
+    <div class="box-title">Définition — Univers</div>
+    L'<strong>univers</strong> $\Omega$ est l'ensemble de tous les résultats possibles d'une expérience aléatoire.
+  </div>
+
+  <p style="font-size:0.82em;margin-top:0.7em;"><strong>Exemples :</strong></p>
+  <div class="cols-2" style="font-size:0.78em;gap:0.6em;">
+    <div class="box-ex">
+      <div class="box-title">🎲 Pile ou face</div>
+      $\Omega = \{\text{pile}, \text{face}\}$
+      <br/>ou $\Omega = \{\text{pile}, \text{face}, \text{tranche}\}$
+    </div>
+    <div class="box-ex">
+      <div class="box-title">⚙️ Système en panne / fonctionnel</div>
+      $\Omega = \{0, 1\}$
+      <br/><em style="font-size:0.9em;">0 = en panne, 1 = fonctionnel</em>
+    </div>
+    <div class="box-ex">
+      <div class="box-title">🌪️ Force du vent (discret)</div>
+      $\Omega = \{\text{Force 0}, \ldots, \text{Force 12}\}$
+    </div>
+    <div class="box-ex">
+      <div class="box-title">🌪️ Vitesse du vent (continu)</div>
+      $\Omega = [0, 300]$ (km/h)
+      <br/><em style="font-size:0.9em;">Précision supplémentaire</em>
+    </div>
+  </div>
+
+  <div class="box-rem" style="margin-top:0.5em;font-size:0.78em;">
+    <div class="box-title">💡 Remarque</div>
+    Le choix de $\Omega$ dépend du niveau de précision souhaité. Il n'y a pas de choix unique et canonique.
+    L'univers peut être <strong>discret</strong> (fini ou dénombrable) ou <strong>continu</strong> (intervalle de $\mathbb{R}$).
+  </div>
+</section>
+
+<!-- ==================== ÉVÉNEMENTS ==================== -->
+<section>
+  <h2>1.4 — Les événements</h2>
+  <div class="box-def">
+    <div class="box-title">Définition — Événement aléatoire</div>
+    Un <strong>événement aléatoire</strong> est un sous-ensemble $A \subset \Omega$.
+    On dit que $A$ est <strong>réalisé</strong> si le résultat $\omega$ de l'expérience appartient à $A$.
+  </div>
+
+  <div class="cols-2" style="margin-top:0.7em;font-size:0.82em;gap:0.7em;">
+    <div>
+      <div class="box-ex">
+        <div class="box-title">🎲 Dé à 6 faces</div>
+        "Obtenir un chiffre pair" :
+        $$\Omega = \{1,2,3,4,5,6\}$$
+        $$A = \{2, 4, 6\} \subset \Omega$$
+      </div>
+      <div class="box-ex" style="margin-top:0.5em;">
+        <div class="box-title">⏱ Durée de vie</div>
+        "Durée $\geq$ 1000 heures" :
+        $$\Omega = \mathbb{R}_+$$
+        $$A = [1000, +\infty[ \;\subset\; \Omega$$
+      </div>
+    </div>
+    <div>
+      <div class="box-rem">
+        <div class="box-title">Événements particuliers</div>
+        <ul style="margin-left:1em;">
+          <li>$\emptyset$ : <strong>événement impossible</strong></li>
+          <li>$\Omega$ : <strong>événement certain</strong></li>
+        </ul>
+      </div>
+      <div class="box-rem" style="margin-top:0.5em;">
+        <div class="box-title">🌪️ Exemple pont</div>
+        "Vent de force $\geq$ 10" :
+        $$\Omega = \{\text{Force 0}, \ldots, \text{Force 12}\}$$
+        $$A = \{\text{F10}, \text{F11}, \text{F12}\} \subset \Omega$$
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== OPÉRATIONS ==================== -->
+<section>
+  <h2>1.5 — Opérations sur les événements</h2>
+  <div class="box-def">
+    <div class="box-title">Définition — Événement contraire</div>
+    Le <strong>contraire</strong> de $A$, noté $A^C$, est le complémentaire dans $\Omega$ :
+    $$A^C = \{\omega \in \Omega : \omega \notin A\}$$
+  </div>
+
+  <div class="box-def" style="margin-top:0.6em;">
+    <div class="box-title">Définition — Opérations ensemblistes</div>
+    <div class="cols-2" style="font-size:0.85em;">
+      <div>
+        <strong>Intersection</strong> ($A$ et $B$) :
+        $$A \cap B = \{\omega : \omega \in A \text{ et } \omega \in B\}$$
+        <em>$A$ et $B$ sont réalisés simultanément.</em>
+      </div>
+      <div>
+        <strong>Union</strong> ($A$ ou $B$) :
+        $$A \cup B = \{\omega : \omega \in A \text{ ou } \omega \in B\}$$
+        <em>Au moins l'un des deux est réalisé.</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="box-def" style="margin-top:0.6em;font-size:0.85em;">
+    <div class="box-title">Définition — Événements incompatibles</div>
+    $A$ et $B$ sont <strong>incompatibles</strong> si $A \cap B = \emptyset$.
+    La réalisation de l'un exclut celle de l'autre.
+  </div>
+</section>
+
+<!-- ==================== DIAGRAMME VENN ==================== -->
+<section>
+  <h2>Illustration — Diagramme de Venn</h2>
+  <div style="display:flex;justify-content:center;margin:0.5em 0;">
+    <svg viewBox="0 0 520 280" width="500" height="270" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif;">
+      <defs>
+        <!-- Hachurage diagonal -->
+        <pattern id="hatch" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="8" stroke="#C1440E" stroke-width="2" opacity="0.6"/>
+        </pattern>
+        <clipPath id="clipAB">
+          <circle cx="320" cy="140" r="90"/>
+        </clipPath>
+      </defs>
+      <style>
+        .aub-hatch { opacity: 0; transition: opacity 0.25s; pointer-events: none; }
+        .aub-group:hover .aub-hatch { opacity: 1; }
+        .aub-label { cursor: pointer; }
+        .aub-group:hover .aub-label { font-size: 15px; fill: #C1440E; font-weight: 700; }
+      </style>
+
+      <!-- Fond Omega -->
+      <rect x="10" y="10" width="500" height="260" rx="12" fill="#FAF6F0" stroke="#C1440E" stroke-width="2"/>
+      <text x="480" y="30" font-size="16" fill="#C1440E" font-style="italic" text-anchor="end">Ω</text>
+
+      <!-- Cercle A -->
+      <circle cx="195" cy="140" r="90" fill="rgba(193,68,14,0.18)" stroke="#C1440E" stroke-width="2"/>
+      <text x="155" y="110" font-size="18" fill="#A0320A" font-weight="600">A</text>
+
+      <!-- Cercle B -->
+      <circle cx="320" cy="140" r="90" fill="rgba(42,92,138,0.18)" stroke="#2A5C8A" stroke-width="2"/>
+      <text x="345" y="110" font-size="18" fill="#2A5C8A" font-weight="600">B</text>
+
+      <!-- A inter B -->
+      <circle cx="195" cy="140" r="90" fill="rgba(107,61,138,0.25)" clip-path="url(#clipAB)"/>
+
+      <!-- Labels fixes -->
+      <text x="155" y="150" font-size="13" fill="#A0320A" text-anchor="middle">A seulement</text>
+      <text x="258" y="150" font-size="13" fill="#6B3D8A" text-anchor="middle" font-weight="600">A∩B</text>
+      <text x="360" y="150" font-size="13" fill="#2A5C8A" text-anchor="middle">B seulement</text>
+
+      <!-- A ∪ B — hachurage au hover -->
+      <g class="aub-group">
+        <circle cx="195" cy="140" r="90" fill="url(#hatch)" class="aub-hatch"/>
+        <circle cx="320" cy="140" r="90" fill="url(#hatch)" class="aub-hatch"/>
+        <text x="258" y="255" font-size="13" fill="#6B3A2A" text-anchor="middle" class="aub-label">A ∪ B = zone hachurée</text>
+        <rect x="158" y="242" width="200" height="18" fill="transparent"/>
+      </g>
+    </svg>
+  </div>
+  <div class="cols-2" style="font-size:0.78em;gap:0.5em;">
+    <div class="box-ex">
+      <strong>$A \cap B$</strong> : zone commune (violet)
+    </div>
+    <div class="box-ex">
+      <strong>$A \cup B$</strong> : toute la zone hachurée
+    </div>
+    <div class="box-ex">
+      <strong>$A^C$</strong> : Tout élément de $\Omega$ qui n'appartient pas à $A$
+    </div>
+    <div class="box-ex" id="incomp-cell" style="position:relative;cursor:pointer;">
+      <strong>Incompatibles</strong> : cercles disjoints
+      <div id="incomp-tooltip" style="
+        display:none;
+        position:absolute;
+        bottom:110%;
+        left:50%;
+        transform:translateX(-50%);
+        background:white;
+        border:2px solid #C1440E;
+        border-radius:8px;
+        padding:0.4em;
+        box-shadow:0 4px 12px rgba(0,0,0,0.15);
+        z-index:9999;
+      ">
+        <svg viewBox="0 0 200 100" width="200" height="100" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif;display:block;">
+          <rect x="2" y="2" width="196" height="96" rx="8" fill="#FAF6F0" stroke="#C1440E" stroke-width="1.5"/>
+          <circle cx="65" cy="50" r="38" fill="rgba(193,68,14,0.2)" stroke="#C1440E" stroke-width="1.5"/>
+          <text x="65" y="45" font-size="14" fill="#A0320A" font-weight="600" text-anchor="middle">A</text>
+          <circle cx="145" cy="50" r="38" fill="rgba(42,92,138,0.2)" stroke="#2A5C8A" stroke-width="1.5"/>
+          <text x="145" y="45" font-size="14" fill="#2A5C8A" font-weight="600" text-anchor="middle">B</text>
+          <text x="100" y="90" font-size="9" fill="#6B3A2A" text-anchor="middle">A ∩ B = ∅</text>
+        </svg>
+      </div>
+    </div>
+    <script>
+      (function() {
+        function initIncomp() {
+          var cell = document.getElementById('incomp-cell');
+          var tip  = document.getElementById('incomp-tooltip');
+          if (!cell || !tip) return;
+          cell.addEventListener('mouseenter', function() { tip.style.display = 'block'; });
+          cell.addEventListener('mouseleave', function() { tip.style.display = 'none'; });
+        }
+        // Essai immédiat + après chaque changement de slide Reveal
+        initIncomp();
+        if (typeof Reveal !== 'undefined') {
+          Reveal.on('slidechanged', initIncomp);
+          Reveal.on('ready', initIncomp);
+        }
+      })();
+    </script>
+  </div>
+</section>
+
+<!-- ==================== PROBABILITÉ DÉFINITION ==================== -->
+<section>
+  <h2>1.6 — Définition d'une probabilité</h2>
+  <div class="box-def">
+    <div class="box-title">Définition — Probabilité (axiomes de Kolmogorov)</div>
+    Soit $(\Omega, \mathcal{A})$. Une <strong>probabilité</strong> $\mathbb{P}$ sur $(\Omega, \mathcal{A})$ est une application $\mathbb{P} : \mathcal{A} \to [0,1]$ telle que :
+    <ol style="margin-left:1.2em;margin-top:0.4em;font-size:0.9em;">
+      <li>$\mathbb{P}[\Omega] = 1$</li>
+      <li>Pour toute famille d'événements <em>deux à deux incompatibles</em> $(A_n)_{n \geq 1}$ :
+        $$\mathbb{P}\!\left[\bigcup_{n=1}^{+\infty} A_n\right] = \sum_{n=1}^{\infty} \mathbb{P}[A_n]$$
+      </li>
+    </ol>
+  </div>
+
+  <div class="box-def" style="margin-top:0.6em;">
+    <div class="box-title">Définition — Espace probabilisé</div>
+    Le triplet $(\Omega, \mathcal{A}, \mathbb{P})$ est appelé <strong>espace probabilisé</strong>, où :
+    <ul style="margin-left:1.2em;margin-top:0.3em;font-size:0.9em;">
+      <li>$\Omega$ est l'univers</li>
+      <li>$\mathcal{A}$ est la tribu des événements</li>
+      <li>$\mathbb{P}$ est une probabilité sur $(\Omega, \mathcal{A})$.</li>
+    </ul>
+  </div>
+
+  <div class="box-rem" style="margin-top:0.6em;font-size:0.82em;">
+    <div class="box-title">⚠️ Remarque importante</div>
+    Le choix de $\mathbb{P}$ est <strong>arbitraire</strong> et fait partie du modèle. C'est à l'ingénieur de proposer le modèle le plus adapté à la situation réelle. Il n'existe pas de choix canonique.
+  </div>
+</section>
+
+<!-- ==================== PROPRIÉTÉS PROBA ==================== -->
+<section>
+  <h2>1.7 — Propriétés de la probabilité</h2>
+  <div class="box-prop">
+    <div class="box-title">Proposition</div>
+    Soit $(\Omega, \mathcal{A}, \mathbb{P})$ un espace probabilisé. Soient $A$, $B$ des événements. Alors :
+  </div>
+  <div class="cols-2" style="margin-top:0.5em;font-size:0.82em;gap:0.6em;">
+    <div>
+      <div class="formula-key">$\mathbb{P}[A^C] = 1 - \mathbb{P}[A]$</div>
+      <button class="proof-toggle-btn" onclick="event.stopPropagation();document.getElementById('modal-p2').style.display='flex'">▶ Preuve</button>
+
+      <div class="formula-key" style="margin-top:0.4em;">$\mathbb{P}[\emptyset] = 0$</div>
+      <button class="proof-toggle-btn" onclick="event.stopPropagation();document.getElementById('modal-p1').style.display='flex'">▶ Preuve</button>
+
+      <div class="formula-key" style="margin-top:0.4em;">Si $A \subset B$ : $\mathbb{P}[A] \leq \mathbb{P}[B]$</div>
+      <button class="proof-toggle-btn" onclick="event.stopPropagation();document.getElementById('modal-p3').style.display='flex'">▶ Preuve</button>
+    </div>
+    <div>
+      <div class="formula-key">$\mathbb{P}[A \cup B] = \mathbb{P}[A] + \mathbb{P}[B] - \mathbb{P}[A \cap B]$</div>
+      <button class="proof-toggle-btn" onclick="event.stopPropagation();document.getElementById('modal-p4').style.display='flex'">▶ Preuve</button>
+
+      <div class="formula-key" style="margin-top:0.4em;">$\mathbb{P}\!\left[\bigcup_{k=1}^N A_k\right] \leq \sum_{k=1}^N \mathbb{P}[A_k]$</div>
+      <button class="proof-toggle-btn" onclick="event.stopPropagation();document.getElementById('modal-p5').style.display='flex'">▶ Preuve</button>
+
+      <div class="formula-key" style="margin-top:0.4em;">
+        <strong>Si $\Omega$ fini :</strong>
+        $\mathbb{P}[A] = \displaystyle\sum_{\omega \in A} \mathbb{P}[\{\omega\}]$
+      </div>
+    </div>
+  </div>
+
+  <!-- Modales preuves -->
+  <script>
+    (function() {
+      var preuves = {
+        'modal-p1': {
+          titre: '$\\mathbb{P}[\\emptyset] = 0$',
+          contenu: 'On applique la propriété $\\mathbb{P}[A^C] = 1 - \\mathbb{P}[A]$ avec $A = \\Omega$. On obtient : $$\\mathbb{P}[\\emptyset] = \\mathbb{P}[\\Omega^C] = 1 - \\mathbb{P}[\\Omega]$$ Par la propriété 1. de la définition d&#39;une probabilité, $\\mathbb{P}[\\Omega] = 1$, donc : $$\\mathbb{P}[\\emptyset] = 1 - 1 = 0. \\quad \\square$$'
+        },
+        'modal-p2': {
+          titre: '$\\mathbb{P}[A^C] = 1 - \\mathbb{P}[A]$',
+          contenu: '$A$ et $A^C$ sont incompatibles et $A \\cup A^C = \\Omega$. Par la propriété 2. de la définition d&#39;une probabilité : $$\\mathbb{P}[A] + \\mathbb{P}[A^C] = \\mathbb{P}[\\Omega] = 1$$ donc $\\mathbb{P}[A^C] = 1 - \\mathbb{P}[A]$. $\\square$'
+        },
+        'modal-p3': {
+          titre: 'Si $A \\subset B$ : $\\mathbb{P}[A] \\leq \\mathbb{P}[B]$',
+          contenu: 'Si $A \\subset B$, on peut écrire $B = A \\cup (B \\cap A^C)$, avec $A$ et $B \\cap A^C$ incompatibles. Par la propriété 2. de la définition d&#39;une probabilité : $$\\mathbb{P}[B] = \\mathbb{P}[A] + \\mathbb{P}[B \\cap A^C] \\geq \\mathbb{P}[A]$$ car $\\mathbb{P}[B \\cap A^C] \\geq 0$. $\\square$'
+        },
+        'modal-p4': {
+          titre: '$\\mathbb{P}[A \\cup B] = \\mathbb{P}[A] + \\mathbb{P}[B] - \\mathbb{P}[A \\cap B]$',
+          contenu: 'On décompose $A \\cup B$ en parties disjointes : $$A \\cup B = (A \\cap B^C) \\cup (A \\cap B) \\cup (B \\cap A^C)$$ Par la propriété 2. de la définition d&#39;une probabilité : $\\mathbb{P}[A \\cup B] = \\mathbb{P}[A \\cap B^C] + \\mathbb{P}[A \\cap B] + \\mathbb{P}[B \\cap A^C]$. Or $\\mathbb{P}[A] = \\mathbb{P}[A \\cap B^C] + \\mathbb{P}[A \\cap B]$ et $\\mathbb{P}[B] = \\mathbb{P}[B \\cap A^C] + \\mathbb{P}[A \\cap B]$, donc : $$\\mathbb{P}[A \\cup B] = \\mathbb{P}[A] + \\mathbb{P}[B] - \\mathbb{P}[A \\cap B]. \\quad \\square$$'
+        },
+        'modal-p6': {
+          titre: 'Si $\\Omega$ fini : $\\mathbb{P}[A] = \\sum_{\\omega \\in A} \\mathbb{P}[\\{\\omega\\}]$',
+          contenu: 'Si $\\Omega = \\{\\omega_1, \\ldots, \\omega_N\\}$ est fini, on peut écrire $A = \\bigcup_{\\omega \\in A} \\{\\omega\\}$, où les singletons $\\{\\omega\\}$ sont deux à deux incompatibles. Par la propriété 2. de la définition d&#39;une probabilité : $$\\mathbb{P}[A] = \\mathbb{P}\\!\\left[\\bigcup_{\\omega \\in A} \\{\\omega\\}\\right] = \\sum_{\\omega \\in A} \\mathbb{P}[\\{\\omega\\}]. \\quad \\square$$'
+        },
+        'modal-p5': {
+          titre: '$\\mathbb{P}\\!\\left[\\bigcup_{k=1}^N A_k\\right] \\leq \\sum_{k=1}^N \\mathbb{P}[A_k]$',
+          contenu: 'Par récurrence sur $N$. Pour $N=2$ : $\\mathbb{P}[A_1 \\cup A_2] = \\mathbb{P}[A_1] + \\mathbb{P}[A_2] - \\mathbb{P}[A_1 \\cap A_2] \\leq \\mathbb{P}[A_1] + \\mathbb{P}[A_2]$. Si le résultat est vrai au rang $N-1$, alors : $$\\mathbb{P}\\!\\left[\\bigcup_{k=1}^N A_k\\right] \\leq \\mathbb{P}\\!\\left[\\bigcup_{k=1}^{N-1} A_k\\right] + \\mathbb{P}[A_N] \\leq \\sum_{k=1}^N \\mathbb{P}[A_k]. \\quad \\square$$'
+        }
+      };
+
+      // Créer les modales dynamiquement
+      Object.keys(preuves).forEach(function(id) {
+        var p = preuves[id];
+        var div = document.createElement('div');
+        div.id = id;
+        div.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;';
+        div.innerHTML = '<div style="background:white;border-radius:10px;padding:1.5em 2em;max-width:620px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.25);position:relative;">'
+          + '<button onclick="document.getElementById(\'' + id + '\').style.display=\'none\'" style="position:absolute;top:0.6em;right:0.8em;background:none;border:none;font-size:1.4em;cursor:pointer;color:#C1440E;">✕</button>'
+          + '<div class="proof-modal-title" style="font-weight:700;color:#C1440E;font-size:0.85em;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.6em;">Preuve — ' + p.titre + '</div>'
+          + '<div class="proof-modal-content" style="font-size:0.9em;color:#2C1810;line-height:1.7;">' + p.contenu + '</div>'
+          + '</div>';
+        div.addEventListener('click', function(e) { if (e.target === div) div.style.display = 'none'; });
+        document.body.appendChild(div);
+      });
+
+      // Rendre les maths dans toutes les modales
+      function renderModals() {
+        document.querySelectorAll('.proof-modal-content, .proof-modal-title').forEach(function(el) {
+          if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(el, {
+              delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+              throwOnError: false
+            });
+          }
+        });
+      }
+
+      if (typeof Reveal !== 'undefined') {
+        Reveal.on('ready', renderModals);
+      } else {
+        document.addEventListener('DOMContentLoaded', renderModals);
+      }
+    })();
+  </script>
+</section>
+
+<!-- ==================== PROBABILITÉ UNIFORME ==================== -->
+<section>
+  <h2>1.8 — Probabilité uniforme</h2>
+  <p style="font-size:0.85em;">Cas $\Omega$ fini : $\Omega = \{\omega_1, \ldots, \omega_N\}$.</p>
+
+  <div class="box-def">
+    <div class="box-title">Probabilité uniforme (équiprobabilité)</div>
+    $$\mathbb{P}[\{\omega_i\}] = \frac{1}{N} \quad \Rightarrow \quad \mathbb{P}[A] = \frac{\text{Card}(A)}{\text{Card}(\Omega)}$$
+  </div>
+
+  <div class="box-rem" style="margin-top:0.6em;font-size:0.82em;">
+    "<em>Choisir au hasard</em>" signifie que les choix sont <strong>équiprobables</strong>. Les calculs se ramènent alors à de l'analyse combinatoire.
+  </div>
+
+  <div class="cols-2" style="margin-top:0.6em;font-size:0.82em;">
+    <div class="box-ex">
+      <div class="box-title">🎲 Dé à 6 faces</div>
+      $\mathbb{P}[\{\omega\}] = 1/6$ pour tout $\omega$.<br/>
+      $A = \{2, 4, 6\}$ : $$\mathbb{P}[A] = \frac{3}{6} = \frac{1}{2}$$
+    </div>
+    <div class="box-ex">
+      <div class="box-title">🔵 Urne</div>
+      12 boules (8 blanches, 4 noires).<br/>
+      $\mathbb{P}[\text{blanche}] = \frac{8}{12} = \frac{2}{3}$
+    </div>
+  </div>
+</section>
+
+<!-- ==================== EXERCICES ==================== -->
+<section>
+  <h2>Exercices</h2>
+  <div class="box-exo">
+    <strong>Exercice 1.</strong>
+    <p style="margin:0.3em 0;">Une urne contient 12 boules numérotées (1–8 blanches, 9–12 noires). On tire une boule au hasard.</p>
+    <ol style="margin-top:0.4em;font-size:0.9em;">
+      <li>Décrire l'espace des issues.</li>
+      <li>Probabilité d'une boule portant un nombre pair ?</li>
+      <li>Probabilité de tirer une boule blanche ?</li>
+      <li>Probabilité d'une boule noire portant un nombre impair ?</li>
+    </ol>
+  </div>
+
+  <div class="box-exo" style="margin-top:0.6em;">
+    <strong>Exercice 2 — Le paradoxe du chevalier de Méré.</strong>
+    <p style="font-size:0.85em;margin:0.3em 0;">Le Chevalier de Méré pensait que les deux jeux avaient la même probabilité de gagner. Son expérience lui montrait que le jeu 1 était plus avantageux. Calculer les probabilités des deux jeux et résoudre le paradoxe.</p>
+    <ul style="font-size:0.85em;margin-top:0.3em;">
+      <li><strong>Jeu 1 :</strong> Obtenir au moins un as en lançant 4 fois un dé à 6 faces.</li>
+      <li><strong>Jeu 2 :</strong> Obtenir au moins un double as en lançant 24 fois une paire de dés.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== RÉSUMÉ ==================== -->
+<section>
+  <h2>Résumé du Chapitre 1</h2>
+  <div class="cols-2" style="font-size:0.82em;gap:0.7em;">
+    <div>
+      <div class="box-def">
+        <div class="box-title">🔑 Vocabulaire</div>
+        <ul style="margin-left:1em;">
+          <li><strong>Univers</strong> $\Omega$ : ensemble des possibles</li>
+          <li><strong>Événement</strong> $A \subset \Omega$</li>
+          <li>$A^C$, $A \cap B$, $A \cup B$</li>
+          <li>Événements <strong>incompatibles</strong> : $A \cap B = \emptyset$</li>
+        </ul>
+      </div>
+      <div class="box-prop" style="margin-top:0.5em;">
+        <div class="box-title">📐 Probabilité</div>
+        <ul style="margin-left:1em;">
+          <li>$\mathbb{P} : \mathcal{A} \to [0,1]$</li>
+          <li>$\mathbb{P}[\Omega]=1$</li>
+          <li>$\mathbb{P}[A \cup B] = \mathbb{P}[A] + \mathbb{P}[B] - \mathbb{P}[A \cap B]$</li>
+          <li>$\mathbb{P}[A^C]=1-\mathbb{P}[A]$</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="box-rem">
+        <div class="box-title">⚡ Points clés</div>
+        <ul style="margin-left:1em;">
+          <li>Le choix de $\Omega$ et de $\mathbb{P}$ est <em>arbitraire</em></li>
+          <li>Équiprobabilité : $\mathbb{P}[A] = \frac{\text{Card}(A)}{\text{Card}(\Omega)}$</li>
+          <li>Triplet $(\Omega, \mathcal{A}, \mathbb{P})$ = espace de probabilité</li>
+        </ul>
+      </div>
+      <div style="margin-top:0.5em;text-align:center;">
+        <div style="background:var(--tc-brick);color:white;border-radius:8px;padding:0.6em 1em;font-size:0.85em;">
+          <strong>Prochain chapitre :</strong><br/>Probabilités conditionnelles &amp; Indépendance
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== QCM ==================== -->
+<section>
+  <h2>🎯 Quiz — Chapitre 1</h2>
+  <div class="cols-2" style="font-size:0.78em;gap:0.6em;">
+
+    <div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q1.</strong>
+        <p style="margin:0.2em 0;">Soient $A$ et $B$ incompatibles avec $\mathbb{P}[A] = 0.3$ et $\mathbb{P}[B] = 0.4$. Que vaut $\mathbb{P}[A \cup B]$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$0.12$</li>
+          <li>$0.58$</li>
+          <li>$0.70$</li>
+          <li>On ne peut pas savoir</li>
+        </ol>
+      </div>
+
+      <div class="box-exo">
+        <strong>Q2.</strong>
+        <p style="margin:0.2em 0;">Soit $A$ un événement avec $\mathbb{P}[A] = 0.7$. Que vaut $\mathbb{P}[A^C]$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$0.7$</li>
+          <li>$0.3$</li>
+          <li>$1.7$</li>
+          <li>$-0.7$</li>
+        </ol>
+      </div>
+    </div>
+
+    <div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q3.</strong>
+        <p style="margin:0.2em 0;">Une urne contient 5 boules rouges et 3 bleues.<br/>On tire une boule au hasard.<br/>Quelle est la probabilité de tirer une boule rouge ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$3/8$</li>
+          <li>$5/3$</li>
+          <li>$5/8$</li>
+          <li>$1/2$</li>
+        </ol>
+      </div>
+
+      <div class="box-exo">
+        <strong>Q4.</strong>
+        <p style="margin:0.2em 0;">$\mathbb{P}[A]=0.5$, $\mathbb{P}[B]=0.4$, $\mathbb{P}[A \cap B]=0.2$. Que vaut $\mathbb{P}[A \cup B]$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$0.9$</li>
+          <li>$0.7$</li>
+          <li>$0.2$</li>
+          <li>$1.1$</li>
+        </ol>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==================== CORRECTION QCM ==================== -->
+<section>
+  <h2>✅ Correction du Quiz</h2>
+  <div style="font-size:0.8em;display:flex;flex-direction:column;gap:0.5em;">
+
+    <div class="box-rem">
+      <strong>Q1 — Réponse : c) $0.70$</strong><br/>
+      $A$ et $B$ incompatibles $\Rightarrow$ $\mathbb{P}[A \cup B] = \mathbb{P}[A] + \mathbb{P}[B] = 0.3 + 0.4 = 0.7$.
+    </div>
+
+    <div class="box-rem">
+      <strong>Q2 — Réponse : b) $0.3$</strong><br/>
+      $\mathbb{P}[A^C] = 1 - \mathbb{P}[A] = 1 - 0.7 = 0.3$.
+    </div>
+
+    <div class="box-rem">
+      <strong>Q3 — Réponse : c) $5/8$</strong><br/>
+      $\Omega$ contient $5 + 3 = 8$ boules. Par équiprobabilité : $\mathbb{P}[\text{rouge}] = \frac{\text{Card}(\text{rouge})}{\text{Card}(\Omega)} = \frac{5}{8}$.
+    </div>
+
+    <div class="box-rem">
+      <strong>Q4 — Réponse : b) $0.7$</strong><br/>
+      $\mathbb{P}[A \cup B] = \mathbb{P}[A] + \mathbb{P}[B] - \mathbb{P}[A \cap B] = 0.5 + 0.4 - 0.2 = 0.7$.
+    </div>
+
+  </div>
+  <div style="margin-top:1em;text-align:right;font-size:0.65em;color:#999;font-style:italic;">
+    Transparents réalisés avec l'assistance de Claude AI
+  </div>
+</section>
+
+</div><!-- /.slides -->
+</div><!-- /.reveal -->
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="../assets/preuves.js"></script>
+
+<script>
+  // Init Reveal.js
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    progress: true,
+    controls: true,
+    controlsLayout: 'bottom-right',
+    transition: 'slide',
+    transitionSpeed: 'fast',
+    center: false,
+    width: 1100,
+    height: 700,
+    margin: 0.06,
+    plugins: []
+  });
+
+  // KaTeX auto-render
+  Reveal.on('ready', function () {
+    renderMath();
+  });
+  Reveal.on('slidechanged', function () {
+    renderMath();
+  });
+
+  function renderMath() {
+    renderMathInElement(document.body, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$',  right: '$',  display: false },
+        { left: '\\(', right: '\\)', display: false },
+        { left: '\\[', right: '\\]', display: true }
+      ],
+      throwOnError: false,
+      strict: false
+    });
+  }
+</script>
+</body>
+</html>

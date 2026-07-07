@@ -1,0 +1,306 @@
+/* =============================================
+   THÈME TERRA COTTA — Cours Probabilités & Stats
+   INSA Toulouse — Anthony Réveillac
+   ============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap');
+
+/* --- Palette terra cotta --- */
+:root {
+  --tc-brick:     #C1440E;   /* terra cotta principal */
+  --tc-rust:      #A0320A;   /* accent foncé */
+  --tc-sand:      #F5EFE6;   /* fond clair */
+  --tc-warm:      #EDE0D0;   /* fond carte */
+  --tc-gold:      #D4853A;   /* or chaud */
+  --tc-dark:      #2C1810;   /* texte sombre */
+  --tc-mid:       #6B3A2A;   /* texte moyen */
+  --tc-cream:     #FAF6F0;   /* fond slides */
+  --tc-green:     #3D7A4A;   /* accent vert (remarques) */
+  --tc-blue:      #2A5C8A;   /* accent bleu (définitions) */
+  --tc-purple:    #6B3D8A;   /* accent violet (théorèmes) */
+}
+
+/* --- Corps de la présentation --- */
+.reveal {
+  font-family: 'Inter', sans-serif;
+  font-size: 28px;
+  color: var(--tc-dark);
+  background-color: var(--tc-cream);
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+/* --- Titres --- */
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  font-family: 'Lora', Georgia, serif;
+  color: var(--tc-brick);
+  text-transform: none;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.reveal h1 { font-size: 2em; }
+.reveal h2 { font-size: 1.5em; border-bottom: 2px solid var(--tc-gold); padding-bottom: 0.2em; margin-bottom: 0.5em; }
+.reveal h3 { font-size: 1.15em; color: var(--tc-mid); }
+
+/* --- Slide de titre de chapitre --- */
+.reveal .chapter-title {
+  background: linear-gradient(135deg, var(--tc-brick) 0%, var(--tc-rust) 100%);
+  color: white !important;
+  border-radius: 8px;
+  padding: 2em;
+  text-align: center;
+}
+
+.reveal .chapter-title h1,
+.reveal .chapter-title h2 {
+  color: white !important;
+  border-bottom: none;
+}
+
+.reveal .chapter-title .subtitle {
+  font-size: 0.7em;
+  color: rgba(255,255,255,0.8);
+  font-style: italic;
+  margin-top: 0.5em;
+}
+
+/* --- Boîtes de contenu --- */
+.reveal .box-def {
+  background: #EEF4FB;
+  border-left: 5px solid var(--tc-blue);
+  border-radius: 0 6px 6px 0;
+  padding: 0.7em 1em;
+  margin: 0.5em 0;
+}
+
+.reveal .box-def .box-title {
+  font-weight: 600;
+  color: var(--tc-blue);
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3em;
+}
+
+.reveal .box-thm {
+  background: #F5F0FB;
+  border-left: 5px solid var(--tc-purple);
+  border-radius: 0 6px 6px 0;
+  padding: 0.7em 1em;
+  margin: 0.5em 0;
+}
+
+.reveal .box-thm .box-title {
+  font-weight: 600;
+  color: var(--tc-purple);
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3em;
+}
+
+.reveal .box-prop {
+  background: #FFF7ED;
+  border-left: 5px solid var(--tc-gold);
+  border-radius: 0 6px 6px 0;
+  padding: 0.7em 1em;
+  margin: 0.5em 0;
+}
+
+.reveal .box-prop .box-title {
+  font-weight: 600;
+  color: var(--tc-rust);
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3em;
+}
+
+.reveal .box-rem {
+  background: #F0F7F2;
+  border-left: 5px solid var(--tc-green);
+  border-radius: 0 6px 6px 0;
+  padding: 0.7em 1em;
+  margin: 0.5em 0;
+  font-size: 0.85em;
+}
+
+.reveal .box-rem .box-title {
+  font-weight: 600;
+  color: var(--tc-green);
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3em;
+}
+
+.reveal .box-ex {
+  background: var(--tc-warm);
+  border-left: 5px solid var(--tc-brick);
+  border-radius: 0 6px 6px 0;
+  padding: 0.7em 1em;
+  margin: 0.5em 0;
+  font-size: 0.88em;
+}
+
+.reveal .box-ex .box-title {
+  font-weight: 600;
+  color: var(--tc-brick);
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.3em;
+}
+
+/* --- Bouton preuve toggle --- */
+.reveal .proof-toggle-btn {
+  display: inline-block;
+  background: var(--tc-brick);
+  color: white;
+  border: none;
+  padding: 0.35em 0.9em;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75em;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  transition: background 0.2s;
+  margin-top: 0.5em;
+}
+
+.reveal .proof-toggle-btn:hover {
+  background: var(--tc-rust);
+}
+
+.reveal .proof-content {
+  display: none;
+  background: #FAFAFA;
+  border: 1px dashed var(--tc-gold);
+  border-radius: 6px;
+  padding: 0.8em 1em;
+  margin-top: 0.5em;
+  font-size: 0.85em;
+  color: var(--tc-mid);
+}
+
+.reveal .proof-content.visible {
+  display: block;
+}
+
+/* --- Listes --- */
+.reveal ul {
+  margin-left: 1.2em;
+}
+
+.reveal ul li, .reveal ol li {
+  margin-bottom: 0.4em;
+  line-height: 1.5;
+}
+
+.reveal ul li::marker {
+  color: var(--tc-brick);
+}
+
+/* --- Formules --- */
+.reveal .katex { font-size: 1em; }
+.reveal .katex-display { margin: 0.6em 0; }
+
+/* --- Encadré de formule clé --- */
+.reveal .formula-key {
+  background: var(--tc-sand);
+  border: 2px solid var(--tc-brick);
+  border-radius: 6px;
+  padding: 0.6em 1.2em;
+  text-align: center;
+  margin: 0.5em auto;
+}
+
+/* --- Grille 2 colonnes --- */
+.reveal .cols-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2em;
+  align-items: start;
+}
+
+.reveal .cols-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1em;
+  align-items: start;
+}
+
+/* --- Badge --- */
+.reveal .badge {
+  display: inline-block;
+  background: var(--tc-brick);
+  color: white;
+  border-radius: 20px;
+  padding: 0.1em 0.7em;
+  font-size: 0.7em;
+  font-weight: 600;
+  vertical-align: middle;
+  margin-right: 0.3em;
+}
+
+/* --- Tag loi --- */
+.reveal .law-tag {
+  display: inline-block;
+  background: var(--tc-warm);
+  border: 1.5px solid var(--tc-gold);
+  border-radius: 4px;
+  padding: 0.05em 0.5em;
+  font-size: 0.8em;
+  color: var(--tc-rust);
+  font-weight: 600;
+}
+
+/* --- Navigation progress bar --- */
+.reveal .progress {
+  color: var(--tc-brick);
+}
+
+/* --- Slide number --- */
+.reveal .slide-number {
+  color: var(--tc-mid);
+  font-size: 0.7em;
+}
+
+/* --- Séparateur --- */
+.reveal hr {
+  border: none;
+  border-top: 1.5px solid var(--tc-warm);
+  margin: 0.6em 0;
+}
+
+/* --- Exercice dans boîte grise --- */
+.reveal .box-exo {
+  background: #F7F7F7;
+  border: 1px solid #DDD;
+  border-radius: 6px;
+  padding: 0.8em 1em;
+  margin: 0.5em 0;
+  font-size: 0.82em;
+}
+
+/* --- Highlight --- */
+.reveal .hl {
+  color: var(--tc-brick);
+  font-weight: 600;
+}
+
+/* --- Fragment animations --- */
+.reveal .fragment.highlight-tc.visible {
+  color: var(--tc-brick);
+  font-weight: 600;
+}
+
+/* --- Responsive petits écrans --- */
+@media (max-width: 768px) {
+  .reveal { font-size: 20px; }
+  .reveal .cols-2, .reveal .cols-3 { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chapitre 3 — Variables aléatoires</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/white.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"/>
+  <link rel="stylesheet" href="../assets/theme-terracotta.css"/>
+  <style>.reveal-viewport{background:#FAF6F0;}.reveal .slides section{padding:0.5em 1em;}</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- TITRE -->
+<section>
+  <div class="chapter-title" style="margin-top:1em;">
+    <div style="font-size:0.65em;color:rgba(255,255,255,0.75);margin-bottom:0.3em;">INSA Toulouse — Génie Civil 2-IC — 2026-2027</div>
+    <h1 style="font-size:1.4em;margin-bottom:0.2em;">Probabilités &amp; Statistique</h1>
+    <hr style="border-color:rgba(255,255,255,0.3);margin:0.5em 0;"/>
+    <h2 style="font-size:1.1em;color:rgba(255,255,255,0.95);border:none;">Chapitre 3</h2>
+    <h2 style="font-size:1.3em;color:white;border:none;margin-top:0.1em;">Variables aléatoires</h2>
+    <p class="subtitle">Anthony Réveillac</p>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section>
+  <h2>Plan du chapitre</h2>
+  <ol style="font-size:0.9em;line-height:2.1;">
+    <li>Définition d'une variable aléatoire réelle</li>
+    <li>Loi de probabilité et fonction de répartition</li>
+    <li>Variables discrètes vs continues</li>
+    <li>Les lois discrètes fondamentales</li>
+    <li>Les lois continues fondamentales</li>
+  </ol>
+</section>
+
+<!-- MOTIVATION VAR -->
+<section>
+  <h2>3.1 — Motivation</h2>
+  <p style="font-size:0.85em;">Souvent, on n'est pas intéressé par le résultat de l'expérience lui-même, mais par une <strong>fonction numérique</strong> de ce résultat.</p>
+
+  <div class="box-ex">
+    <div class="box-title">🏭 Exemple — Contrôle qualité</div>
+    On observe $n$ pièces : défectueuse ($=1$) ou non ($=0$). $\Omega = \{0,1\}^n$.
+    <br/>Ce qui intéresse le fabricant : la <strong>proportion de pièces défectueuses</strong>
+    $$X(\omega) = \frac{1}{n}\sum_{i=1}^n \omega_i$$
+    $X$ est une fonction $\Omega \to \mathbb{R}$ : c'est une <strong>variable aléatoire réelle</strong>.
+  </div>
+</section>
+
+<!-- DÉFINITION VAR -->
+<section>
+  <h2>Variable aléatoire réelle</h2>
+  <div class="box-def">
+    <div class="box-title">Définition — Variable aléatoire réelle (v.a.r.)</div>
+    Étant donné un espace probabilisé $(\Omega, \mathcal{A}, \mathbb{P})$, une <strong>variable aléatoire réelle</strong> est une application <strong>mesurable</strong> :
+    $$X : \omega \in \Omega \;\mapsto\; X(\omega) \in \mathbb{R}$$
+    c'est-à-dire que pour tout borélien $B \in \mathcal{B}(\mathbb{R})$ :
+    $$\{X \in B\} = \{\omega \in \Omega : X(\omega) \in B\} \in \mathcal{A}.$$
+  </div>
+
+  <div class="box-def" style="margin-top:0.6em;">
+    <div class="box-title">Définition — Loi de probabilité de $X$</div>
+    La <strong>loi de probabilité</strong> de $X$, notée $\mathbb{P}_X$, associe à toute partie $A \subset \mathbb{R}$ :
+    $$\mathbb{P}_X[A] = \mathbb{P}[\{\omega \in \Omega : X(\omega) \in A\}] = \mathbb{P}[X \in A]$$
+  </div>
+
+  <div class="box-rem" style="margin-top:0.5em;font-size:0.82em;">
+    <div class="box-title">Notation</div>
+    On écrira : $\mathbb{P}[X \in A]$, $\mathbb{P}[X = x]$, $\mathbb{P}[X \leq x]$, $\mathbb{P}[a &lt; X \leq b]$...
+  </div>
+</section>
+
+<!-- FONCTION DE RÉPARTITION -->
+<section>
+  <h2>3.2 — Fonction de répartition</h2>
+
+  <div style="margin-bottom:0.4em;display:flex;gap:0.8em;">
+    <button class="proof-toggle-btn" onclick="event.stopPropagation();document.getElementById('modal-fdr-disc').style.display='flex'">📊 Voir $F_X$ discrète</button>
+    <button class="proof-toggle-btn" onclick="event.stopPropagation();document.getElementById('modal-fdr-cont').style.display='flex'">📈 Voir $F_X$ continue</button>
+  </div>
+
+  <div class="box-def" style="font-size:0.85em;">
+    <div class="box-title">Définition — Fonction de répartition</div>
+    $$F_X(x) = \mathbb{P}[X \leq x], \quad \forall x \in \mathbb{R}$$
+  </div>
+
+  <div class="box-prop" style="margin-top:0.4em;">
+    <div class="box-title">Propriétés</div>
+    <div class="cols-2" style="font-size:0.78em;">
+      <ul style="margin-left:1em;">
+        <li>$0 \leq F_X(x) \leq 1$</li>
+        <li>$F_X(x) \to 0$ quand $x \to -\infty$</li>
+        <li>$F_X(x) \to 1$ quand $x \to +\infty$</li>
+      </ul>
+      <ul style="margin-left:1em;">
+        <li>$F_X$ est <strong>croissante</strong></li>
+        <li>$F_X$ est <strong>continue à droite</strong></li>
+        <li>$\mathbb{P}[a &lt; X \leq b] = F_X(b) - F_X(a)$</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box-def" style="margin-top:0.4em;font-size:0.85em;">
+    <div class="box-title">Définition — Quantile d'ordre $\alpha$</div>
+    Si $F_X$ est strictement croissante, le <strong>quantile d'ordre</strong> $\alpha \in ]0,1[$ est le nombre $x_\alpha$ tel que :
+    $$F_X(x_\alpha) = \alpha \quad \Longleftrightarrow \quad \mathbb{P}[X \leq x_\alpha] = \alpha$$
+    La <strong>médiane</strong> est le quantile d'ordre $1/2$.
+  </div>
+</section>
+
+<!-- DISCRÈTES vs CONTINUES -->
+<section>
+  <h2>3.3 — Types de variables aléatoires</h2>
+  <div class="cols-2" style="gap:0.8em;font-size:0.85em;">
+    <div>
+      <div class="box-def">
+        <div class="box-title">Variable discrète</div>
+        $X$ à valeurs dans un ensemble <strong>fini ou dénombrable</strong> $E$.
+        <br/>La loi est caractérisée par :
+        $$\mathbb{P}[X = x], \quad x \in E$$
+        La fonction de répartition est <strong>en escalier</strong>.
+      </div>
+      <div class="box-ex" style="margin-top:0.5em;">
+        <div class="box-title">Exemple</div>
+        Nombre de pièces défectueuses, résultat d'un dé...
+      </div>
+    </div>
+    <div>
+      <div class="box-def">
+        <div class="box-title">Variable continue</div>
+        $X$ à valeurs dans un ensemble infini non dénombrable, et $F_X$ est continue.
+        <br/>Caractérisée par sa <strong>densité</strong> $f_X \geq 0$ telle que :
+        $$F_X(t) = \int_{-\infty}^t f_X(x)\,dx$$
+        $$\mathbb{P}[a &lt; X &lt; b] = \int_a^b f_X(x)\,dx$$
+      </div>
+      <div class="box-ex" style="margin-top:0.5em;">
+        <div class="box-title">Exemple</div>
+        Durée de vie, diamètre d'un composant...
+      </div>
+    </div>
+  </div>
+  <div class="box-rem" style="margin-top:0.5em;font-size:0.8em;">
+    Pour une v.a.r. continue : $\mathbb{P}[X = x] = 0$ pour tout $x \in \mathbb{R}$. Les deux v.a.r. ont même loi si et seulement si leurs fonctions de répartition sont égales.
+  </div>
+</section>
+
+<!-- LOIS DISCRÈTES -->
+<section>
+  <h2>3.4 — Lois discrètes fondamentales</h2>
+  <div class="cols-2" style="gap:0.6em;font-size:0.78em;">
+    <div>
+      <div class="box-prop">
+        <div class="box-title">Bernoulli $\mathcal{B}(p)$</div>
+        $X$ à valeurs dans $\{0, 1\}$, $\mathbb{P}[X=1] = p$, $\mathbb{P}[X=0] = 1-p$
+        <br/><em>État d'un système, pile/face</em>
+      </div>
+      <div class="box-prop" style="margin-top:0.5em;">
+        <div class="box-title">Binomiale $\mathcal{B}(n,p)$</div>
+        $X$ à valeurs dans $\{0,\ldots,n\}$
+        $$\mathbb{P}[X=k] = \binom{n}{k} p^k (1-p)^{n-k}$$
+        <em>Nb de succès en $n$ épreuves indép.</em>
+      </div>
+    </div>
+    <div>
+      <div class="box-prop">
+        <div class="box-title">Géométrique $\mathcal{G}(p)$</div>
+        $X$ à valeurs dans $\mathbb{N}^*$
+        $$\mathbb{P}[X=k] = p(1-p)^{k-1}$$
+        <em>Nb d'essais jusqu'au 1er succès</em>
+      </div>
+      <div class="box-prop" style="margin-top:0.5em;">
+        <div class="box-title">Poisson $\mathcal{P}(\lambda)$</div>
+        $X$ à valeurs dans $\mathbb{N}$
+        $$\mathbb{P}[X=k] = e^{-\lambda}\frac{\lambda^k}{k!}$$
+        <em>Loi des événements rares</em>
+        <br/><em>Limite de $\mathcal{B}(n,p)$ avec $np \to \lambda$</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOIS CONTINUES -->
+<section>
+  <h2>3.5 — Lois continues fondamentales</h2>
+  <div class="cols-2" style="gap:0.6em;font-size:0.78em;">
+    <div>
+      <div class="box-prop">
+        <div class="box-title">Uniforme $\mathcal{U}([a,b])$</div>
+        $$f_X(x) = \frac{1}{b-a} \;\text{ si } x \in [a,b]$$
+        Toute valeur dans $[a,b]$ est également probable.
+      </div>
+      <div class="box-prop" style="margin-top:0.5em;">
+        <div class="box-title">Exponentielle $\mathcal{E}(\lambda)$</div>
+        $$f_X(x) = \lambda e^{-\lambda x} \;\text{ si } x \geq 0$$
+        <em>Fiabilité — durée de vie de composants électroniques.</em>
+        <br/>Paramètre $\lambda$ = taux de défaillance.
+      </div>
+    </div>
+    <div>
+      <div class="box-thm">
+        <div class="box-title">🔔 Normale $\mathcal{N}(m, \sigma^2)$</div>
+        $$f_X(x) = \frac{1}{\sigma\sqrt{2\pi}}\exp\!\left\{-\frac{(x-m)^2}{2\sigma^2}\right\}$$
+        "Courbe en cloche", symétrique en $x=m$.
+        <br/><em>Diamètre de roulement, erreurs de mesure, vieillissement...</em>
+      </div>
+      <div class="box-prop" style="margin-top:0.5em;">
+        <div class="box-title">Gamma $\gamma(a,\lambda)$</div>
+        $$f_X(x) = \frac{\lambda^a}{\Gamma(a)} x^{a-1} e^{-\lambda x}, \; x \geq 0$$
+        Généralise l'exponentielle ($a=1$).
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISUALISATION DENSITÉS -->
+<section>
+  <h2>Visualisation des densités continues</h2>
+  <div style="display:flex;justify-content:center;margin-top:0.4em;">
+    <svg viewBox="0 0 700 300" width="680" height="290" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif;">
+      <!-- Axes -->
+      <line x1="50" y1="250" x2="650" y2="250" stroke="#6B3A2A" stroke-width="1.5"/>
+      <line x1="50" y1="20" x2="50" y2="255" stroke="#6B3A2A" stroke-width="1.5"/>
+      <text x="660" y="254" font-size="13" fill="#6B3A2A">x</text>
+      <text x="38" y="18" font-size="13" fill="#6B3A2A">f</text>
+
+      <!-- Tick marks x -->
+      <line x1="150" y1="247" x2="150" y2="253" stroke="#6B3A2A" stroke-width="1"/>
+      <text x="147" y="265" font-size="11" fill="#6B3A2A">1</text>
+      <line x1="250" y1="247" x2="250" y2="253" stroke="#6B3A2A" stroke-width="1"/>
+      <text x="247" y="265" font-size="11" fill="#6B3A2A">2</text>
+      <line x1="350" y1="247" x2="350" y2="253" stroke="#6B3A2A" stroke-width="1"/>
+      <text x="347" y="265" font-size="11" fill="#6B3A2A">3</text>
+      <line x1="450" y1="247" x2="450" y2="253" stroke="#6B3A2A" stroke-width="1"/>
+      <text x="447" y="265" font-size="11" fill="#6B3A2A">4</text>
+      <line x1="550" y1="247" x2="550" y2="253" stroke="#6B3A2A" stroke-width="1"/>
+      <text x="547" y="265" font-size="11" fill="#6B3A2A">5</text>
+
+      <!-- Exponentielle lambda=1: f(x)=exp(-x), x>=0 -->
+      <!-- Valeurs: x=0:1, x=1:0.368, x=2:0.135, x=3:0.05, x=4:0.018, scale y: 200px=1 -->
+      <polyline points="50.0,50.0 55.0,59.8 60.0,69.0 65.0,77.9 70.0,86.3 75.0,94.2 80.0,101.8 85.0,109.1 90.0,115.9 95.0,122.5 100.0,128.7 105.0,134.6 110.0,140.2 115.0,145.6 120.0,150.7 125.0,155.5 130.0,160.1 135.0,164.5 140.0,168.7 145.0,172.7 150.0,176.4 155.0,180.0 160.0,183.4 165.0,186.7 170.0,189.8 175.0,192.7 180.0,195.5 185.0,198.2 190.0,200.7 195.0,203.1 200.0,205.4 205.0,207.6 210.0,209.6 215.0,211.6 220.0,213.5 225.0,215.2 230.0,216.9 235.0,218.6 240.0,220.1 245.0,221.5 250.0,222.9 255.0,224.3 260.0,225.5 265.0,226.7 270.0,227.8 275.0,228.9 280.0,229.9 285.0,230.9 290.0,231.9 295.0,232.7 300.0,233.6 305.0,234.4 310.0,235.1 315.0,235.9 320.0,236.6 325.0,237.2 330.0,237.8 335.0,238.4 340.0,239.0 345.0,239.5 350.0,240.0 355.0,240.5 360.0,241.0 365.0,241.4 370.0,241.8 375.0,242.2 380.0,242.6 385.0,243.0 390.0,243.3 395.0,243.7 400.0,244.0 405.0,244.3 410.0,244.5 415.0,244.8 420.0,245.1 425.0,245.3 430.0,245.5 435.0,245.7 440.0,246.0 445.0,246.1 450.0,246.3 455.0,246.5 460.0,246.7 465.0,246.8 470.0,247.0 475.0,247.1 480.0,247.3 485.0,247.4 490.0,247.5 495.0,247.7 500.0,247.8 505.0,247.9 510.0,248.0 515.0,248.1 520.0,248.2 525.0,248.3 530.0,248.4 535.0,248.4 540.0,248.5 545.0,248.6 550.0,248.7" fill="none" stroke="#C1440E" stroke-width="2.5"/>
+      <text x="80" y="45" font-size="13" fill="#C1440E" font-weight="600">Exp(1)</text>
+
+      <!-- Normale N(3,1): f(x)=1/sqrt(2pi)*exp(-(x-3)^2/2), scale: max=0.4, 200*0.4/0.4=200 -->
+      <!-- Approx points: x=0:0.004, 0.5:0.017, 1:0.054, 1.5:0.130, 2:0.242, 2.5:0.352, 3:0.399, 3.5:0.352, 4:0.242, 4.5:0.130, 5:0.054, 5.5:0.017, 6:0.004 -->
+      <!-- y = 250 - (val/0.4)*200 -->
+      <polyline points="50.0,247.8 55.0,247.4 60.0,247.0 65.0,246.6 70.0,246.0 75.0,245.4 80.0,244.8 85.0,244.0 90.0,243.2 95.0,242.3 100.0,241.2 105.0,240.1 110.0,238.8 115.0,237.4 120.0,235.8 125.0,234.1 130.0,232.2 135.0,230.2 140.0,227.9 145.0,225.5 150.0,222.9 155.0,220.1 160.0,217.1 165.0,213.9 170.0,210.4 175.0,206.7 180.0,202.9 185.0,198.7 190.0,194.4 195.0,189.8 200.0,185.1 205.0,180.1 210.0,174.9 215.0,169.6 220.0,164.1 225.0,158.4 230.0,152.6 235.0,146.8 240.0,140.8 245.0,134.8 250.0,128.7 255.0,122.6 260.0,116.6 265.0,110.6 270.0,104.8 275.0,99.0 280.0,93.5 285.0,88.1 290.0,82.9 295.0,78.1 300.0,73.5 305.0,69.3 310.0,65.4 315.0,61.9 320.0,58.8 325.0,56.2 330.0,54.0 335.0,52.2 340.0,51.0 345.0,50.2 350.0,50.0 355.0,50.2 360.0,51.0 365.0,52.2 370.0,54.0 375.0,56.2 380.0,58.8 385.0,61.9 390.0,65.4 395.0,69.3 400.0,73.5 405.0,78.1 410.0,82.9 415.0,88.1 420.0,93.5 425.0,99.0 430.0,104.8 435.0,110.6 440.0,116.6 445.0,122.6 450.0,128.7 455.0,134.8 460.0,140.8 465.0,146.8 470.0,152.6 475.0,158.4 480.0,164.1 485.0,169.6 490.0,174.9 495.0,180.1 500.0,185.1 505.0,189.8 510.0,194.4 515.0,198.7 520.0,202.9 525.0,206.7 530.0,210.4 535.0,213.9 540.0,217.1 545.0,220.1 550.0,222.9 555.0,225.5 560.0,227.9 565.0,230.2 570.0,232.2 575.0,234.1 580.0,235.8 585.0,237.4 590.0,238.8 595.0,240.1 600.0,241.2 605.0,242.3 610.0,243.2 615.0,244.0 620.0,244.8 625.0,245.4 630.0,246.0 635.0,246.6 640.0,247.0 645.0,247.4 650.0,247.8" fill="none" stroke="#2A5C8A" stroke-width="2.5"/>
+      <text x="370" y="45" font-size="13" fill="#2A5C8A" font-weight="600">N(3,1)</text>
+
+      <!-- Legend -->
+      <rect x="55" y="275" width="14" height="3" fill="#C1440E"/>
+      <text x="73" y="284" font-size="11" fill="#C1440E">Exponentielle</text>
+      <rect x="200" y="275" width="14" height="3" fill="#2A5C8A"/>
+      <text x="218" y="284" font-size="11" fill="#2A5C8A">Normale</text>
+    </svg>
+  </div>
+  <div class="box-rem" style="font-size:0.78em;margin-top:0.3em;">
+    L'aire sous la courbe entre $a$ et $b$ = $\mathbb{P}[a &lt; X &lt; b]$. L'aire totale vaut toujours $\mathbf{1}$.
+  </div>
+</section>
+
+<!-- RÉSUMÉ -->
+<section>
+  <h2>Résumé du Chapitre 3</h2>
+  <div class="cols-2" style="font-size:0.78em;gap:0.7em;">
+    <div>
+      <div class="box-def">
+        <div class="box-title">🔑 V.a.r.</div>
+        $X : \Omega \to \mathbb{R}$, application mesurable.
+        <br/>Loi : $\mathbb{P}_X[A] = \mathbb{P}[X \in A]$
+      </div>
+      <div class="box-prop" style="margin-top:0.5em;">
+        <div class="box-title">📐 Lois discrètes</div>
+        <table style="width:100%;font-size:0.9em;">
+          <tr><td>Bernoulli</td><td>$\mathcal{B}(p)$</td></tr>
+          <tr><td>Binomiale</td><td>$\mathcal{B}(n,p)$</td></tr>
+          <tr><td>Géométrique</td><td>$\mathcal{G}(p)$</td></tr>
+          <tr><td>Poisson</td><td>$\mathcal{P}(\lambda)$</td></tr>
+        </table>
+      </div>
+    </div>
+    <div>
+      <div class="box-def">
+        <div class="box-title">📊 Fonction de répartition</div>
+        $F_X(x) = \mathbb{P}[X \leq x]$
+        <br/>Croissante, continue à droite
+      </div>
+      <div class="box-prop" style="margin-top:0.5em;">
+        <div class="box-title">📐 Lois continues</div>
+        <table style="width:100%;font-size:0.9em;">
+          <tr><td>Uniforme</td><td>$\mathcal{U}([a,b])$</td></tr>
+          <tr><td>Exponentielle</td><td>$\mathcal{E}(\lambda)$</td></tr>
+          <tr><td>Gamma</td><td>$\gamma(a,\lambda)$</td></tr>
+          <tr><td>Normale</td><td>$\mathcal{N}(m,\sigma^2)$</td></tr>
+        </table>
+      </div>
+      <div style="margin-top:0.5em;text-align:center;">
+        <div style="background:var(--tc-brick);color:white;border-radius:8px;padding:0.6em;font-size:0.82em;">
+          <strong>Prochain chapitre :</strong><br/>Manipulation de variables aléatoires
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== QCM ==================== -->
+<section>
+  <h2>🎯 Quiz — Chapitre 3</h2>
+  <div class="cols-2" style="font-size:0.78em;gap:0.6em;">
+    <div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q1.</strong>
+        <p style="margin:0.2em 0;">$X \sim \mathcal{B}(10, 0.3)$. Que vaut $\mathbb{E}[X]$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$0.3$</li>
+          <li>$3$</li>
+          <li>$10$</li>
+          <li>$2.1$</li>
+        </ol>
+      </div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q2.</strong>
+        <p style="margin:0.2em 0;">$X \sim \mathcal{E}(\lambda)$. Que vaut $\mathbb{P}[X > t]$ pour $t \geq 0$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$\lambda e^{-\lambda t}$</li>
+          <li>$1 - e^{-\lambda t}$</li>
+          <li>$e^{-\lambda t}$</li>
+          <li>$e^{\lambda t}$</li>
+        </ol>
+      </div>
+    </div>
+    <div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q3.</strong>
+        <p style="margin:0.2em 0;">$X \sim \mathcal{N}(2, 9)$. Que valent $\mathbb{E}[X]$ et $\text{Var}(X)$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$\mathbb{E}[X]=9$, $\text{Var}(X)=2$</li>
+          <li>$\mathbb{E}[X]=2$, $\text{Var}(X)=3$</li>
+          <li>$\mathbb{E}[X]=2$, $\text{Var}(X)=9$</li>
+          <li>$\mathbb{E}[X]=2$, $\text{Var}(X)=\sqrt{9}$</li>
+        </ol>
+      </div>
+      <div class="box-exo">
+        <strong>Q4.</strong>
+        <p style="margin:0.2em 0;">$X$ est une variable aléatoire réelle continue. Que vaut $\mathbb{P}[X = 3]$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$f_X(3)$ où $f_X$ est la densité</li>
+          <li>$F_X(3)$</li>
+          <li>$0$</li>
+          <li>Cela dépend de la loi</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CORRECTION QCM ==================== -->
+<section>
+  <h2>✅ Correction du Quiz</h2>
+  <div style="font-size:0.8em;display:flex;flex-direction:column;gap:0.5em;">
+    <div class="box-rem">
+      <strong>Q1 — Réponse : b) $3$</strong><br/>
+      Pour $X \sim \mathcal{B}(n,p)$ : $\mathbb{E}[X] = np = 10 \times 0.3 = 3$.
+    </div>
+    <div class="box-rem">
+      <strong>Q2 — Réponse : c) $e^{-\lambda t}$</strong><br/>
+      $\mathbb{P}[X > t] = \int_t^{+\infty} \lambda e^{-\lambda x}\,dx = e^{-\lambda t}$. C'est la propriété de <em>sans mémoire</em> de la loi exponentielle.
+    </div>
+    <div class="box-rem">
+      <strong>Q3 — Réponse : c) $\mathbb{E}[X]=2$, $\text{Var}(X)=9$</strong><br/>
+      Pour $X \sim \mathcal{N}(m, \sigma^2)$ : $\mathbb{E}[X] = m = 2$ et $\text{Var}(X) = \sigma^2 = 9$. Attention : $\sigma^2 = 9$, donc $\sigma = 3$.
+    </div>
+    <div class="box-rem">
+      <strong>Q4 — Réponse : c) $0$</strong><br/>
+      Pour toute v.a.r. continue : $\mathbb{P}[X = x] = \int_x^x f_X(t)\,dt = 0$ pour tout $x \in \mathbb{R}$.
+    </div>
+  </div>
+  <div style="margin-top:1em;text-align:right;font-size:0.65em;color:#999;font-style:italic;">
+    Transparents réalisés avec l'assistance de Claude AI
+  </div>
+</section>
+
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="../assets/preuves.js"></script>
+<script>
+  Reveal.initialize({hash:true,slideNumber:'c/t',progress:true,controls:true,transition:'slide',transitionSpeed:'fast',center:false,width:1100,height:700,margin:0.06});
+  function renderMath(){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}],throwOnError:false,strict:false});}
+  Reveal.on('ready',renderMath);
+  Reveal.on('slidechanged',renderMath);
+</script>
+
+<!-- Modal FDR discrète -->
+<div id="modal-fdr-disc" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:10px;padding:1.2em 1.5em;max-width:560px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.25);position:relative;">
+    <button onclick="document.getElementById('modal-fdr-disc').style.display='none'" style="position:absolute;top:0.4em;right:0.7em;background:none;border:none;font-size:1.3em;cursor:pointer;color:#C1440E;">✕</button>
+    <div style="font-weight:700;color:#C1440E;font-size:0.82em;text-transform:uppercase;margin-bottom:0.6em;">$F_X$ — Variable discrète (ex : dé à 6 faces)</div>
+    <svg viewBox="0 0 480 220" width="460" height="210" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif;display:block;margin:0 auto;">
+      <line x1="50" y1="190" x2="450" y2="190" stroke="#6B3A2A" stroke-width="1.5"/>
+      <line x1="50" y1="10" x2="50" y2="195" stroke="#6B3A2A" stroke-width="1.5"/>
+      <text x="455" y="194" font-size="12" fill="#6B3A2A">x</text>
+      <text x="38" y="14" font-size="12" fill="#6B3A2A">1</text>
+      <text x="38" y="98" font-size="12" fill="#6B3A2A">½</text>
+      <line x1="48" y1="15" x2="450" y2="15" stroke="#EDE0D0" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="48" y1="100" x2="450" y2="100" stroke="#EDE0D0" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="50" y1="190" x2="110" y2="190" stroke="#C1440E" stroke-width="2.5"/>
+      <line x1="110" y1="161" x2="170" y2="161" stroke="#C1440E" stroke-width="2.5"/>
+      <line x1="170" y1="131" x2="230" y2="131" stroke="#C1440E" stroke-width="2.5"/>
+      <line x1="230" y1="102" x2="290" y2="102" stroke="#C1440E" stroke-width="2.5"/>
+      <line x1="290" y1="73" x2="350" y2="73" stroke="#C1440E" stroke-width="2.5"/>
+      <line x1="350" y1="44" x2="410" y2="44" stroke="#C1440E" stroke-width="2.5"/>
+      <line x1="410" y1="15" x2="450" y2="15" stroke="#C1440E" stroke-width="2.5"/>
+      <circle cx="110" cy="161" r="4" fill="#C1440E"/>
+      <circle cx="170" cy="131" r="4" fill="#C1440E"/>
+      <circle cx="230" cy="102" r="4" fill="#C1440E"/>
+      <circle cx="290" cy="73" r="4" fill="#C1440E"/>
+      <circle cx="350" cy="44" r="4" fill="#C1440E"/>
+      <circle cx="410" cy="15" r="4" fill="#C1440E"/>
+      <circle cx="110" cy="190" r="4" fill="white" stroke="#C1440E" stroke-width="2"/>
+      <circle cx="170" cy="161" r="4" fill="white" stroke="#C1440E" stroke-width="2"/>
+      <circle cx="230" cy="131" r="4" fill="white" stroke="#C1440E" stroke-width="2"/>
+      <circle cx="290" cy="102" r="4" fill="white" stroke="#C1440E" stroke-width="2"/>
+      <circle cx="350" cy="73" r="4" fill="white" stroke="#C1440E" stroke-width="2"/>
+      <circle cx="410" cy="44" r="4" fill="white" stroke="#C1440E" stroke-width="2"/>
+      <text x="108" y="205" font-size="11" fill="#6B3A2A" text-anchor="middle">1</text>
+      <text x="168" y="205" font-size="11" fill="#6B3A2A" text-anchor="middle">2</text>
+      <text x="228" y="205" font-size="11" fill="#6B3A2A" text-anchor="middle">3</text>
+      <text x="288" y="205" font-size="11" fill="#6B3A2A" text-anchor="middle">4</text>
+      <text x="348" y="205" font-size="11" fill="#6B3A2A" text-anchor="middle">5</text>
+      <text x="408" y="205" font-size="11" fill="#6B3A2A" text-anchor="middle">6</text>
+      <text x="32" y="164" font-size="10" fill="#6B3A2A">1/6</text>
+      <text x="32" y="134" font-size="10" fill="#6B3A2A">2/6</text>
+      <text x="32" y="105" font-size="10" fill="#6B3A2A">3/6</text>
+      <text x="32" y="76" font-size="10" fill="#6B3A2A">4/6</text>
+      <text x="32" y="47" font-size="10" fill="#6B3A2A">5/6</text>
+    </svg>
+    <div style="font-size:0.75em;color:#6B3A2A;text-align:center;margin-top:0.3em;">Fonction en escalier — sauts aux valeurs prises par $X$</div>
+  </div>
+</div>
+
+<!-- Modal FDR continue -->
+<div id="modal-fdr-cont" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:white;border-radius:10px;padding:1.2em 1.5em;max-width:560px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.25);position:relative;">
+    <button onclick="document.getElementById('modal-fdr-cont').style.display='none'" style="position:absolute;top:0.4em;right:0.7em;background:none;border:none;font-size:1.3em;cursor:pointer;color:#2A5C8A;">✕</button>
+    <div style="font-weight:700;color:#2A5C8A;font-size:0.82em;text-transform:uppercase;margin-bottom:0.6em;">$F_X$ — Variable continue (ex : $\mathcal{E}(1)$, $F_X(x)=1-e^{-x}$)</div>
+    <svg viewBox="0 0 480 220" width="460" height="210" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif;display:block;margin:0 auto;">
+      <line x1="50" y1="190" x2="450" y2="190" stroke="#6B3A2A" stroke-width="1.5"/>
+      <line x1="50" y1="10" x2="50" y2="195" stroke="#6B3A2A" stroke-width="1.5"/>
+      <text x="455" y="194" font-size="12" fill="#6B3A2A">x</text>
+      <text x="38" y="14" font-size="12" fill="#6B3A2A">1</text>
+      <text x="38" y="98" font-size="12" fill="#6B3A2A">½</text>
+      <line x1="48" y1="15" x2="450" y2="15" stroke="#EDE0D0" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="48" y1="100" x2="450" y2="100" stroke="#EDE0D0" stroke-width="1" stroke-dasharray="4"/>
+      <line x1="10" y1="190" x2="50" y2="190" stroke="#2A5C8A" stroke-width="2.5"/>
+      <polyline points="50.0,190.0 54.5,181.5 59.0,173.3 63.5,165.6 68.0,158.3 72.5,151.3 77.0,144.6 81.5,138.3 86.0,132.3 90.5,126.6 95.0,121.1 99.5,116.0 104.0,111.0 108.5,106.4 113.0,101.9 117.5,97.7 122.0,93.6 126.5,89.8 131.0,86.1 135.5,82.7 140.0,79.4 144.5,76.2 149.0,73.3 153.5,70.4 158.0,67.7 162.5,65.1 167.0,62.7 171.5,60.4 176.0,58.2 180.5,56.0 185.0,54.0 189.5,52.1 194.0,50.3 198.5,48.6 203.0,47.0 207.5,45.4 212.0,43.9 216.5,42.5 221.0,41.2 225.5,39.9 230.0,38.7 234.5,37.5 239.0,36.4 243.5,35.4 248.0,34.4 252.5,33.4 257.0,32.5 261.5,31.7 266.0,30.9 270.5,30.1 275.0,29.4 279.5,28.7 284.0,28.0 288.5,27.4 293.0,26.8 297.5,26.2 302.0,25.6 306.5,25.1 311.0,24.6 315.5,24.2 320.0,23.7 324.5,23.3 329.0,22.9 333.5,22.5 338.0,22.1 342.5,21.8 347.0,21.5 351.5,21.1 356.0,20.8 360.5,20.6 365.0,20.3 369.5,20.0 374.0,19.8 378.5,19.5 383.0,19.3 387.5,19.1 392.0,18.9 396.5,18.7 401.0,18.5 405.5,18.4 410.0,18.2" fill="none" stroke="#2A5C8A" stroke-width="2.5"/>
+      <line x1="50" y1="15" x2="450" y2="15" stroke="#2A5C8A" stroke-width="1" stroke-dasharray="5,4" opacity="0.5"/>
+      <text x="140" y="205" font-size="11" fill="#6B3A2A" text-anchor="middle">1</text>
+      <text x="230" y="205" font-size="11" fill="#6B3A2A" text-anchor="middle">2</text>
+      <text x="320" y="205" font-size="11" fill="#6B3A2A" text-anchor="middle">3</text>
+      <text x="410" y="205" font-size="11" fill="#6B3A2A" text-anchor="middle">4</text>
+      <text x="50" y="205" font-size="11" fill="#6B3A2A" text-anchor="middle">0</text>
+    </svg>
+    <div style="font-size:0.75em;color:#6B3A2A;text-align:center;margin-top:0.3em;">Fonction continue et croissante — $F_X(x) = 1 - e^{-x}$ pour $x \geq 0$</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    ['modal-fdr-disc','modal-fdr-cont'].forEach(function(id) {
+      var m = document.getElementById(id);
+      if (m) m.addEventListener('click', function(e){ if(e.target===m) m.style.display='none'; });
+    });
+  })();
+</script>
+</body></html>

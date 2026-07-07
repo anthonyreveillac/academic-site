@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chapitre 6 — Estimation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/white.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"/>
+  <link rel="stylesheet" href="../assets/theme-terracotta.css"/>
+  <style>.reveal-viewport{background:#FAF6F0;}.reveal .slides section{padding:0.5em 1em;}</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- TITRE -->
+<section>
+  <div class="chapter-title" style="margin-top:1em;">
+    <div style="font-size:0.65em;color:rgba(255,255,255,0.75);margin-bottom:0.3em;">INSA Toulouse — Génie Civil 2-IC — 2026-2027</div>
+    <h1 style="font-size:1.4em;margin-bottom:0.2em;">Probabilités &amp; Statistique</h1>
+    <hr style="border-color:rgba(255,255,255,0.3);margin:0.5em 0;"/>
+    <h2 style="font-size:1.1em;color:rgba(255,255,255,0.95);border:none;">Chapitre 6</h2>
+    <h2 style="font-size:1.3em;color:white;border:none;margin-top:0.1em;">Estimation statistique</h2>
+    <p class="subtitle">Anthony Réveillac</p>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section>
+  <h2>Plan du chapitre</h2>
+  <ol style="font-size:0.9em;line-height:2.1;">
+    <li>Introduction et cadre général</li>
+    <li>Estimation ponctuelle — propriétés</li>
+    <li>Estimateurs de la moyenne et de la variance</li>
+    <li>Intervalles de confiance pour la moyenne</li>
+    <li>Intervalles de confiance pour une proportion</li>
+    <li>Intervalles de confiance pour la variance</li>
+  </ol>
+</section>
+
+<!-- MOTIVATION -->
+<section>
+  <h2>6.1 — Cadre général</h2>
+  <div class="box-rem" style="margin-bottom:0.6em;font-size:0.85em;">
+    Dans tous ces transparents on se place sur un espace probabilisé $(\Omega, \mathcal{A}, \mathbb{P})$.
+  </div>
+  <p style="font-size:0.85em;">On dispose d'observations sur une <strong>population de grande taille</strong>. On veut estimer un paramètre inconnu $\theta$ à partir d'un <strong>échantillon de petite taille</strong>.</p>
+
+  <div class="box-ex" style="margin-top:0.5em;">
+    <div class="box-title">🏭 Exemple fil rouge</div>
+    Une usine produit des composants électroniques. On veut estimer la proportion $p$ de composants défectueux. Tester tous les composants est trop coûteux : on prélève $n$ pièces au hasard.
+    <br/>On modélise par des v.a.r. i.i.d. de Bernoulli : $X_i = 1$ si défectueux, $0$ sinon.
+    <br/>Estimation naturelle : $\hat{p} = \bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:0.78em;padding:0 2em;margin-top:-0.2em;">
+    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
+    <span style="color:#2A5C8A;font-weight:600;">Aire centrale $= 1-\alpha$</span>
+    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
+  </div>
+
+  <div class="box-rem" style="margin-top:0.5em;font-size:0.82em;">
+    <div class="box-title">Paramètres typiques à estimer</div>
+    <ul style="margin-left:1em;">
+      <li>Espérance $m = \mathbb{E}[X]$</li>
+      <li>Proportion $p$ (cas Bernoulli)</li>
+      <li>Variance $\sigma^2 = \text{Var}(X)$</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ÉCHANTILLON ET ESTIMATEUR -->
+<section>
+  <h2>6.2 — Échantillon et estimateur</h2>
+  <div class="box-def">
+    <div class="box-title">Définition — Échantillon</div>
+    Un <strong>échantillon</strong> de taille $n$ d'une variable aléatoire $X$ est la donnée de $n$ variables aléatoires indépendantes $X_1, \ldots, X_n$ de même loi que $X$.
+  </div>
+
+  <div class="box-def" style="margin-top:0.6em;">
+    <div class="box-title">Définition — Estimateur</div>
+    Un <strong>estimateur</strong> de $\theta$ est une fonction $\hat{\theta}_n = g(X_1, \ldots, X_n)$ calculée à partir de l'échantillon.
+    <br/>C'est une variable aléatoire qui approche le paramètre inconnu $\theta$.
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:0.78em;padding:0 2em;margin-top:-0.2em;">
+    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
+    <span style="color:#2A5C8A;font-weight:600;">Aire centrale $= 1-\alpha$</span>
+    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
+  </div>
+
+  <div class="box-rem" style="margin-top:0.6em;font-size:0.85em;">
+    <div class="box-title">Exemples d'estimateurs naturels</div>
+    <ul style="margin-left:1.2em;">
+      <li><strong>Moyenne empirique</strong> $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$ : estimateur de $m = \mathbb{E}[X]$</li>
+      <li><strong>Proportion empirique</strong> $\bar{X}_n$ (cas Bernoulli) : estimateur de $p$</li>
+      <li><strong>Variance empirique</strong> $S_n^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X}_n)^2$ : estimateur de $\sigma^2$</li>
+    </ul>
+  </div>
+</section>
+
+<!-- CONSISTANCE ET BIAIS -->
+<section>
+  <h2>6.3 — Propriétés d'un estimateur</h2>
+  <div class="box-def">
+    <div class="box-title">Définition — Estimateur consistant</div>
+    $\hat{\theta}_n$ est <strong>consistant</strong> si pour tout $\varepsilon > 0$ :
+    $$\mathbb{P}[|\hat{\theta}_n - \theta| > \varepsilon] \xrightarrow[n \to +\infty]{} 0$$
+    ($\hat{\theta}_n$ converge en probabilité vers $\theta$)
+  </div>
+
+  <div class="box-def" style="margin-top:0.5em;">
+    <div class="box-title">Définition — Biais</div>
+    Le <strong>biais</strong> de $\hat{\theta}_n$ est $\mathbb{E}[\hat{\theta}_n] - \theta$.
+    <br/>$\hat{\theta}_n$ est <strong>sans biais</strong> si $\mathbb{E}[\hat{\theta}_n] = \theta$.
+  </div>
+</section>
+
+<!-- CRITÈRE CONSISTANCE ET EQM -->
+<section>
+  <h2>6.3 — Critère de consistance</h2>
+  <div class="box-thm">
+    <div class="box-title">Théorème — Critère de consistance</div>
+    Si $\mathbb{E}[\hat{\theta}_n] \xrightarrow{} \theta$ et $\text{Var}[\hat{\theta}_n] \xrightarrow{} 0$, alors $\hat{\theta}_n$ est consistant.
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:0.78em;padding:0 2em;margin-top:-0.2em;">
+    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
+    <span style="color:#2A5C8A;font-weight:600;">Aire centrale $= 1-\alpha$</span>
+    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
+  </div>
+
+  <div class="box-rem" style="margin-top:0.6em;font-size:0.85em;">
+    <div class="box-title">Écart quadratique moyen (EQM)</div>
+    $$\mathbb{E}[(\hat{\theta}_n - \theta)^2] = \text{Var}[\hat{\theta}_n] + \text{biais}^2$$
+    Un bon estimateur minimise à la fois le biais <strong>et</strong> la variance.
+    <br/>On parle de <strong>compromis biais-variance</strong>.
+  </div>
+
+  <div class="box-ex" style="margin-top:0.6em;font-size:0.82em;">
+    <div class="box-title">Illustration</div>
+    <div class="cols-2">
+      <div>Sans biais, grande variance → dispersé autour de $\theta$</div>
+      <div>Biaisé, faible variance → concentré mais décalé de $\theta$</div>
+    </div>
+    Le meilleur estimateur minimise l'EQM global.
+  </div>
+</section>
+
+<!-- ESTIMATEURS CLASSIQUES -->
+<section>
+  <h2>6.3 — Estimateurs classiques</h2>
+  <div class="cols-2" style="gap:0.7em;font-size:0.82em;">
+    <div>
+      <div class="box-prop">
+        <div class="box-title">Moyenne empirique</div>
+        $$\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$$
+        <ul style="margin-left:1em;margin-top:0.3em;">
+          <li>Consistante (LGN)</li>
+          <li>Sans biais : $\mathbb{E}[\bar{X}_n] = m$</li>
+          <li>$\text{Var}[\bar{X}_n] = \dfrac{\sigma^2}{n}$</li>
+        </ul>
+        <div style="margin-top:0.4em;font-size:0.9em;font-style:italic;">
+          Si $X \sim \mathcal{N}(m,\sigma^2)$ : $\bar{X}_n \sim \mathcal{N}\!\left(m, \dfrac{\sigma^2}{n}\right)$
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="box-prop">
+        <div class="box-title">Variance empirique</div>
+        $$S_n^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X}_n)^2$$
+        <ul style="margin-left:1em;margin-top:0.3em;">
+          <li>Consistante</li>
+          <li>Sans biais : $\mathbb{E}[S_n^2] = \sigma^2$</li>
+        </ul>
+        <div style="margin-top:0.4em;font-size:0.9em;font-style:italic;">
+          ⚠️ Diviseur $n-1$ et non $n$ (pour garantir le sans-biais)
+        </div>
+      </div>
+      <div class="box-rem" style="margin-top:0.5em;">
+        <div class="box-title">Loi du $\chi^2$</div>
+        Si $X_i \sim \mathcal{N}(m,\sigma^2)$ :
+        $$\frac{(n-1)S_n^2}{\sigma^2} \sim \chi^2_{(n-1)}$$
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUANTILES GÉNÉRAL -->
+<section>
+  <h2>Rappel — Notion de quantile</h2>
+  <div class="box-def" style="font-size:0.85em;">
+    <div class="box-title">Définition</div>
+    Le <strong>quantile d'ordre $\alpha$</strong> ($\alpha \in ]0,1[$) de $X$ est le réel $x_\alpha$ tel que $\mathbb{P}[X \leq x_\alpha] = \alpha$.
+  </div>
+
+  <div class="cols-2" style="margin-top:0.6em;gap:0.8em;font-size:0.78em;">
+    <div>
+      <div class="box-ex" style="margin-bottom:0.4em;">
+        <div class="box-title">Exemple discret — Dé à 6 faces</div>
+        Quantile d'ordre $\alpha = 0.6$ : $x_{0.6} = 4$ car $F_X(4) = 4/6 \geq 0.6$.
+      </div>
+      <svg viewBox="0 0 260 150" width="310" height="175" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;">
+        <line x1="25" y1="125" x2="245" y2="125" stroke="#6B3A2A" stroke-width="1.5"/>
+        <line x1="25" y1="10" x2="25" y2="128" stroke="#6B3A2A" stroke-width="1.5"/>
+        <!-- Steps F(x) -->
+        <line x1="25" y1="125" x2="62" y2="125" stroke="#C1440E" stroke-width="2"/>
+        <line x1="62" y1="104" x2="97" y2="104" stroke="#C1440E" stroke-width="2"/>
+        <line x1="97" y1="83" x2="132" y2="83" stroke="#C1440E" stroke-width="2"/>
+        <line x1="132" y1="62" x2="167" y2="62" stroke="#C1440E" stroke-width="2"/>
+        <line x1="167" y1="41" x2="202" y2="41" stroke="#C1440E" stroke-width="2"/>
+        <line x1="202" y1="20" x2="237" y2="20" stroke="#C1440E" stroke-width="2"/>
+        <line x1="237" y1="10" x2="245" y2="10" stroke="#C1440E" stroke-width="2"/>
+        <!-- Dots -->
+        <circle cx="62" cy="104" r="3" fill="#C1440E"/><circle cx="97" cy="83" r="3" fill="#C1440E"/>
+        <circle cx="132" cy="62" r="3" fill="#C1440E"/><circle cx="167" cy="41" r="3" fill="#C1440E"/>
+        <circle cx="202" cy="20" r="3" fill="#C1440E"/><circle cx="237" cy="10" r="3" fill="#C1440E"/>
+        <circle cx="62" cy="125" r="3" fill="white" stroke="#C1440E" stroke-width="1.5"/>
+        <circle cx="97" cy="104" r="3" fill="white" stroke="#C1440E" stroke-width="1.5"/>
+        <circle cx="132" cy="83" r="3" fill="white" stroke="#C1440E" stroke-width="1.5"/>
+        <circle cx="167" cy="62" r="3" fill="white" stroke="#C1440E" stroke-width="1.5"/>
+        <circle cx="202" cy="41" r="3" fill="white" stroke="#C1440E" stroke-width="1.5"/>
+        <!-- quantile alpha=0.6 -->
+        <line x1="25" y1="56" x2="167" y2="56" stroke="#2A5C8A" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <line x1="167" y1="56" x2="167" y2="125" stroke="#2A5C8A" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <text x="10" y="59" font-size="9" fill="#2A5C8A">0.6</text>
+        <text x="163" y="138" font-size="9" fill="#2A5C8A" text-anchor="middle">x₀.₆=4</text>
+        <!-- x labels -->
+        <text x="62" y="138" font-size="9" fill="#6B3A2A" text-anchor="middle">1</text>
+        <text x="97" y="138" font-size="9" fill="#6B3A2A" text-anchor="middle">2</text>
+        <text x="132" y="138" font-size="9" fill="#6B3A2A" text-anchor="middle">3</text>
+        <text x="202" y="138" font-size="9" fill="#6B3A2A" text-anchor="middle">5</text>
+        <text x="237" y="138" font-size="9" fill="#6B3A2A" text-anchor="middle">6</text>
+        <text x="14" y="13" font-size="9" fill="#6B3A2A">1</text>
+      </svg>
+    </div>
+    <div>
+      <div class="box-ex" style="margin-bottom:0.4em;">
+        <div class="box-title">Exemple continu — $\mathcal{E}(1)$</div>
+        $F_X(x) = 1-e^{-x}$. Quantile d'ordre $\alpha$ : $x_\alpha = -\ln(1-\alpha)$.
+        <br/>Ex : $x_{0.6} = -\ln(0.4) \approx 0.916$.
+      </div>
+      <svg viewBox="0 0 260 150" width="310" height="175" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:0 auto;">
+        <line x1="25" y1="125" x2="245" y2="125" stroke="#6B3A2A" stroke-width="1.5"/>
+        <line x1="25" y1="10" x2="25" y2="128" stroke="#6B3A2A" stroke-width="1.5"/>
+        <!-- F(x)=1-exp(-x), x in [0,4], x_px=25+x*55, y_px=125-(1-exp(-x))*115 -->
+        <polyline points="25,125 30,115 36,106 41,98 47,91 52,85 58,79 63,74 68,70 74,66 79,62 85,59 90,56 96,53 101,51 107,48 112,46 117,44 123,42 128,41 134,39 139,38 144,37 150,36 155,35 161,34 166,33 172,33 177,32 183,31 188,31 193,30 199,30 204,30 210,29 215,29 220,29 226,29 231,29 237,28 242,28" fill="none" stroke="#C1440E" stroke-width="2"/>
+        <!-- quantile alpha=0.6, x=0.916 -> x_px=25+0.916*55=75.4, y_px=125-0.6*115=56 -->
+        <line x1="25" y1="56" x2="75" y2="56" stroke="#2A5C8A" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <line x1="75" y1="56" x2="75" y2="125" stroke="#2A5C8A" stroke-width="1.2" stroke-dasharray="4,3"/>
+        <text x="10" y="59" font-size="9" fill="#2A5C8A">0.6</text>
+        <text x="75" y="138" font-size="9" fill="#2A5C8A" text-anchor="middle">x₀.₆</text>
+        <!-- x labels -->
+        <text x="80" y="138" font-size="9" fill="#6B3A2A" text-anchor="middle">1</text>
+        <text x="135" y="138" font-size="9" fill="#6B3A2A" text-anchor="middle">2</text>
+        <text x="190" y="138" font-size="9" fill="#6B3A2A" text-anchor="middle">3</text>
+        <text x="14" y="13" font-size="9" fill="#6B3A2A">1</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- QUANTILE N(0,1) -->
+<section>
+  <h2>Quantile de la loi $\mathcal{N}(0,1)$</h2>
+  <div class="box-def" style="font-size:0.85em;margin-bottom:0.5em;">
+    $z_{1-\alpha/2}$ est le quantile d'ordre $1-\alpha/2$ de $\mathcal{N}(0,1)$ : $\mathbb{P}[Z \leq z_{1-\alpha/2}] = 1-\alpha/2$.
+    <br/>Par symétrie de la loi normale : $\mathbb{P}[-z_{1-\alpha/2} \leq Z \leq z_{1-\alpha/2}] = 1-\alpha$.
+  </div>
+
+  <div style="display:flex;justify-content:center;margin-top:0.3em;">
+    <svg viewBox="0 0 580 260" width="560" height="250" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif;">
+      <!-- Areas -->
+      <polygon points="45.00,229.58 46.08,229.56 47.16,229.53 48.23,229.51 49.31,229.48 50.39,229.45 51.47,229.42 52.55,229.39 53.62,229.36 54.70,229.33 55.78,229.29 56.86,229.25 57.94,229.21 59.01,229.17 60.09,229.13 61.17,229.08 62.25,229.04 63.33,228.99 64.40,228.94 65.48,228.88 66.56,228.83 67.64,228.77 68.72,228.71 69.79,228.64 70.87,228.57 71.95,228.50 73.03,228.43 74.11,228.35 75.18,228.27 76.26,228.19 77.34,228.10 78.42,228.01 79.50,227.92 80.57,227.82 81.65,227.72 82.73,227.61 83.81,227.50 84.89,227.38 85.96,227.26 87.04,227.14 88.12,227.01 89.20,226.87 90.28,226.73 91.35,226.58 92.43,226.43 93.51,226.27 94.59,226.11 95.67,225.94 96.74,225.76 97.82,225.58 98.90,225.39 99.98,225.19 101.06,224.99 102.13,224.77 103.21,224.56 104.29,224.33 105.37,224.09 106.45,223.85 107.52,223.59 108.60,223.33 109.68,223.06 110.76,222.78 111.84,222.49 112.91,222.19 113.99,221.88 115.07,221.57 116.15,221.24 117.23,220.89 118.30,220.54 119.38,220.18 120.46,219.81 121.54,219.42 122.62,219.02 123.69,218.61 124.77,218.19 125.85,217.75 126.93,217.30 128.01,216.84 129.08,216.37 130.16,215.88 131.24,215.37 132.32,214.85 133.40,214.32 134.47,213.77 135.55,213.21 136.63,212.63 137.71,212.04 138.79,211.43 139.86,210.80 140.94,210.16 142.02,209.50 143.10,208.83 144.18,208.13 145.25,207.42 146.33,206.69 147.41,205.95 148.49,205.19 149.57,204.40 150.64,203.60 151.72,202.79 152.80,201.95 152.80,230 45.00,230" fill="rgba(193,68,14,0.55)"/>
+      <polygon points="427.20,230 427.20,201.95 428.28,202.79 429.36,203.60 430.43,204.40 431.51,205.19 432.59,205.95 433.67,206.69 434.75,207.42 435.82,208.13 436.90,208.83 437.98,209.50 439.06,210.16 440.14,210.80 441.21,211.43 442.29,212.04 443.37,212.63 444.45,213.21 445.53,213.77 446.60,214.32 447.68,214.85 448.76,215.37 449.84,215.88 450.92,216.37 451.99,216.84 453.07,217.30 454.15,217.75 455.23,218.19 456.31,218.61 457.38,219.02 458.46,219.42 459.54,219.81 460.62,220.18 461.70,220.54 462.77,220.89 463.85,221.24 464.93,221.57 466.01,221.88 467.09,222.19 468.16,222.49 469.24,222.78 470.32,223.06 471.40,223.33 472.48,223.59 473.55,223.85 474.63,224.09 475.71,224.33 476.79,224.56 477.87,224.77 478.94,224.99 480.02,225.19 481.10,225.39 482.18,225.58 483.26,225.76 484.33,225.94 485.41,226.11 486.49,226.27 487.57,226.43 488.65,226.58 489.72,226.73 490.80,226.87 491.88,227.01 492.96,227.14 494.04,227.26 495.11,227.38 496.19,227.50 497.27,227.61 498.35,227.72 499.43,227.82 500.50,227.92 501.58,228.01 502.66,228.10 503.74,228.19 504.82,228.27 505.89,228.35 506.97,228.43 508.05,228.50 509.13,228.57 510.21,228.64 511.28,228.71 512.36,228.77 513.44,228.83 514.52,228.88 515.60,228.94 516.67,228.99 517.75,229.04 518.83,229.08 519.91,229.13 520.99,229.17 522.06,229.21 523.14,229.25 524.22,229.29 525.30,229.33 526.38,229.36 527.45,229.39 528.53,229.42 529.61,229.45 530.69,229.48 531.77,229.51 532.84,229.53 533.92,229.56 535.00,229.58 535.00,230" fill="rgba(193,68,14,0.55)"/>
+      <polygon points="152.80,201.95 155.54,199.73 158.29,197.39 161.03,194.92 163.78,192.32 166.52,189.59 169.26,186.73 172.01,183.74 174.75,180.62 177.50,177.37 180.24,173.99 182.98,170.48 185.73,166.86 188.47,163.11 191.22,159.25 193.96,155.29 196.70,151.22 199.45,147.06 202.19,142.81 204.94,138.49 207.68,134.09 210.42,129.65 213.17,125.15 215.91,120.63 218.66,116.08 221.40,111.53 224.14,106.99 226.89,102.46 229.63,97.98 232.38,93.54 235.12,89.17 237.86,84.89 240.61,80.71 243.35,76.64 246.10,72.70 248.84,68.91 251.58,65.28 254.33,61.83 257.07,58.56 259.82,55.51 262.56,52.67 265.30,50.06 268.05,47.70 270.79,45.58 273.54,43.73 276.28,42.15 279.02,40.85 281.77,39.83 284.51,39.10 287.26,38.65 290.00,38.51 292.74,38.65 295.49,39.10 298.23,39.83 300.98,40.85 303.72,42.15 306.46,43.73 309.21,45.58 311.95,47.70 314.70,50.06 317.44,52.67 320.18,55.51 322.93,58.56 325.67,61.83 328.42,65.28 331.16,68.91 333.90,72.70 336.65,76.64 339.39,80.71 342.14,84.89 344.88,89.17 347.62,93.54 350.37,97.98 353.11,102.46 355.86,106.99 358.60,111.53 361.34,116.08 364.09,120.63 366.83,125.15 369.58,129.65 372.32,134.09 375.06,138.49 377.81,142.81 380.55,147.06 383.30,151.22 386.04,155.29 388.78,159.25 391.53,163.11 394.27,166.86 397.02,170.48 399.76,173.99 402.50,177.37 405.25,180.62 407.99,183.74 410.74,186.73 413.48,189.59 416.22,192.32 418.97,194.92 421.71,197.39 424.46,199.73 427.20,201.95 427.20,230 152.80,230" fill="rgba(42,92,138,0.2)"/>
+      <!-- Curve -->
+      <polyline points="45.00,229.58 47.45,229.53 49.90,229.47 52.35,229.40 54.80,229.32 57.25,229.24 59.70,229.15 62.15,229.04 64.60,228.93 67.05,228.80 69.50,228.66 71.95,228.50 74.40,228.33 76.85,228.14 79.30,227.94 81.75,227.71 84.20,227.46 86.65,227.18 89.10,226.88 91.55,226.56 94.00,226.20 96.45,225.81 98.90,225.39 101.35,224.93 103.80,224.43 106.25,223.89 108.70,223.31 111.15,222.68 113.60,222.00 116.05,221.27 118.50,220.48 120.95,219.63 123.40,218.72 125.85,217.75 128.30,216.71 130.75,215.60 133.20,214.42 135.65,213.16 138.10,211.82 140.55,210.40 143.00,208.89 145.45,207.29 147.90,205.60 150.35,203.82 152.80,201.95 155.25,199.97 157.70,197.90 160.15,195.73 162.60,193.45 165.05,191.07 167.50,188.59 169.95,186.00 172.40,183.30 174.85,180.51 177.30,177.61 179.75,174.60 182.20,171.50 184.65,168.30 187.10,165.00 189.55,161.61 192.00,158.13 194.45,154.57 196.90,150.92 199.35,147.21 201.80,143.42 204.25,139.57 206.70,135.67 209.15,131.72 211.60,127.73 214.05,123.70 216.50,119.66 218.95,115.60 221.40,111.53 223.85,107.47 226.30,103.43 228.75,99.41 231.20,95.43 233.65,91.50 236.10,87.63 238.55,83.84 241.00,80.12 243.45,76.49 245.90,72.98 248.35,69.57 250.80,66.30 253.25,63.16 255.70,60.17 258.15,57.34 260.60,54.67 263.05,52.19 265.50,49.88 267.95,47.78 270.40,45.87 272.85,44.17 275.30,42.68 277.75,41.42 280.20,40.38 282.65,39.56 285.10,38.98 287.55,38.62 290.00,38.51 292.45,38.62 294.90,38.98 297.35,39.56 299.80,40.38 302.25,41.42 304.70,42.68 307.15,44.17 309.60,45.87 312.05,47.78 314.50,49.88 316.95,52.19 319.40,54.67 321.85,57.34 324.30,60.17 326.75,63.16 329.20,66.30 331.65,69.57 334.10,72.98 336.55,76.49 339.00,80.12 341.45,83.84 343.90,87.63 346.35,91.50 348.80,95.43 351.25,99.41 353.70,103.43 356.15,107.47 358.60,111.53 361.05,115.60 363.50,119.66 365.95,123.70 368.40,127.73 370.85,131.72 373.30,135.67 375.75,139.57 378.20,143.42 380.65,147.21 383.10,150.92 385.55,154.57 388.00,158.13 390.45,161.61 392.90,165.00 395.35,168.30 397.80,171.50 400.25,174.60 402.70,177.61 405.15,180.51 407.60,183.30 410.05,186.00 412.50,188.59 414.95,191.07 417.40,193.45 419.85,195.73 422.30,197.90 424.75,199.97 427.20,201.95 429.65,203.82 432.10,205.60 434.55,207.29 437.00,208.89 439.45,210.40 441.90,211.82 444.35,213.16 446.80,214.42 449.25,215.60 451.70,216.71 454.15,217.75 456.60,218.72 459.05,219.63 461.50,220.48 463.95,221.27 466.40,222.00 468.85,222.68 471.30,223.31 473.75,223.89 476.20,224.43 478.65,224.93 481.10,225.39 483.55,225.81 486.00,226.20 488.45,226.56 490.90,226.88 493.35,227.18 495.80,227.46 498.25,227.71 500.70,227.94 503.15,228.14 505.60,228.33 508.05,228.50 510.50,228.66 512.95,228.80 515.40,228.93 517.85,229.04 520.30,229.15 522.75,229.24 525.20,229.32 527.65,229.40 530.10,229.47 532.55,229.53 535.00,229.58" fill="none" stroke="#2C1810" stroke-width="2.5"/>
+      <!-- Axis -->
+      <line x1="30" y1="230" x2="550" y2="230" stroke="#6B3A2A" stroke-width="1.5"/>
+      <line x1="290" y1="25" x2="290" y2="233" stroke="#6B3A2A" stroke-width="1" stroke-dasharray="3,3"/>
+      <!-- Quantile vertical lines -->
+      <line x1="152.8" y1="201.9" x2="152.8" y2="230" stroke="#C1440E" stroke-width="2"/>
+      <line x1="427.2" y1="201.9" x2="427.2" y2="230" stroke="#C1440E" stroke-width="2"/>
+      <!-- x-axis labels -->
+      <text x="154" y="249" font-size="12" fill="#C1440E" text-anchor="middle" font-weight="700">— z*</text>
+      <text x="426" y="249" font-size="12" fill="#C1440E" text-anchor="middle" font-weight="700">z*</text>
+      <text x="290" y="249" font-size="12" fill="#6B3A2A" text-anchor="middle">0</text>
+      <!-- Area labels -->
+      <text x="99" y="215" font-size="15" fill="#C1440E" text-anchor="middle" font-weight="700">α/2</text>
+      <text x="481" y="215" font-size="15" fill="#C1440E" text-anchor="middle" font-weight="700">α/2</text>
+      <text x="290" y="145" font-size="16" fill="#2A5C8A" text-anchor="middle" font-weight="700">1 − α</text>
+    </svg>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:0.78em;padding:0 2em;margin-top:-0.2em;">
+    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
+    <span style="color:#2A5C8A;font-weight:600;">Aire centrale $= 1-\alpha$</span>
+    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
+  </div>
+
+  <div class="box-rem" style="font-size:0.78em;margin-top:0.3em;">
+    <div class="box-title">Valeurs usuelles</div>
+    <div class="cols-2">
+      <div>$\alpha = 5\%$ : $z_{97.5\%} = 1.96$ &nbsp;|&nbsp; $\alpha = 10\%$ : $z_{95\%} = 1.645$</div>
+      <div>$\alpha = 1\%$ : $z_{99.5\%} = 2.576$ &nbsp;|&nbsp; $\alpha = 2\%$ : $z_{99\%} = 2.326$</div>
+    </div>
+  </div>
+</section>
+
+<!-- IC VARIANCE CONNUE -->
+<section>
+  <h2>6.4 — IC pour la moyenne (variance connue)</h2>
+  <p style="font-size:0.82em;">$n$-échantillon $X_1,\ldots,X_n$ i.i.d. $\sim \mathcal{N}(m, \sigma^2)$, $m$ inconnu, $\sigma$ connu.</p>
+
+  <div class="box-prop">
+    <div class="box-title">Construction</div>
+    On a $\sqrt{n}\dfrac{\bar{X}_n - m}{\sigma} \sim \mathcal{N}(0,1)$.
+    <br/>Soit $z_{1-\alpha/2}$ le quantile d'ordre $1-\alpha/2$ de $\mathcal{N}(0,1)$.
+    <br/>Alors $\mathbb{P}\!\left[-z_{1-\alpha/2} \leq \sqrt{n}\dfrac{\bar{X}_n-m}{\sigma} \leq z_{1-\alpha/2}\right] = 1-\alpha$.
+  </div>
+
+  <div class="formula-key" style="margin-top:0.6em;">
+    $$\text{IC}_{1-\alpha}(m) = \left[\bar{x}_n - z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}},\;\; \bar{x}_n + z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}}\right]$$
+  </div>
+
+  <div class="box-ex" style="margin-top:0.5em;font-size:0.82em;">
+    <div class="box-title">À 95% : $\alpha = 5\%$, $z_{97.5\%} = 1.96$</div>
+    $$\text{IC}_{95\%}(m) = \left[\bar{x}_n - \frac{1.96\,\sigma}{\sqrt{n}},\;\; \bar{x}_n + \frac{1.96\,\sigma}{\sqrt{n}}\right]$$
+    <em>Pour $n$ grand sans hypothèse normale, le TCL garantit la validité asymptotique.</em>
+  </div>
+</section>
+
+<!-- IC VARIANCE INCONNUE -->
+<section>
+  <h2>6.5 — IC pour la moyenne (variance inconnue)</h2>
+  <p style="font-size:0.82em;">On remplace $\sigma$ par son estimateur $S_n$. La statistique suit alors une loi de <strong>Student</strong>.</p>
+
+  <div class="box-thm">
+    <div class="box-title">Loi de Student $\mathcal{T}_{n-1}$</div>
+    Si $X_i \sim \mathcal{N}(m,\sigma^2)$ (variance inconnue) :
+    $$\sqrt{n}\frac{\bar{X}_n - m}{S_n} \sim \mathcal{T}_{n-1}$$
+  </div>
+
+  <div class="formula-key" style="margin-top:0.5em;">
+    $$\text{IC}_{1-\alpha}(m) = \left[\bar{x}_n - t_{1-\alpha/2}\frac{s_n}{\sqrt{n}},\;\; \bar{x}_n + t_{1-\alpha/2}\frac{s_n}{\sqrt{n}}\right]$$
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:0.78em;padding:0 2em;margin-top:-0.2em;">
+    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
+    <span style="color:#2A5C8A;font-weight:600;">Aire centrale $= 1-\alpha$</span>
+    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
+  </div>
+
+  <div class="box-rem" style="margin-top:0.5em;font-size:0.82em;">
+    <div class="box-title">📋 $t_{1-\alpha/2}$ se lit dans les tables de Student à $n-1$ degrés de liberté</div>
+    Pour $n$ grand (≥ 30), $\mathcal{T}_{n-1} \approx \mathcal{N}(0,1)$, donc $t_{1-\alpha/2} \approx z_{1-\alpha/2}$.
+  </div>
+</section>
+
+<!-- IC PROPORTION -->
+<section>
+  <h2>6.6 — IC pour une proportion</h2>
+  <p style="font-size:0.82em;">On estime $p$ par $\bar{X}_n = \frac{1}{n}\sum X_i$ (avec $X_i$ de Bernoulli).</p>
+  <p style="font-size:0.82em;">Par le TCL : $\dfrac{\bar{X}_n - p}{\sqrt{p(1-p)/n}} \xrightarrow{\mathcal{L}} \mathcal{N}(0,1)$.</p>
+
+  <div class="box-prop" style="margin-top:0.4em;">
+    <div class="box-title">IC asymptotique pour $p$</div>
+    En remplaçant $p$ dans les bornes par $\bar{X}_n$ (estimateur consistant) :
+  </div>
+
+  <div class="formula-key" style="margin-top:0.4em;font-size:0.85em;">
+    $$\text{IC}_{1-\alpha}(p) = \left[\bar{x}_n - z_{1-\alpha/2}\sqrt{\frac{\bar{x}_n(1-\bar{x}_n)}{n}},\;\; \bar{x}_n + z_{1-\alpha/2}\sqrt{\frac{\bar{x}_n(1-\bar{x}_n)}{n}}\right]$$
+  </div>
+
+  <div class="box-ex" style="margin-top:0.5em;font-size:0.8em;">
+    <div class="box-title">🏭 Application : 21 pièces défectueuses sur 1500</div>
+    $\bar{x}_n = 21/1500 = 0.014$, $z_{97.5\%} = 1.96$
+    $$\text{IC}_{95\%}(p) = [0.0081,\; 0.0199]$$
+    Avec 95% de confiance : entre 0.81% et 1.99% de pièces défectueuses.
+  </div>
+</section>
+
+<!-- IC SIMULATION -->
+<section>
+  <h2>🎛️ Simulation — IC pour la moyenne</h2>
+  <p style="font-size:0.8em;">$X \sim \mathcal{N}(m=5, \sigma^2=4)$. On génère un échantillon de taille $n$ et on compare les IC à $1-\alpha$.</p>
+
+  <div style="display:flex;align-items:center;gap:0.8em;margin:0.3em 0;font-size:0.8em;flex-wrap:wrap;">
+    <label>$n$ = <strong id="ic-n-val">10</strong></label>
+    <input type="range" id="ic-n" min="2" max="200" value="10" style="width:150px;"
+      oninput="document.getElementById('ic-n-val').textContent=this.value; icSimulate()"/>
+    <label>$\alpha$ = <strong id="ic-alpha-val">5%</strong></label>
+    <input type="range" id="ic-alpha" min="1" max="20" value="5" style="width:100px;"
+      oninput="document.getElementById('ic-alpha-val').textContent=this.value+'%'; icSimulate()"/>
+    <button onclick="event.stopPropagation();icSimulate()" style="background:#C1440E;color:white;border:none;border-radius:4px;padding:0.25em 0.7em;cursor:pointer;">Relancer</button>
+  </div>
+
+  <div style="display:flex;gap:0.6em;align-items:flex-start;">
+    <div style="flex:1;">
+      <canvas id="ic-canvas" width="750" height="220" style="width:100%;border:1px solid #EDE0D0;border-radius:6px;display:block;background:#FAF6F0;"></canvas>
+      <div id="ic-result" style="margin-top:0.3em;font-size:0.75em;color:#2C1810;text-align:center;min-height:1.2em;"></div>
+    </div>
+    <div style="background:#F7F7F7;border:1px solid #DDD;border-radius:6px;padding:0.4em 0.5em;font-size:0.6em;font-family:monospace;width:155px;flex-shrink:0;">
+      <div style="font-weight:700;color:#C1440E;font-family:Inter,sans-serif;font-size:1.2em;margin-bottom:0.3em;border-bottom:1px solid #DDD;padding-bottom:0.2em;">Échantillon (n=<span id="ic-n-display">10</span>)</div>
+      <div id="ic-sample-display" style="line-height:1.8;word-break:break-all;"></div>
+    </div>
+  </div>
+</section>
+
+<!-- IC VARIANCE -->
+<section>
+  <h2>6.7 — IC pour la variance</h2>
+  <p style="font-size:0.82em;">Si $X_i \sim \mathcal{N}(m,\sigma^2)$ : $\dfrac{(n-1)S_n^2}{\sigma^2} \sim \chi^2_{(n-1)}$.</p>
+
+  <div class="box-prop">
+    <div class="box-title">Construction</div>
+    Soient $v_{\alpha/2}$ et $v_{1-\alpha/2}$ les quantiles de $\chi^2_{(n-1)}$.
+    $$\mathbb{P}\!\left[v_{\alpha/2} \leq \frac{(n-1)S_n^2}{\sigma^2} \leq v_{1-\alpha/2}\right] = 1-\alpha$$
+  </div>
+
+  <div class="formula-key" style="margin-top:0.5em;font-size:0.85em;">
+    $$\text{IC}_{1-\alpha}(\sigma^2) = \left[\frac{(n-1)s_n^2}{v_{1-\alpha/2}},\;\; \frac{(n-1)s_n^2}{v_{\alpha/2}}\right]$$
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:0.78em;padding:0 2em;margin-top:-0.2em;">
+    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
+    <span style="color:#2A5C8A;font-weight:600;">Aire centrale $= 1-\alpha$</span>
+    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
+  </div>
+
+  <div class="box-rem" style="margin-top:0.5em;font-size:0.8em;">
+    <div class="box-title">⚠️ Attention</div>
+    La densité du $\chi^2$ n'est pas symétrique (contrairement à $\mathcal{N}(0,1)$), donc $v_{\alpha/2} \neq -v_{1-\alpha/2}$.
+    On lit les deux quantiles séparément dans les tables.
+  </div>
+</section>
+
+<!-- RÉSUMÉ -->
+<section>
+  <h2>Résumé du Chapitre 6</h2>
+  <div style="font-size:0.76em;">
+    <table style="width:100%;border-collapse:collapse;margin-top:0.5em;">
+      <thead>
+        <tr style="background:var(--tc-brick);color:white;">
+          <th style="padding:0.4em;text-align:left;">Paramètre</th>
+          <th style="padding:0.4em;text-align:center;">Estimateur</th>
+          <th style="padding:0.4em;text-align:center;">Loi pivot</th>
+          <th style="padding:0.4em;text-align:left;">IC $1-\alpha$</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:var(--tc-warm);">
+          <td style="padding:0.35em;">$m$ ($\sigma$ connu)</td>
+          <td style="padding:0.35em;text-align:center;">$\bar{X}_n$</td>
+          <td style="padding:0.35em;text-align:center;">$\mathcal{N}(0,1)$</td>
+          <td style="padding:0.35em;">$\bar{x}_n \pm z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}}$</td>
+        </tr>
+        <tr>
+          <td style="padding:0.35em;">$m$ ($\sigma$ inconnu)</td>
+          <td style="padding:0.35em;text-align:center;">$\bar{X}_n$</td>
+          <td style="padding:0.35em;text-align:center;">$\mathcal{T}_{n-1}$</td>
+          <td style="padding:0.35em;">$\bar{x}_n \pm t_{1-\alpha/2}\frac{s_n}{\sqrt{n}}$</td>
+        </tr>
+        <tr style="background:var(--tc-warm);">
+          <td style="padding:0.35em;">$p$ (proportion)</td>
+          <td style="padding:0.35em;text-align:center;">$\bar{X}_n$</td>
+          <td style="padding:0.35em;text-align:center;">$\mathcal{N}(0,1)$ (asympt.)</td>
+          <td style="padding:0.35em;">$\bar{x}_n \pm z_{1-\alpha/2}\sqrt{\frac{\bar{x}_n(1-\bar{x}_n)}{n}}$</td>
+        </tr>
+        <tr>
+          <td style="padding:0.35em;">$\sigma^2$</td>
+          <td style="padding:0.35em;text-align:center;">$S_n^2$</td>
+          <td style="padding:0.35em;text-align:center;">$\chi^2_{(n-1)}$</td>
+          <td style="padding:0.35em;">$\left[\frac{(n-1)s_n^2}{v_{1-\alpha/2}}, \frac{(n-1)s_n^2}{v_{\alpha/2}}\right]$</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div style="margin-top:0.7em;text-align:center;">
+    <div style="background:var(--tc-brick);color:white;border-radius:8px;padding:0.6em;font-size:0.82em;">
+      <strong>Prochain chapitre :</strong> Tests d'hypothèses
+    </div>
+  </div>
+</section>
+
+<!-- ==================== QCM ==================== -->
+<section>
+  <h2>🎯 Quiz — Chapitre 6</h2>
+  <div class="cols-2" style="font-size:0.78em;gap:0.6em;">
+    <div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q1.</strong>
+        <p style="margin:0.2em 0;">$X_1,\ldots,X_n$ i.i.d. $\sim \mathcal{N}(m, \sigma^2)$, $\sigma$ connu. Quel est l'IC à 95% pour $m$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$\left[\bar{x}_n \pm \frac{1.96\,\sigma}{\sqrt{n}}\right]$</li>
+          <li>$\left[\bar{x}_n \pm \frac{1.96\,\sigma}{n}\right]$</li>
+          <li>$\left[\bar{x}_n \pm \frac{1.64\,\sigma}{\sqrt{n}}\right]$</li>
+          <li>$\left[\bar{x}_n \pm \frac{1.96\,s_n}{\sqrt{n}}\right]$</li>
+        </ol>
+      </div>
+      <div class="box-exo">
+        <strong>Q2.</strong>
+        <p style="margin:0.2em 0;">Un estimateur $\hat{\theta}_n$ est <strong>sans biais</strong> si :</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$\hat{\theta}_n \to \theta$ en probabilité</li>
+          <li>$\mathbb{E}[\hat{\theta}_n] = \theta$</li>
+          <li>$\text{Var}(\hat{\theta}_n) \to 0$</li>
+          <li>$\hat{\theta}_n = \theta$ p.s.</li>
+        </ol>
+      </div>
+    </div>
+    <div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q3.</strong>
+        <p style="margin:0.2em 0;">On observe 200 composants, 14 sont défectueux. Donner un IC à 95% pour la proportion $p$.</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$[0.035,\; 0.105]$</li>
+          <li>$[0.07,\; 0.14]$</li>
+          <li>$[0.04,\; 0.11]$</li>
+          <li>$[0.014,\; 0.028]$</li>
+        </ol>
+      </div>
+      <div class="box-exo">
+        <strong>Q4.</strong>
+        <p style="margin:0.2em 0;">$\hat{\theta}_n$ est <strong>consistant</strong> si :</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$\mathbb{E}[\hat{\theta}_n] = \theta$</li>
+          <li>$\mathbb{P}[|\hat{\theta}_n - \theta| > \varepsilon] \to 0$ pour tout $\varepsilon > 0$</li>
+          <li>$\text{Var}(\hat{\theta}_n) = 0$</li>
+          <li>$\hat{\theta}_n \geq \theta$ p.s.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CORRECTION QCM ==================== -->
+<section>
+  <h2>✅ Correction du Quiz</h2>
+  <div style="font-size:0.8em;display:flex;flex-direction:column;gap:0.5em;">
+    <div class="box-rem">
+      <strong>Q1 — Réponse : a)</strong><br/>
+      $\sigma$ connu, loi normale : on utilise $z_{97.5\%} = 1.96$.
+      $$\text{IC}_{95\%}(m) = \left[\bar{x}_n - \frac{1.96\,\sigma}{\sqrt{n}},\; \bar{x}_n + \frac{1.96\,\sigma}{\sqrt{n}}\right]$$
+    </div>
+    <div class="box-rem">
+      <strong>Q2 — Réponse : b) $\mathbb{E}[\hat{\theta}_n] = \theta$</strong><br/>
+      Sans biais = la moyenne des estimations est égale à la vraie valeur. Attention : sans biais n'implique pas consistant (et vice-versa) !
+    </div>
+    <div class="box-rem">
+      <strong>Q3 — Réponse : a) $[0.035,\; 0.105]$</strong><br/>
+      $\hat{p} = 14/200 = 0.07$. $\text{IC}_{95\%}(p) = 0.07 \pm 1.96\sqrt{\frac{0.07 \times 0.93}{200}} = 0.07 \pm 0.035$.
+    </div>
+    <div class="box-rem">
+      <strong>Q4 — Réponse : b)</strong><br/>
+      Consistant = converge en probabilité vers $\theta$. Par Chebychev : si $\mathbb{E}[\hat{\theta}_n] \to \theta$ et $\text{Var}(\hat{\theta}_n) \to 0$, alors $\hat{\theta}_n$ est consistant.
+    </div>
+  </div>
+  <div style="margin-top:1em;text-align:right;font-size:0.65em;color:#999;font-style:italic;">
+    Transparents réalisés avec l'assistance de Claude AI
+  </div>
+</section>
+
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="../assets/preuves.js"></script>
+<script>
+  Reveal.initialize({hash:true,slideNumber:'c/t',progress:true,controls:true,transition:'slide',transitionSpeed:'fast',center:false,width:1100,height:700,margin:0.06});
+  function renderMath(){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}],throwOnError:false,strict:false});}
+  Reveal.on('ready',renderMath);
+  Reveal.on('slidechanged',renderMath);
+</script>
+<!-- Script simulation IC -->
+<script>
+// Normal quantile approximation (Beasley-Springer-Moro)
+function normQuantile(p) {
+  var a = [2.50662823884, -18.61500062529, 41.39119773534, -25.44106049637];
+  var b = [-8.47351093090, 23.08336743743, -21.06224101826, 3.13082909833];
+  var c = [0.3374754822726147, 0.9761690190917186, 0.1607979714918209,
+           0.0276438810333863, 0.0038405729373609, 0.0003951896511349,
+           0.0000321767881768, 0.0000002888167364, 0.0000003960315187];
+  var y = p - 0.5;
+  if (Math.abs(y) < 0.42) {
+    var r = y*y;
+    return y*(((a[3]*r+a[2])*r+a[1])*r+a[0])/((((b[3]*r+b[2])*r+b[1])*r+b[0])*r+1);
+  }
+  var r = p < 0.5 ? p : 1-p;
+  r = Math.log(-Math.log(r));
+  var x = c[0]+r*(c[1]+r*(c[2]+r*(c[3]+r*(c[4]+r*(c[5]+r*(c[6]+r*(c[7]+r*c[8])))))));
+  return p < 0.5 ? -x : x;
+}
+
+// t-distribution quantile approximation (Hill 1970)
+function tQuantile(p, df) {
+  if (df > 100) return normQuantile(p);
+  var a = normQuantile(p);
+  var g1 = (Math.pow(a,3)+a)/4;
+  var g2 = (5*Math.pow(a,5)+16*Math.pow(a,3)+3*a)/96;
+  var g3 = (3*Math.pow(a,7)+19*Math.pow(a,5)+17*Math.pow(a,3)-15*a)/384;
+  var g4 = (79*Math.pow(a,9)+776*Math.pow(a,7)+1482*Math.pow(a,5)-1920*Math.pow(a,3)-945*a)/92160;
+  return a + g1/df + g2/(df*df) + g3/(df*df*df) + g4/(df*df*df*df);
+}
+
+// Box-Muller normal random
+function randNorm(mu, sigma) {
+  var u1 = Math.random(), u2 = Math.random();
+  return mu + sigma * Math.sqrt(-2*Math.log(u1)) * Math.cos(2*Math.PI*u2);
+}
+
+function icSimulate() {
+  var nEl = document.getElementById('ic-n');
+  var aEl = document.getElementById('ic-alpha');
+  var canvas = document.getElementById('ic-canvas');
+  if (!nEl || !aEl || !canvas) return;
+
+  var n = parseInt(nEl.value);
+  var alpha = parseInt(aEl.value) / 100;
+  var m = 5, sigma = 2;
+
+  // Update n display
+  var nd = document.getElementById('ic-n-display');
+  if (nd) nd.textContent = n;
+
+  // Generate sample
+  var sample = [];
+  for (var i = 0; i < n; i++) sample.push(randNorm(m, sigma));
+  var xbar = sample.reduce(function(a,b){return a+b;},0) / n;
+  var s2 = sample.reduce(function(a,b){return a+(b-xbar)*(b-xbar);},0) / (n>1?n-1:1);
+  var s = Math.sqrt(s2);
+
+  // ICs
+  var z = normQuantile(1 - alpha/2);
+  var t = tQuantile(1 - alpha/2, n-1);
+  var ic1 = [xbar - z*sigma/Math.sqrt(n), xbar + z*sigma/Math.sqrt(n)];
+  var ic2 = [xbar - t*s/Math.sqrt(n),     xbar + t*s/Math.sqrt(n)];
+  var ok1 = ic1[0] <= m && m <= ic1[1];
+  var ok2 = ic2[0] <= m && m <= ic2[1];
+
+  // Canvas
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  // Layout: left labels, right plot
+  var pL = 100, pR = 20, pT = 30, pB = 45;
+  var gW = W - pL - pR, gH = H - pT - pB;
+
+  // X range centered on m
+  var hw = Math.max(3*sigma/Math.sqrt(n), Math.abs(xbar-m) + sigma/Math.sqrt(n), (ic2[1]-ic2[0])*0.7) * 1.5;
+  var xMin = m - hw, xMax = m + hw;
+  function xp(v) { return pL + (v-xMin)/(xMax-xMin)*gW; }
+
+  // Row centers
+  var yAxis = pT + gH;        // axis line
+  var y1 = pT + gH*0.33;      // IC sigma connu
+  var y2 = pT + gH*0.70;      // IC Student
+
+  // Background zone
+  ctx.fillStyle = '#FAF6F0';
+  ctx.fillRect(pL, pT, gW, gH);
+
+  // Axis line
+  ctx.strokeStyle = '#6B3A2A'; ctx.lineWidth = 1.5; ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(pL, yAxis); ctx.lineTo(pL+gW, yAxis); ctx.stroke();
+
+  // Tick marks and labels on axis
+  ctx.font = '11px Inter,sans-serif'; ctx.fillStyle = '#6B3A2A'; ctx.textAlign = 'center';
+  var step = hw > 2 ? 1 : (hw > 0.5 ? 0.5 : 0.2);
+  for (var v = Math.ceil(xMin/step)*step; v <= xMax+0.001; v += step) {
+    var px = xp(v);
+    ctx.beginPath(); ctx.moveTo(px, yAxis); ctx.lineTo(px, yAxis+5); ctx.stroke();
+    ctx.fillText(v.toFixed(1), px, yAxis+17);
+  }
+
+  // m vertical line
+  ctx.setLineDash([6,4]); ctx.strokeStyle = '#6B3A2A'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(xp(m), pT); ctx.lineTo(xp(m), yAxis); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.font = 'bold 12px Inter,sans-serif'; ctx.fillStyle = '#6B3A2A'; ctx.textAlign = 'center';
+  ctx.fillText('m='+m, xp(m), pT+13);
+
+  // Draw IC function
+  function drawBar(ic, y, ok, label) {
+    var h = 24;
+    var col = ok ? '#3D7A4A' : '#C1440E';
+    var colFill = ok ? 'rgba(61,122,74,0.2)' : 'rgba(193,68,14,0.2)';
+    // Filled bar
+    ctx.fillStyle = colFill;
+    ctx.fillRect(xp(ic[0]), y-h/2, xp(ic[1])-xp(ic[0]), h);
+    // Border
+    ctx.strokeStyle = col; ctx.lineWidth = 2.5;
+    ctx.strokeRect(xp(ic[0]), y-h/2, xp(ic[1])-xp(ic[0]), h);
+    // End caps
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(xp(ic[0]), y-h/2-5); ctx.lineTo(xp(ic[0]), y+h/2+5);
+    ctx.moveTo(xp(ic[1]), y-h/2-5); ctx.lineTo(xp(ic[1]), y+h/2+5);
+    ctx.stroke();
+    // xbar dot
+    ctx.beginPath(); ctx.arc(xp(xbar), y, 5, 0, 2*Math.PI);
+    ctx.fillStyle = col; ctx.fill();
+    // Left label
+    ctx.font = 'bold 12px Inter,sans-serif'; ctx.textAlign = 'right'; ctx.fillStyle = '#2C1810';
+    ctx.fillText(label, pL-6, y+4);
+    // Status + values below bar
+    ctx.font = '11px Inter,sans-serif'; ctx.textAlign = 'center'; ctx.fillStyle = col;
+    ctx.fillText((ok?'✓ ':'✗ ')+'['+ic[0].toFixed(2)+' ; '+ic[1].toFixed(2)+']  (largeur '+((ic[1]-ic[0]).toFixed(2))+')', pL+gW/2, y+h/2+15);
+  }
+
+  drawBar(ic1, y1, ok1, 'σ connu');
+  drawBar(ic2, y2, ok2, 'Student');
+
+  // Bottom info
+  ctx.font = '10px Inter,sans-serif'; ctx.textAlign = 'left'; ctx.fillStyle = '#6B3A2A';
+  ctx.fillText('x̄ₙ='+xbar.toFixed(3)+'  sₙ='+s.toFixed(3)+'  z='+z.toFixed(3)+'  t='+t.toFixed(3), pL, H-5);
+
+  // Result message — cleared
+  var res = document.getElementById('ic-result');
+  if (res) res.innerHTML = '';
+
+  // Sample display
+  var sd = document.getElementById('ic-sample-display');
+  if (sd) {
+    var shown = sample.slice(0, 30);
+    sd.innerHTML = shown.map(function(v){
+      return '<span style="color:'+(v>=m?'#2A5C8A':'#C1440E')+'">'+v.toFixed(2)+'</span>';
+    }).join('  ') + (n>30 ? '<br/><span style="color:#999">…+' + (n-30) + '</span>' : '');
+  }
+}
+
+// Init: call on every slide change and on ready
+function tryInitIC() {
+  var canvas = document.getElementById('ic-canvas');
+  if (canvas) icSimulate();
+}
+
+if (typeof Reveal !== 'undefined') {
+  Reveal.on('ready', tryInitIC);
+  Reveal.on('slidechanged', tryInitIC);
+} else {
+  document.addEventListener('DOMContentLoaded', tryInitIC);
+}
+</script>
+
+</body></html>

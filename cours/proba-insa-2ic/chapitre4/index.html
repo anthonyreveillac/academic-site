@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chapitre 4 — Manipulation de variables aléatoires</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/white.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"/>
+  <link rel="stylesheet" href="../assets/theme-terracotta.css"/>
+  <style>.reveal-viewport{background:#FAF6F0;}.reveal .slides section{padding:0.5em 1em;}</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- TITRE -->
+<section>
+  <div class="chapter-title" style="margin-top:1em;">
+    <div style="font-size:0.65em;color:rgba(255,255,255,0.75);margin-bottom:0.3em;">INSA Toulouse — Génie Civil 2-IC — 2026-2027</div>
+    <h1 style="font-size:1.4em;margin-bottom:0.2em;">Probabilités &amp; Statistique</h1>
+    <hr style="border-color:rgba(255,255,255,0.3);margin:0.5em 0;"/>
+    <h2 style="font-size:1.1em;color:rgba(255,255,255,0.95);border:none;">Chapitre 4</h2>
+    <h2 style="font-size:1.2em;color:white;border:none;margin-top:0.1em;">Manipulation de variables aléatoires</h2>
+    <p class="subtitle">Anthony Réveillac</p>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section>
+  <h2>Plan du chapitre</h2>
+  <ol style="font-size:0.9em;line-height:2.1;">
+    <li>Espérance mathématique</li>
+    <li>Variance et écart-type</li>
+    <li>Tableau récapitulatif des lois</li>
+    <li>Loi d'un couple de v.a.r.</li>
+    <li>Indépendance de v.a.r.</li>
+    <li>Variables gaussiennes — propriétés</li>
+  </ol>
+</section>
+
+<!-- ESPÉRANCE -->
+<section>
+  <h2>4.1 — Espérance mathématique</h2>
+  <div class="box-rem" style="margin-bottom:0.6em;font-size:0.85em;">
+    Dans tous ces transparents on se place sur un espace probabilisé $(\Omega, \mathcal{A}, \mathbb{P})$.
+  </div>
+  <div class="box-def">
+    <div class="box-title">Définition — Espérance de $h(X)$</div>
+    <div class="cols-2" style="font-size:0.85em;gap:0.5em;">
+      <div>
+        <strong>Cas discret</strong> ($X$ à valeurs dans $\mathcal{X}$) :
+        $$\mathbb{E}[h(X)] = \sum_{x \in \mathcal{X}} h(x)\,\mathbb{P}[X=x]$$
+      </div>
+      <div>
+        <strong>Cas continu</strong> (densité $f_X$) :
+        $$\mathbb{E}[h(X)] = \int_{-\infty}^{+\infty} h(x)\,f_X(x)\,dx$$
+      </div>
+    </div>
+  </div>
+
+  <div class="box-rem" style="margin-top:0.5em;font-size:0.85em;">
+    Pour $h(x) = x$ : $\mathbb{E}[X]$ est la <strong>moyenne</strong> de $X$, la valeur moyenne pondérée par les probabilités.
+  </div>
+
+  <div class="box-prop" style="margin-top:0.5em;">
+    <div class="box-title">Propriétés de l'espérance</div>
+    <ol style="font-size:0.85em;margin-left:1.2em;">
+      <li><strong>Linéarité :</strong> $\mathbb{E}[\alpha X + \beta Y] = \alpha\,\mathbb{E}[X] + \beta\,\mathbb{E}[Y]$</li>
+      <li>Si $X = a$ (constante) : $\mathbb{E}[X] = a$</li>
+      <li>Si $X \geq Y$ : $\mathbb{E}[X] \geq \mathbb{E}[Y]$</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ESPÉRANCE EXEMPLE -->
+<section>
+  <h2>4.1 — Espérance : exemples</h2>
+  <div class="box-ex" style="font-size:0.88em;">
+    <div class="box-title">🎰 Roulette</div>
+    Gain $G$ : $\mathbb{P}[G=+1]=18/37$, $\mathbb{P}[G=-1]=19/37$.
+    $$\mathbb{E}[G] = 1 \times \frac{18}{37} + (-1) \times \frac{19}{37} = -\frac{1}{37} \approx -0.027$$
+    Le jeu est <strong>défavorable au joueur</strong>.
+  </div>
+
+  <div class="box-ex" style="margin-top:0.6em;font-size:0.88em;">
+    <div class="box-title">🏗️ Charge sur une poutre</div>
+    La charge $C$ (en kN) appliquée sur une poutre vaut :
+    <ul style="margin:0.3em 0 0.3em 1.2em;">
+      <li>$10$ kN avec probabilité $0.6$ (charge courante)</li>
+      <li>$20$ kN avec probabilité $0.4$ (charge exceptionnelle)</li>
+    </ul>
+    Charge moyenne :
+    $$\mathbb{E}[C] = 10 \times 0.6 + 20 \times 0.4 = 6 + 8 = 14 \text{ kN}$$
+    La charge moyenne de <strong>14 kN</strong> sert de référence pour le dimensionnement.
+  </div>
+</section>
+
+<!-- VARIANCE -->
+<section>
+  <h2>4.2 — Variance et écart-type</h2>
+  <div class="box-def" style="font-size:0.88em;">
+    <div class="box-title">Définition — Variance</div>
+    $$\text{Var}(X) = \mathbb{E}[|X - \mathbb{E}[X]|^2]$$
+    Mesure la <strong>dispersion</strong> de $X$ autour de sa moyenne.
+  </div>
+
+  <div class="box-prop" style="margin-top:0.4em;">
+    <div class="box-title">Propriétés</div>
+    <div class="cols-2" style="font-size:0.82em;">
+      <ul style="margin-left:1em;">
+        <li>$\text{Var}(X) \geq 0$</li>
+        <li>$\text{Var}(X) = 0 \Leftrightarrow X$ constante</li>
+        <li>$\text{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2$</li>
+      </ul>
+      <ul style="margin-left:1em;">
+        <li>$\text{Var}(aX+b) = a^2\,\text{Var}(X)$</li>
+        <li>$\text{Var}(X+b) = \text{Var}(X)$</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box-def" style="margin-top:0.4em;font-size:0.88em;">
+    <div class="box-title">Définition — Écart-type</div>
+    $\sigma_X = \sqrt{\text{Var}(X)}$, même unité que $X$. Permet de comparer avec $\mathbb{E}[X]$.
+    <br/><strong>Variable centrée réduite :</strong> $Y = \dfrac{X - \mathbb{E}[X]}{\sigma_X}$, alors $\mathbb{E}[Y] = 0$ et $\text{Var}(Y) = 1$.
+  </div>
+</section>
+
+<!-- TABLEAU RÉCAP -->
+<section>
+  <h2>4.3 — Tableau récapitulatif</h2>
+  <div style="overflow-x:auto;font-size:0.75em;">
+    <table style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="background:var(--tc-brick);color:white;">
+          <th style="padding:0.5em;text-align:left;">Loi</th>
+          <th style="padding:0.5em;text-align:center;">Notation</th>
+          <th style="padding:0.5em;text-align:center;">$\mathbb{E}[X]$</th>
+          <th style="padding:0.5em;text-align:center;">$\text{Var}(X)$</th>
+        </tr>
+      </thead>
+      <tbody style="font-family:Inter,sans-serif;">
+        <tr style="background:var(--tc-warm);">
+          <td style="padding:0.4em;">Bernoulli</td>
+          <td style="padding:0.4em;text-align:center;">$\mathcal{B}(p)$</td>
+          <td style="padding:0.4em;text-align:center;">$p$</td>
+          <td style="padding:0.4em;text-align:center;">$p(1-p)$</td>
+        </tr>
+        <tr>
+          <td style="padding:0.4em;">Binomiale</td>
+          <td style="padding:0.4em;text-align:center;">$\mathcal{B}(n,p)$</td>
+          <td style="padding:0.4em;text-align:center;">$np$</td>
+          <td style="padding:0.4em;text-align:center;">$np(1-p)$</td>
+        </tr>
+        <tr style="background:var(--tc-warm);">
+          <td style="padding:0.4em;">Géométrique</td>
+          <td style="padding:0.4em;text-align:center;">$\mathcal{G}(p)$</td>
+          <td style="padding:0.4em;text-align:center;">$\dfrac{1}{p}$</td>
+          <td style="padding:0.4em;text-align:center;">$\dfrac{1-p}{p^2}$</td>
+        </tr>
+        <tr>
+          <td style="padding:0.4em;">Poisson</td>
+          <td style="padding:0.4em;text-align:center;">$\mathcal{P}(\lambda)$</td>
+          <td style="padding:0.4em;text-align:center;">$\lambda$</td>
+          <td style="padding:0.4em;text-align:center;">$\lambda$</td>
+        </tr>
+        <tr style="background:var(--tc-warm);">
+          <td style="padding:0.4em;">Normale</td>
+          <td style="padding:0.4em;text-align:center;">$\mathcal{N}(m,\sigma^2)$</td>
+          <td style="padding:0.4em;text-align:center;">$m$</td>
+          <td style="padding:0.4em;text-align:center;">$\sigma^2$</td>
+        </tr>
+        <tr>
+          <td style="padding:0.4em;">Exponentielle</td>
+          <td style="padding:0.4em;text-align:center;">$\mathcal{E}(\lambda)$</td>
+          <td style="padding:0.4em;text-align:center;">$\dfrac{1}{\lambda}$</td>
+          <td style="padding:0.4em;text-align:center;">$\dfrac{1}{\lambda^2}$</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- LOI D'UN COUPLE -->
+<section>
+  <h2>4.4 — Loi d'un couple $(X,Y)$</h2>
+  <div class="box-def">
+    <div class="box-title">Fonction de répartition conjointe</div>
+    $$F_{X,Y}(x,y) = \mathbb{P}[X \leq x,\; Y \leq y]$$
+  </div>
+
+  <div class="cols-2" style="margin-top:0.5em;font-size:0.82em;gap:0.6em;">
+    <div>
+      <div class="box-def">
+        <div class="box-title">Cas discret</div>
+        Loi conjointe : $p_{X,Y}(x_i, y_j) = \mathbb{P}[X=x_i, Y=y_j]$
+        <br/><strong>Lois marginales :</strong>
+        $$p_X(x_i) = \sum_j p_{X,Y}(x_i, y_j)$$
+      </div>
+    </div>
+    <div>
+      <div class="box-def">
+        <div class="box-title">Cas continu</div>
+        Densité conjointe $f_{X,Y}(x,y) \geq 0$ :
+        $$\mathbb{P}[X \in A, Y \in B] = \iint_{A \times B} f_{X,Y}(x,y)\,dxdy$$
+        <strong>Densités marginales :</strong>
+        $$f_X(x) = \int f_{X,Y}(x,y)\,dy$$
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INDÉPENDANCE DE V.A.R. -->
+<section>
+  <h2>4.5 — Indépendance de v.a.r.</h2>
+  <div class="box-def">
+    <div class="box-title">Définition — Indépendance</div>
+    $X$ et $Y$ sont <strong>indépendantes</strong> ssi pour tous $A, B \subset \mathbb{R}$ :
+    $$\mathbb{P}[X \in A,\; Y \in B] = \mathbb{P}[X \in A]\,\mathbb{P}[Y \in B]$$
+  </div>
+
+  <div class="box-thm" style="margin-top:0.5em;">
+    <div class="box-title">Théorème — Caractérisation</div>
+    <ul style="font-size:0.85em;margin-left:1.2em;">
+      <li><strong>Cas discret :</strong> $X \perp Y \Leftrightarrow p_{X,Y}(x,y) = p_X(x)\,p_Y(y)$</li>
+      <li><strong>Cas continu :</strong> $X \perp Y \Leftrightarrow f_{X,Y}(s,t) = f_X(s)\,f_Y(t)$</li>
+      <li><strong>Équivalent :</strong> $F_{X,Y}(a,b) = F_X(a)\,F_Y(b)$</li>
+    </ul>
+  </div>
+
+  <div class="box-prop" style="margin-top:0.5em;font-size:0.85em;">
+    <div class="box-title">Propriétés si $X \perp Y$</div>
+    <div class="cols-2">
+      <div class="formula-key">$\mathbb{E}[XY] = \mathbb{E}[X]\,\mathbb{E}[Y]$</div>
+      <div class="formula-key">$\text{Var}(X+Y) = \text{Var}(X) + \text{Var}(Y)$</div>
+    </div>
+  </div>
+</section>
+
+<!-- GAUSSIENNES -->
+<section>
+  <h2>4.6 — Propriétés des variables gaussiennes</h2>
+  <div class="box-prop">
+    <div class="box-title">Proposition — Stabilité par transformation affine</div>
+    Si $X \sim \mathcal{N}(m, \sigma^2)$ et $a, b \in \mathbb{R}$, $a \neq 0$ :
+    $$aX + b \sim \mathcal{N}(am+b,\; a^2\sigma^2)$$
+  </div>
+
+  <div class="box-rem" style="margin-top:0.5em;font-size:0.85em;">
+    <div class="box-title">Standardisation</div>
+    <div class="cols-2">
+      <div class="formula-key">$X \sim \mathcal{N}(m,\sigma^2) \Rightarrow \dfrac{X-m}{\sigma} \sim \mathcal{N}(0,1)$</div>
+      <div class="formula-key">$Z \sim \mathcal{N}(0,1) \Rightarrow \sigma Z + m \sim \mathcal{N}(m,\sigma^2)$</div>
+    </div>
+  </div>
+
+  <div class="box-prop" style="margin-top:0.5em;">
+    <div class="box-title">Proposition — Stabilité par somme</div>
+    Si $X \sim \mathcal{N}(m_1, \sigma_1^2)$ et $Y \sim \mathcal{N}(m_2, \sigma_2^2)$ sont <strong>indépendantes</strong> :
+    $$X + Y \sim \mathcal{N}(m_1 + m_2,\; \sigma_1^2 + \sigma_2^2)$$
+  </div>
+
+  <div class="box-rem" style="margin-top:0.5em;font-size:0.82em;">
+    Cette propriété est propre aux lois normales (et de Poisson). Elle est fondamentale pour le TCL du chapitre suivant.
+  </div>
+</section>
+
+<!-- RÉSUMÉ -->
+<section>
+  <h2>Résumé du Chapitre 4</h2>
+  <div class="cols-2" style="font-size:0.8em;gap:0.7em;">
+    <div>
+      <div class="box-def">
+        <div class="box-title">🔑 Espérance</div>
+        Moyenne pondérée des valeurs possibles.
+        <br/>Linéaire : $\mathbb{E}[\alpha X + \beta Y] = \alpha\mathbb{E}[X] + \beta\mathbb{E}[Y]$
+      </div>
+      <div class="box-def" style="margin-top:0.5em;">
+        <div class="box-title">📊 Variance</div>
+        $\text{Var}(X) = \mathbb{E}[X^2] - (\mathbb{E}[X])^2$
+        <br/>$\text{Var}(aX+b) = a^2\text{Var}(X)$
+      </div>
+    </div>
+    <div>
+      <div class="box-prop">
+        <div class="box-title">🔗 Indépendance</div>
+        $f_{X,Y} = f_X \cdot f_Y$
+        <br/>$\Rightarrow \mathbb{E}[XY] = \mathbb{E}[X]\mathbb{E}[Y]$
+        <br/>$\Rightarrow \text{Var}(X+Y) = \text{Var}(X) + \text{Var}(Y)$
+      </div>
+      <div style="margin-top:0.5em;text-align:center;">
+        <div style="background:var(--tc-brick);color:white;border-radius:8px;padding:0.6em;font-size:0.82em;">
+          <strong>Prochain chapitre :</strong><br/>Théorèmes limites (LGN, TCL)
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== QCM ==================== -->
+<section>
+  <h2>🎯 Quiz — Chapitre 4</h2>
+  <div class="cols-2" style="font-size:0.78em;gap:0.6em;">
+    <div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q1.</strong>
+        <p style="margin:0.2em 0;">$X \sim \mathcal{N}(3, 4)$. Que vaut $\mathbb{E}[2X+1]$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$7$</li>
+          <li>$6$</li>
+          <li>$9$</li>
+          <li>$4$</li>
+        </ol>
+      </div>
+      <div class="box-exo">
+        <strong>Q2.</strong>
+        <p style="margin:0.2em 0;">$X$ et $Y$ indépendantes avec $\text{Var}(X)=2$ et $\text{Var}(Y)=3$. Que vaut $\text{Var}(X+Y)$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$\sqrt{5}$</li>
+          <li>$5$</li>
+          <li>$6$</li>
+          <li>On ne peut pas savoir</li>
+        </ol>
+      </div>
+    </div>
+    <div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q3.</strong>
+        <p style="margin:0.2em 0;">$X \sim \mathcal{B}(10, 0.4)$. Que vaut $\text{Var}(X)$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$4$</li>
+          <li>$2.4$</li>
+          <li>$0.4$</li>
+          <li>$10$</li>
+        </ol>
+      </div>
+      <div class="box-exo">
+        <strong>Q4.</strong>
+        <p style="margin:0.2em 0;">$X$ et $Y$ sont indépendantes avec $\mathbb{E}[X]=2$ et $\mathbb{E}[Y]=3$. Que vaut $\mathbb{E}[XY]$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$5$</li>
+          <li>$6$</li>
+          <li>$\mathbb{E}[X^2]\mathbb{E}[Y^2]$</li>
+          <li>On ne peut pas savoir</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CORRECTION QCM ==================== -->
+<section>
+  <h2>✅ Correction du Quiz</h2>
+  <div style="font-size:0.8em;display:flex;flex-direction:column;gap:0.5em;">
+    <div class="box-rem">
+      <strong>Q1 — Réponse : a) $7$</strong><br/>
+      Par linéarité : $\mathbb{E}[2X+1] = 2\mathbb{E}[X] + 1 = 2 \times 3 + 1 = 7$.
+    </div>
+    <div class="box-rem">
+      <strong>Q2 — Réponse : b) $5$</strong><br/>
+      Par indépendance : $\text{Var}(X+Y) = \text{Var}(X) + \text{Var}(Y) = 2 + 3 = 5$.
+    </div>
+    <div class="box-rem">
+      <strong>Q3 — Réponse : b) $2.4$</strong><br/>
+      Pour $X \sim \mathcal{B}(n,p)$ : $\text{Var}(X) = np(1-p) = 10 \times 0.4 \times 0.6 = 2.4$.
+    </div>
+    <div class="box-rem">
+      <strong>Q4 — Réponse : b) $6$</strong><br/>
+      Par indépendance : $\mathbb{E}[XY] = \mathbb{E}[X]\mathbb{E}[Y] = 2 \times 3 = 6$.
+    </div>
+  </div>
+  <div style="margin-top:1em;text-align:right;font-size:0.65em;color:#999;font-style:italic;">
+    Transparents réalisés avec l'assistance de Claude AI
+  </div>
+</section>
+
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="../assets/preuves.js"></script>
+<script>
+  Reveal.initialize({hash:true,slideNumber:'c/t',progress:true,controls:true,transition:'slide',transitionSpeed:'fast',center:false,width:1100,height:700,margin:0.06});
+  function renderMath(){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}],throwOnError:false,strict:false});}
+  Reveal.on('ready',renderMath);
+  Reveal.on('slidechanged',renderMath);
+</script>
+</body></html>

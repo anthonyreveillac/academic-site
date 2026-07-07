@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapitre 2 — Probabilités conditionnelles et indépendance</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/theme/white.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+  <link rel="stylesheet" href="../assets/theme-terracotta.css" />
+  <style>.reveal-viewport{background:#FAF6F0;}.reveal .slides section{padding:0.5em 1em;}</style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+<!-- TITRE -->
+<section>
+  <div class="chapter-title" style="margin-top:1em;">
+    <div style="font-size:0.65em;color:rgba(255,255,255,0.75);margin-bottom:0.3em;">INSA Toulouse — Génie Civil 2-IC — 2026-2027</div>
+    <h1 style="font-size:1.4em;margin-bottom:0.2em;">Probabilités &amp; Statistique</h1>
+    <hr style="border-color:rgba(255,255,255,0.3);margin:0.5em 0;"/>
+    <h2 style="font-size:1.1em;color:rgba(255,255,255,0.95);border:none;">Chapitre 2</h2>
+    <h2 style="font-size:1.2em;color:white;border:none;margin-top:0.1em;">Probabilités conditionnelles &amp; Indépendance</h2>
+    <p class="subtitle">Anthony Réveillac</p>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section>
+  <h2>Plan du chapitre</h2>
+  <ol style="font-size:0.9em;line-height:2.1;">
+    <li>Probabilités conditionnelles — définition</li>
+    <li>Formule des probabilités totales</li>
+    <li>Formule de Bayes</li>
+    <li>Indépendance de deux événements</li>
+    <li>Indépendance de $n$ événements</li>
+  </ol>
+</section>
+
+<!-- MOTIVATION PROB COND -->
+<section>
+  <h2>2.1 — Motivation</h2>
+  <p style="font-size:0.85em;">En pratique, certains événements peuvent avoir une <strong>influence</strong> sur d'autres.</p>
+
+  <div class="box-ex" style="margin-top:0.6em;">
+    <div class="box-title">🎲 Exemple</div>
+    On lance deux dés. Soit $A = \{\text{somme} \geq 11\}$ et $B = \{\text{1er dé donne 6}\}$.
+    <br/>La réalisation de $B$ influe clairement sur la réalisation de $A$.
+  </div>
+
+  <div class="box-rem" style="margin-top:0.7em;font-size:0.85em;">
+    <div class="box-title">Idée</div>
+    Si l'on sait que $B$ est réalisé, l'espace des événements possibles n'est plus $\Omega$ tout entier, mais est <strong>restreint à $B$</strong>. On s'intéresse alors à la réalisation de $A$ <em>à l'intérieur de $B$</em>, c'est-à-dire à $A \cap B$.
+  </div>
+
+  <div style="display:flex;justify-content:center;margin-top:0.5em;">
+    <svg viewBox="0 0 520 230" width="520" height="230" xmlns="http://www.w3.org/2000/svg" style="font-family:Inter,sans-serif;">
+      <rect x="10" y="10" width="500" height="210" rx="10" fill="#FAF6F0" stroke="#C1440E" stroke-width="1.5"/>
+      <text x="495" y="30" font-size="16" fill="#C1440E" font-style="italic" text-anchor="end">Ω</text>
+
+      <!-- Cercle A -->
+      <circle cx="200" cy="110" r="88" fill="rgba(193,68,14,0.15)" stroke="#C1440E" stroke-width="2"/>
+      <text x="140" y="90" font-size="22" fill="#A0320A" font-weight="700">A</text>
+
+      <!-- Cercle B -->
+      <circle cx="320" cy="110" r="88" fill="rgba(42,92,138,0.15)" stroke="#2A5C8A" stroke-width="2"/>
+      <text x="365" y="90" font-size="22" fill="#2A5C8A" font-weight="700">B</text>
+
+      <!-- A∩B -->
+      <clipPath id="clipAB2"><circle cx="320" cy="110" r="88"/></clipPath>
+      <circle cx="200" cy="110" r="88" fill="rgba(107,61,138,0.3)" clip-path="url(#clipAB2)"/>
+      <text x="260" y="115" font-size="15" fill="#6B3D8A" text-anchor="middle" font-weight="700">A∩B</text>
+    </svg>
+  </div>
+</section>
+
+<!-- DÉFINITION PROB COND -->
+<section>
+  <h2>Probabilité conditionnelle — Définition</h2>
+  <div class="box-rem" style="margin-bottom:0.6em;font-size:0.85em;">
+    Dans tous ces transparents on se place sur un espace probabilisé $(\Omega, \mathcal{A}, \mathbb{P})$.
+  </div>
+  <div class="box-def">
+    <div class="box-title">Définition</div>
+    Soient $A$ et $B$ deux événements avec $\mathbb{P}[B] \neq 0$. La <strong>probabilité conditionnelle</strong> de $A$ sachant $B$ est :
+    $$\mathbb{P}[A|B] = \frac{\mathbb{P}[A \cap B]}{\mathbb{P}[B]}.$$
+  </div>
+
+  <div class="box-rem" style="margin-top:0.7em;font-size:0.85em;">
+    <div class="box-title">Formules de multiplication</div>
+    <div class="cols-2">
+      <div class="formula-key">Si $\mathbb{P}[B] \neq 0$ : $\mathbb{P}[A \cap B] = \mathbb{P}[A|B]\cdot\mathbb{P}[B]$</div>
+      <div class="formula-key">Si $\mathbb{P}[A] \neq 0$ : $\mathbb{P}[A \cap B] = \mathbb{P}[B|A]\cdot\mathbb{P}[A]$</div>
+    </div>
+  </div>
+
+  <button class="proof-toggle-btn" onclick="event.stopPropagation();document.getElementById('modal-ex-dt').style.display='flex'">▶ Voir l'exemple</button>
+
+  <div id="modal-ex-dt" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:white;border-radius:10px;padding:1.5em 2em;max-width:620px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,0.25);position:relative;">
+      <button onclick="document.getElementById('modal-ex-dt').style.display='none'" style="position:absolute;top:0.6em;right:0.8em;background:none;border:none;font-size:1.4em;cursor:pointer;color:#C1440E;">✕</button>
+      <div style="font-weight:700;color:#C1440E;font-size:0.85em;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.8em;">Exemple — Durée de vie</div>
+      <div id="modal-ex-dt-content" style="font-size:0.9em;color:#2C1810;line-height:1.7;">
+        Soit $D_t$ = "le composant fonctionne encore à $t$", avec $\mathbb{P}[D_t] = e^{-t}$.
+        <br/>Calculons $\mathbb{P}[D_2 | D_1]$ (fonctionner au bout de 2 ans sachant qu'il fonctionne au bout d'une année).
+        <br/><br/>$D_2 \subset D_1 \Rightarrow D_2 \cap D_1 = D_2$, donc :
+        $$\mathbb{P}[D_2 | D_1] = \frac{\mathbb{P}[D_2 \cap D_1]}{\mathbb{P}[D_1]} = \frac{\mathbb{P}[D_2]}{\mathbb{P}[D_1]} = \frac{e^{-2}}{e^{-1}} = e^{-1}.$$
+      </div>
+    </div>
+  </div>
+  <script>
+    (function() {
+      var modal = document.getElementById('modal-ex-dt');
+      if (modal) {
+        modal.addEventListener('click', function(e) { if (e.target === modal) modal.style.display = 'none'; });
+        var content = document.getElementById('modal-ex-dt-content');
+        function renderEx() {
+          if (content && typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(content, {
+              delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+              throwOnError: false
+            });
+          }
+        }
+        if (typeof Reveal !== 'undefined') { Reveal.on('ready', renderEx); } else { document.addEventListener('DOMContentLoaded', renderEx); }
+      }
+    })();
+  </script>
+</section>
+
+<!-- FORMULE PROB TOTALES -->
+<section>
+  <h2>2.2 — Formule des probabilités totales</h2>
+  <div class="box-prop">
+    <div class="box-title">Proposition — Probabilités totales</div>
+    Soit $(A_i)_{i \in I}$ une <strong>partition</strong> de $\Omega$ : $\bigcup_{i} A_i = \Omega$ et $A_i \cap A_j = \emptyset$ pour $i \neq j$.
+    <br/>Si $\mathbb{P}[A_i] \neq 0$ pour tout $i$, alors pour tout événement $A$ :
+    $$\mathbb{P}[A] = \sum_{i \in I} \mathbb{P}[A|A_i]\,\mathbb{P}[A_i].$$
+  </div>
+
+  <button class="proof-toggle-btn">▶ Voir la preuve</button>
+  <div class="proof-content">
+    Comme $(A_i)$ est une partition de $\Omega$ :
+    $$A = A \cap \Omega = A \cap \bigcup_i A_i = \bigcup_i (A \cap A_i)$$
+    Les $A \cap A_i$ sont deux à deux disjoints (car les $A_i$ le sont). Par la propriété d'additivité d'une probabilité :
+    $$\mathbb{P}[A] = \sum_i \mathbb{P}[A \cap A_i] = \sum_i \mathbb{P}[A|A_i]\,\mathbb{P}[A_i] \quad \square$$
+  </div>
+
+  <div class="box-ex" style="margin-top:0.5em;font-size:0.78em;">
+    <div class="box-title">📡 Exemple — Système de communication</div>
+    Un signal binaire est émis : 0 ou 1 avec équiprobabilité. On note :
+    <ul style="margin:0.3em 0 0.3em 1.2em;">
+      <li>$E_0$, $E_1$ : événements "le signal émis est 0 (resp. 1)"</li>
+      <li>$R_0$, $R_1$ : événements "le signal reçu est 0 (resp. 1)"</li>
+    </ul>
+    Le canal est bruité : $\mathbb{P}[R_0|E_0]=0.7$ et $\mathbb{P}[R_1|E_1]=0.8$.
+    Une <strong>erreur</strong> se produit quand le signal reçu diffère du signal émis. Par la formule des probabilités totales :
+    $$\mathbb{P}[\text{erreur}] = \mathbb{P}[R_1|E_0]\,\mathbb{P}[E_0] + \mathbb{P}[R_0|E_1]\,\mathbb{P}[E_1] = 0.3 \times 0.5 + 0.2 \times 0.5 = 0.25.$$
+  </div>
+</section>
+
+<!-- FORMULE DE BAYES -->
+<section>
+  <h2>2.3 — Formule de Bayes</h2>
+  <div class="box-thm">
+    <div class="box-title">Proposition — Formule de Bayes (1763)</div>
+    Sous les mêmes hypothèses (partition $(A_i)$ avec $\mathbb{P}[A_i] \neq 0$) :
+    $$\mathbb{P}[A_i | A] = \frac{\mathbb{P}[A|A_i]\,\mathbb{P}[A_i]}{\displaystyle\sum_{j \in I} \mathbb{P}[A|A_j]\,\mathbb{P}[A_j]}.$$
+  </div>
+
+  <button class="proof-toggle-btn">▶ Voir la preuve</button>
+  <div class="proof-content">
+    Par définition de la probabilité conditionnelle :
+    $$\mathbb{P}[A_i | A] = \frac{\mathbb{P}[A_i \cap A]}{\mathbb{P}[A]} = \frac{\mathbb{P}[A|A_i]\,\mathbb{P}[A_i]}{\mathbb{P}[A]}$$
+    On conclut en appliquant la formule des probabilités totales au dénominateur. $\square$
+  </div>
+
+  <div class="box-rem" style="margin-top:0.5em;font-size:0.82em;">
+    <div class="box-title">🔄 Intérêt — Mise à jour bayésienne</div>
+    La formule de Bayes permet de <strong>mettre à jour</strong> notre connaissance des probabilités en fonction d'informations nouvelles. Elle est fondamentale en statistique bayésienne.
+    <br/><em>On passe des probabilités "a priori" $\mathbb{P}[A_i]$ aux probabilités "a posteriori" $\mathbb{P}[A_i|A]$.</em>
+  </div>
+</section>
+
+<!-- INDÉPENDANCE -->
+<section>
+  <h2>2.4 — Indépendance de deux événements</h2>
+  <div class="box-def">
+    <div class="box-title">Définition — Indépendance</div>
+    Soient $A$ et $B$ deux événements. On dit que $A$ et $B$ sont <strong>indépendants</strong> si :
+    $$\mathbb{P}[A \cap B] = \mathbb{P}[A]\,\mathbb{P}[B].$$
+  </div>
+
+  <div class="box-rem" style="margin-top:0.5em;font-size:0.85em;">
+    <div class="box-title">Interprétation</div>
+    $A$ et $B$ sont indépendants $\Longleftrightarrow$ $\mathbb{P}[A|B] = \mathbb{P}[A]$ et $\mathbb{P}[B|A] = \mathbb{P}[B]$.
+    <br/>La réalisation de l'un <strong>ne modifie pas</strong> la probabilité de l'autre.
+  </div>
+
+  <div class="box-prop" style="margin-top:0.5em;">
+    <div class="box-title">Proposition — Stabilité</div>
+    Si $A$ et $B$ sont indépendants, alors $A^C$ et $B$, $A$ et $B^C$, $A^C$ et $B^C$ le sont aussi.
+  </div>
+
+  <button class="proof-toggle-btn">▶ Voir la preuve ($A^C$ et $B$)</button>
+  <div class="proof-content">
+    $\mathbb{P}[A^C \cap B] = \mathbb{P}[B] - \mathbb{P}[A \cap B] = \mathbb{P}[B] - \mathbb{P}[A]\mathbb{P}[B] = (1-\mathbb{P}[A])\mathbb{P}[B] = \mathbb{P}[A^C]\mathbb{P}[B]$. $\square$
+  </div>
+</section>
+
+<!-- INDÉPENDANCE vs INCOMPATIBILITÉ -->
+<section>
+  <h2>⚠️ Indépendance ≠ Incompatibilité</h2>
+  <div class="box-rem" style="font-size:0.85em;">
+    <div class="box-title">Erreur fréquente à éviter !</div>
+    Ces deux notions sont <strong>fondamentalement différentes</strong>.
+  </div>
+
+  <div class="cols-2" style="margin-top:0.7em;font-size:0.82em;gap:0.7em;">
+    <div class="box-ex">
+      <div class="box-title">✅ Indépendants (non incompatibles)</div>
+      On lance deux dés :<br/>
+      $A = \{$1er dé donne 6$\}$,<br/>
+      $B = \{$somme paire$\}$<br/>
+      $\mathbb{P}[A \cap B] = \mathbb{P}[A]\mathbb{P}[B]$ ✓
+      <br/>Mais $A \cap B \neq \emptyset$
+    </div>
+    <div class="box-ex">
+      <div class="box-title">✅ Incompatibles (non indépendants)</div>
+      On lance deux dés :<br/>
+      $A = \{$1er dé donne 6$\}$,<br/>
+      $B = \{$somme $< 3\}$<br/>
+      $A \cap B = \emptyset$ ✓ (incompatibles)
+      <br/>Mais $\mathbb{P}[A \cap B] \neq \mathbb{P}[A]\mathbb{P}[B]$
+    </div>
+  </div>
+
+  <div class="box-rem" style="margin-top:0.6em;font-size:0.8em;">
+    <strong>Résumé :</strong> Si $A \cap B = \emptyset$ et $\mathbb{P}[A], \mathbb{P}[B] > 0$, alors $A$ et $B$ sont <em>incompatibles mais pas indépendants</em> (car $\mathbb{P}[A \cap B] = 0 \neq \mathbb{P}[A]\mathbb{P}[B] > 0$).
+  </div>
+</section>
+
+<!-- INDÉPENDANCE DE N ÉVÉNEMENTS -->
+<section>
+  <h2>2.5 — Indépendance de $n$ événements</h2>
+  <div class="box-def">
+    <div class="box-title">Définition</div>
+    Les événements $A_1, \ldots, A_n$ sont <strong>indépendants (dans leur ensemble)</strong> si pour tout $k \geq 2$ et tout choix d'indices distincts $i_1, \ldots, i_k$ :
+    $$\mathbb{P}[A_{i_1} \cap \cdots \cap A_{i_k}] = \mathbb{P}[A_{i_1}]\cdots\mathbb{P}[A_{i_k}].$$
+  </div>
+
+  <div class="box-rem" style="margin-top:0.6em;font-size:0.82em;">
+    <div class="box-title">⚠️ Attention</div>
+    L'indépendance <strong>deux à deux</strong> n'implique pas l'indépendance dans leur ensemble !
+  </div>
+
+  <button class="proof-toggle-btn" onclick="event.stopPropagation();document.getElementById('modal-charges').style.display='flex'">▶ Voir le contre-exemple</button>
+
+  <div id="modal-charges" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+    <div style="background:white;border-radius:10px;padding:1em 1.5em;max-width:700px;width:92%;box-shadow:0 8px 32px rgba(0,0,0,0.25);position:relative;">
+      <button onclick="document.getElementById('modal-charges').style.display='none'" style="position:absolute;top:0.4em;right:0.6em;background:none;border:none;font-size:1.2em;cursor:pointer;color:#C1440E;">✕</button>
+      <div style="font-weight:700;color:#C1440E;font-size:0.8em;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5em;">🏗️ Contre-exemple — Charges sur une structure</div>
+      <div id="modal-charges-content" style="font-size:0.75em;color:#2C1810;line-height:1.6;">
+        On considère un bâtiment soumis à des charges aléatoires :
+        <ul style="margin:0.3em 0 0.3em 1.2em;">
+          <li>$A$ = "surcharge de vent excessive"</li>
+          <li>$B$ = "surcharge de neige excessive"</li>
+          <li>$C$ = "surcharge totale excessive"</li>
+        </ul>
+        On pose :
+        <br/>$\mathbb{P}[A]=\mathbb{P}[B]=\mathbb{P}[C]=\frac{1}{2}$ et $\mathbb{P}[A \cap B] = \mathbb{P}[A]\mathbb{P}[B]$, $\mathbb{P}[A \cap C] = \mathbb{P}[A]\mathbb{P}[C]$, $\mathbb{P}[B \cap C] = \mathbb{P}[B]\mathbb{P}[C],$
+        <br/>c'est-à-dire que $A$, $B$, $C$ sont <strong>indépendants deux à deux</strong>.
+        <br/><br/>
+        Mais $C$ est déterminé par $A$ et $B$, donc :
+        $$\mathbb{P}[A \cap B \cap C] = \mathbb{P}[A \cap B] = \frac{1}{4} \neq \frac{1}{8} = \mathbb{P}[A]\mathbb{P}[B]\mathbb{P}[C].$$
+        $\Rightarrow$ $A$, $B$, $C$ <strong>ne sont pas indépendants dans leur ensemble</strong> : l'indépendance deux à deux ne suffit pas pour factoriser $\mathbb{P}[A \cap B \cap C]$.
+      </div>
+    </div>
+  </div>
+  <script>
+    (function() {
+      var modal = document.getElementById('modal-charges');
+      if (modal) {
+        modal.addEventListener('click', function(e) { if (e.target === modal) modal.style.display = 'none'; });
+        function renderCharges() {
+          var content = document.getElementById('modal-charges-content');
+          if (content && typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(content, {
+              delimiters: [{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],
+              throwOnError: false
+            });
+          }
+        }
+        if (typeof Reveal !== 'undefined') { Reveal.on('ready', renderCharges); } else { document.addEventListener('DOMContentLoaded', renderCharges); }
+      }
+    })();
+  </script>
+</section>
+
+<!-- EXERCICES -->
+<section>
+  <h2>Exercices</h2>
+  <div class="box-exo">
+    <strong>Exercice 1.</strong> Téléphone avec $\mathbb{P}[D_t] = e^{-ct}/(1+t)$.
+    Calculer $\mathbb{P}[D_2 | D_1]$.
+  </div>
+  <div class="box-exo" style="margin-top:0.5em;">
+    <strong>Exercice 2.</strong> Système de communication (0 ou 1 équiprobable). $\mathbb{P}[R_0|E_0]=0.7$, $\mathbb{P}[R_1|E_1]=0.8$.
+    <ol style="font-size:0.9em;margin-top:0.3em;">
+      <li>Calculer $\mathbb{P}[E_0|R_1]$.</li>
+      <li>Calculer la probabilité d'une erreur de transmission.</li>
+    </ol>
+  </div>
+  <div class="box-exo" style="margin-top:0.5em;">
+    <strong>Exercice 3.</strong> On lance deux dés. $A$ = "1er dé pair", $B$ = "2ème dé pair", $C$ = "somme paire".
+    <ol style="font-size:0.9em;margin-top:0.3em;">
+      <li>Montrer que $A$, $B$, $C$ sont deux à deux indépendants.</li>
+      <li>Sont-ils indépendants dans leur ensemble ?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- RÉSUMÉ -->
+<section>
+  <h2>Résumé du Chapitre 2</h2>
+  <div class="cols-2" style="font-size:0.82em;gap:0.7em;">
+    <div>
+      <div class="box-def">
+        <div class="box-title">🔑 Probabilité conditionnelle</div>
+        $$\mathbb{P}[A|B] = \frac{\mathbb{P}[A \cap B]}{\mathbb{P}[B]}$$
+      </div>
+      <div class="box-prop" style="margin-top:0.5em;">
+        <div class="box-title">📐 Prob. totales</div>
+        $$\mathbb{P}[A] = \sum_i \mathbb{P}[A|A_i]\mathbb{P}[A_i]$$
+      </div>
+      <div class="box-thm" style="margin-top:0.5em;">
+        <div class="box-title">🔄 Bayes</div>
+        $$\mathbb{P}[A_i|A] = \frac{\mathbb{P}[A|A_i]\mathbb{P}[A_i]}{\sum_j \mathbb{P}[A|A_j]\mathbb{P}[A_j]}$$
+      </div>
+    </div>
+    <div>
+      <div class="box-def">
+        <div class="box-title">🔗 Indépendance</div>
+        $$\mathbb{P}[A \cap B] = \mathbb{P}[A]\mathbb{P}[B]$$
+        ⟺ $\mathbb{P}[A|B] = \mathbb{P}[A]$
+      </div>
+      <div class="box-rem" style="margin-top:0.5em;">
+        <div class="box-title">⚡ À retenir</div>
+        <ul style="margin-left:1em;">
+          <li>Indépendance ≠ Incompatibilité</li>
+          <li>2 à 2 indép. ≠ indép. globale</li>
+        </ul>
+      </div>
+      <div style="margin-top:0.5em;text-align:center;">
+        <div style="background:var(--tc-brick);color:white;border-radius:8px;padding:0.6em;font-size:0.82em;">
+          <strong>Prochain chapitre :</strong><br/>Variables aléatoires
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:1em;text-align:right;font-size:0.65em;color:#999;font-style:italic;">
+    Transparents réalisés avec l'assistance de Claude AI
+  </div>
+</section>
+
+<!-- ==================== QCM ==================== -->
+<section>
+  <h2>🎯 Quiz — Chapitre 2</h2>
+  <div class="cols-2" style="font-size:0.78em;gap:0.6em;">
+    <div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q1.</strong>
+        <p style="margin:0.2em 0;">Soient $A$ et $B$ avec $\mathbb{P}[A]=0.6$, $\mathbb{P}[B]=0.5$, $\mathbb{P}[A \cap B]=0.3$. Que vaut $\mathbb{P}[A|B]$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$0.3$</li>
+          <li>$0.5$</li>
+          <li>$0.6$</li>
+          <li>$0.18$</li>
+        </ol>
+      </div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q2.</strong>
+        <p style="margin:0.2em 0;">$A$ et $B$ sont indépendants avec $\mathbb{P}[A]=0.4$ et $\mathbb{P}[B]=0.3$. Que vaut $\mathbb{P}[A \cap B]$ ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$0.7$</li>
+          <li>$0.1$</li>
+          <li>$0.12$</li>
+          <li>On ne peut pas savoir</li>
+        </ol>
+      </div>
+      <div class="box-exo">
+        <strong>Q3.</strong>
+        <p style="margin:0.2em 0;">Un signal 0 ou 1 est émis équiprobablement. $\mathbb{P}[R_0|E_0]=0.8$, $\mathbb{P}[R_1|E_1]=0.9$. Quelle est la probabilité d'erreur ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$0.10$</li>
+          <li>$0.15$</li>
+          <li>$0.20$</li>
+          <li>$0.30$</li>
+        </ol>
+      </div>
+    </div>
+    <div>
+      <div class="box-exo" style="margin-bottom:0.5em;">
+        <strong>Q4.</strong>
+        <p style="margin:0.2em 0;">$A$ et $B$ sont incompatibles avec $\mathbb{P}[A]=0.3$ et $\mathbb{P}[B]=0.4$. Sont-ils indépendants ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>Oui, car $\mathbb{P}[A \cap B]=0$</li>
+          <li>Non, car $\mathbb{P}[A \cap B] \neq \mathbb{P}[A]\mathbb{P}[B]$</li>
+          <li>Oui si $\mathbb{P}[A]=\mathbb{P}[B]$</li>
+          <li>On ne peut pas savoir</li>
+        </ol>
+      </div>
+      <div class="box-exo">
+        <strong>Q5 — Test médical (Bayes).</strong>
+        <p style="margin:0.2em 0;">Une maladie touche 1% de la population. Un test est positif à 99% si on est malade, et à 5% si on est sain. Si le test est positif, quelle est la probabilité d'être malade ?</p>
+        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+          <li>$99\%$</li>
+          <li>$50\%$</li>
+          <li>$\approx 17\%$</li>
+          <li>$1\%$</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CORRECTION QCM ==================== -->
+<section>
+  <h2>✅ Correction du Quiz</h2>
+  <div style="font-size:0.76em;display:flex;flex-direction:column;gap:0.4em;">
+    <div class="box-rem">
+      <strong>Q1 — Réponse : c) $0.6$</strong><br/>
+      $\mathbb{P}[A|B] = \frac{\mathbb{P}[A \cap B]}{\mathbb{P}[B]} = \frac{0.3}{0.5} = 0.6$.
+    </div>
+    <div class="box-rem">
+      <strong>Q2 — Réponse : c) $0.12$</strong><br/>
+      Par indépendance : $\mathbb{P}[A \cap B] = \mathbb{P}[A]\mathbb{P}[B] = 0.4 \times 0.3 = 0.12$.
+    </div>
+    <div class="box-rem">
+      <strong>Q3 — Réponse : b) $0.15$</strong><br/>
+      $\mathbb{P}[\text{erreur}] = \mathbb{P}[R_1|E_0]\mathbb{P}[E_0] + \mathbb{P}[R_0|E_1]\mathbb{P}[E_1] = 0.2 \times 0.5 + 0.1 \times 0.5 = 0.15$.
+    </div>
+    <div class="box-rem">
+      <strong>Q4 — Réponse : b)</strong><br/>
+      $\mathbb{P}[A \cap B] = 0$ mais $\mathbb{P}[A]\mathbb{P}[B] = 0.12 \neq 0$ : incompatibles mais pas indépendants.
+    </div>
+    <div class="box-rem">
+      <strong>Q5 — Réponse : c) $\approx 17\%$</strong><br/>
+      Soit $M$ = "être malade" et $T^+$ = "test positif". Par Bayes :
+      $$\mathbb{P}[M|T^+] = \frac{\mathbb{P}[T^+|M]\mathbb{P}[M]}{\mathbb{P}[T^+]} = \frac{0.99 \times 0.01}{0.99 \times 0.01 + 0.05 \times 0.99} \approx 0.167$$
+      où le dénominateur $\mathbb{P}[T^+] = \mathbb{P}[T^+|M]\mathbb{P}[M] + \mathbb{P}[T^+|M^C]\mathbb{P}[M^C]$ est la probabilité totale d'un test positif (formule des probabilités totales avec la partition $\{M, M^C\}$).
+      <br/>Malgré un test fiable à 99%, la rareté de la maladie fait que la plupart des positifs sont des faux positifs !
+    </div>
+  </div>
+  <div style="margin-top:0.8em;text-align:right;font-size:0.65em;color:#999;font-style:italic;">
+    Transparents réalisés avec l'assistance de Claude AI
+  </div>
+</section>
+
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.6.1/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="../assets/preuves.js"></script>
+<script>
+  Reveal.initialize({hash:true,slideNumber:'c/t',progress:true,controls:true,transition:'slide',transitionSpeed:'fast',center:false,width:1100,height:700,margin:0.06});
+  function renderMath(){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false},{left:'\\(',right:'\\)',display:false},{left:'\\[',right:'\\]',display:true}],throwOnError:false,strict:false});}
+  Reveal.on('ready',renderMath);
+  Reveal.on('slidechanged',renderMath);
+</script>
+</body></html>
