@@ -133,7 +133,7 @@
   <h2>2.2 — Formule des probabilités totales</h2>
   <div class="box-prop">
     <div class="box-title">Proposition — Probabilités totales</div>
-    Soit $(A_i)_{i \in I}$ une <strong>partition</strong> de $\Omega$ : $\bigcup_{i} A_i = \Omega$ et $A_i \cap A_j = \emptyset$ pour $i \neq j$.
+    Soit $(A_i)_{i \in I}$ une <strong>partition</strong> de $\Omega$ : $\bigcup_{i} A_i = \Omega$ et $A_i \cap A_j = \emptyset$ pour tous $i \neq j$.
     <br/>Si $\mathbb{P}[A_i] \neq 0$ pour tout $i$, alors pour tout événement $A$ :
     $$\mathbb{P}[A] = \sum_{i \in I} \mathbb{P}[A|A_i]\,\mathbb{P}[A_i].$$
   </div>
@@ -366,54 +366,44 @@
 <!-- ==================== QCM ==================== -->
 <section>
   <h2>🎯 Quiz — Chapitre 2</h2>
-  <div class="cols-2" style="font-size:0.78em;gap:0.6em;">
+  <div class="cols-2" style="font-size:0.72em;gap:0.5em;">
     <div>
-      <div class="box-exo" style="margin-bottom:0.5em;">
+      <div class="box-exo" style="margin-bottom:0.3em;padding:0.5em 0.7em;">
         <strong>Q1.</strong>
-        <p style="margin:0.2em 0;">Soient $A$ et $B$ avec $\mathbb{P}[A]=0.6$, $\mathbb{P}[B]=0.5$, $\mathbb{P}[A \cap B]=0.3$. Que vaut $\mathbb{P}[A|B]$ ?</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+        <p style="margin:0.15em 0;">Soient $A$ et $B$ avec $\mathbb{P}[A]=0.6$, $\mathbb{P}[B]=0.5$, $\mathbb{P}[A \cap B]=0.3$. Que vaut $\mathbb{P}[A|B]$ ?</p>
+        <ol style="list-style-type:lower-alpha;margin-top:0.15em;margin-left:1.4em;">
           <li>$0.3$</li>
           <li>$0.5$</li>
           <li>$0.6$</li>
           <li>$0.18$</li>
         </ol>
       </div>
-      <div class="box-exo" style="margin-bottom:0.5em;">
+      <div class="box-exo" style="padding:0.5em 0.7em;">
         <strong>Q2.</strong>
-        <p style="margin:0.2em 0;">$A$ et $B$ sont indépendants avec $\mathbb{P}[A]=0.4$ et $\mathbb{P}[B]=0.3$. Que vaut $\mathbb{P}[A \cap B]$ ?</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+        <p style="margin:0.15em 0;">$A$ et $B$ sont indépendants avec $\mathbb{P}[A]=0.4$ et $\mathbb{P}[B]=0.3$. Que vaut $\mathbb{P}[A \cap B]$ ?</p>
+        <ol style="list-style-type:lower-alpha;margin-top:0.15em;margin-left:1.4em;">
           <li>$0.7$</li>
           <li>$0.1$</li>
           <li>$0.12$</li>
           <li>On ne peut pas savoir</li>
         </ol>
       </div>
-      <div class="box-exo">
-        <strong>Q3.</strong>
-        <p style="margin:0.2em 0;">Un signal 0 ou 1 est émis équiprobablement. $\mathbb{P}[R_0|E_0]=0.8$, $\mathbb{P}[R_1|E_1]=0.9$. Quelle est la probabilité d'erreur ?</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
-          <li>$0.10$</li>
-          <li>$0.15$</li>
-          <li>$0.20$</li>
-          <li>$0.30$</li>
-        </ol>
-      </div>
     </div>
     <div>
-      <div class="box-exo" style="margin-bottom:0.5em;">
-        <strong>Q4.</strong>
-        <p style="margin:0.2em 0;">$A$ et $B$ sont incompatibles avec $\mathbb{P}[A]=0.3$ et $\mathbb{P}[B]=0.4$. Sont-ils indépendants ?</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+      <div class="box-exo" style="margin-bottom:0.3em;padding:0.5em 0.7em;">
+        <strong>Q3.</strong>
+        <p style="margin:0.15em 0;">$A$ et $B$ sont incompatibles avec $\mathbb{P}[A]=0.3$ et $\mathbb{P}[B]=0.4$. Sont-ils indépendants ?</p>
+        <ol style="list-style-type:lower-alpha;margin-top:0.15em;margin-left:1.4em;">
           <li>Oui, car $\mathbb{P}[A \cap B]=0$</li>
           <li>Non, car $\mathbb{P}[A \cap B] \neq \mathbb{P}[A]\mathbb{P}[B]$</li>
           <li>Oui si $\mathbb{P}[A]=\mathbb{P}[B]$</li>
           <li>On ne peut pas savoir</li>
         </ol>
       </div>
-      <div class="box-exo">
-        <strong>Q5 — Test médical (Bayes).</strong>
-        <p style="margin:0.2em 0;">Une maladie touche 1% de la population. Un test est positif à 99% si on est malade, et à 5% si on est sain. Si le test est positif, quelle est la probabilité d'être malade ?</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+      <div class="box-exo" style="padding:0.5em 0.7em;">
+        <strong>Q4 — Test médical (Bayes).</strong>
+        <p style="margin:0.15em 0;">Une maladie touche 1% de la population. Un test est positif à 99% si on est malade, et à 5% si on est sain. Si le test est positif, quelle est la probabilité d'être malade ?</p>
+        <ol style="list-style-type:lower-alpha;margin-top:0.15em;margin-left:1.4em;">
           <li>$99\%$</li>
           <li>$50\%$</li>
           <li>$\approx 17\%$</li>
@@ -437,15 +427,11 @@
       Par indépendance : $\mathbb{P}[A \cap B] = \mathbb{P}[A]\mathbb{P}[B] = 0.4 \times 0.3 = 0.12$.
     </div>
     <div class="box-rem">
-      <strong>Q3 — Réponse : b) $0.15$</strong><br/>
-      $\mathbb{P}[\text{erreur}] = \mathbb{P}[R_1|E_0]\mathbb{P}[E_0] + \mathbb{P}[R_0|E_1]\mathbb{P}[E_1] = 0.2 \times 0.5 + 0.1 \times 0.5 = 0.15$.
-    </div>
-    <div class="box-rem">
-      <strong>Q4 — Réponse : b)</strong><br/>
+      <strong>Q3 — Réponse : b)</strong><br/>
       $\mathbb{P}[A \cap B] = 0$ mais $\mathbb{P}[A]\mathbb{P}[B] = 0.12 \neq 0$ : incompatibles mais pas indépendants.
     </div>
     <div class="box-rem">
-      <strong>Q5 — Réponse : c) $\approx 17\%$</strong><br/>
+      <strong>Q4 — Réponse : c) $\approx 17\%$</strong><br/>
       Soit $M$ = "être malade" et $T^+$ = "test positif". Par Bayes :
       $$\mathbb{P}[M|T^+] = \frac{\mathbb{P}[T^+|M]\mathbb{P}[M]}{\mathbb{P}[T^+]} = \frac{0.99 \times 0.01}{0.99 \times 0.01 + 0.05 \times 0.99} \approx 0.167$$
       où le dénominateur $\mathbb{P}[T^+] = \mathbb{P}[T^+|M]\mathbb{P}[M] + \mathbb{P}[T^+|M^C]\mathbb{P}[M^C]$ est la probabilité totale d'un test positif (formule des probabilités totales avec la partition $\{M, M^C\}$).

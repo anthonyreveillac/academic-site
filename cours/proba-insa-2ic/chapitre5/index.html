@@ -92,7 +92,7 @@
 <section>
   <h2>5.2 — Loi des grands nombres (LGN)</h2>
 
-  <button class="proof-toggle-btn" style="margin-bottom:0.5em;" onclick="event.stopPropagation();document.getElementById('modal-lgn-sim').style.display='flex';setTimeout(lgnSimulate,50)">🎲 Simulation de la LGN</button>
+  <button class="proof-toggle-btn" style="margin-bottom:0.5em;" onclick="event.stopPropagation();document.getElementById('modal-lgn-sim').style.display='flex';setTimeout(lgnSimulate2,50)">🎲 Simulation de la LGN</button>
 
   <div class="box-thm">
     <div class="box-title">Théorème — Loi faible des grands nombres</div>
@@ -223,7 +223,7 @@
       <div class="box-exo" style="margin-bottom:0.5em;">
         <strong>Q1.</strong>
         <p style="margin:0.2em 0;">$X$ avec $\mathbb{E}[X]=5$ et $\text{Var}(X)=4$. Que donne l'inégalité de Chebychev pour $\mathbb{P}[|X-5| \geq 4]$ ?</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+        <ol style="list-style-type:lower-alpha;margin-top:0.3em;margin-left:1.4em;">
           <li>$\leq 1/4$</li>
           <li>$\leq 1/2$</li>
           <li>$\leq 4$</li>
@@ -233,7 +233,7 @@
       <div class="box-exo">
         <strong>Q2.</strong>
         <p style="margin:0.2em 0;">$X_1,\ldots,X_n$ i.i.d. avec $\mathbb{E}[X_1]=3$ et $\text{Var}(X_1) < \infty$. Vers quoi converge $\bar{X}_n$ en probabilité ?</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+        <ol style="list-style-type:lower-alpha;margin-top:0.3em;margin-left:1.4em;">
           <li>$0$</li>
           <li>$3$</li>
           <li>$\mathcal{N}(3,1)$</li>
@@ -245,7 +245,7 @@
       <div class="box-exo" style="margin-bottom:0.5em;">
         <strong>Q3.</strong>
         <p style="margin:0.2em 0;">$X_1,\ldots,X_n$ i.i.d. avec $\mathbb{E}[X_1]=2$, $\text{Var}(X_1)=9$. Quelle est la loi approx. de $\bar{X}_n$ pour $n$ grand ?</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+        <ol style="list-style-type:lower-alpha;margin-top:0.3em;margin-left:1.4em;">
           <li>$\mathcal{N}(2, 9)$</li>
           <li>$\mathcal{N}(2, 9/n)$</li>
           <li>$\mathcal{N}(0, 1)$</li>
@@ -255,7 +255,7 @@
       <div class="box-exo">
         <strong>Q4.</strong>
         <p style="margin:0.2em 0;">$Y \sim \mathcal{B}(100, 0.3)$. Quelle loi utiliser pour approximer $Y$ ?</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+        <ol style="list-style-type:lower-alpha;margin-top:0.3em;margin-left:1.4em;">
           <li>$\mathcal{P}(30)$ (Poisson)</li>
           <li>$\mathcal{N}(30, 21)$ (Normale)</li>
           <li>$\mathcal{U}([0,100])$ (Uniforme)</li>
@@ -306,30 +306,24 @@
 </script>
 <!-- Modal simulation LGN -->
 <div id="modal-lgn-sim" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
-  <div style="background:white;border-radius:10px;padding:1.2em 1.5em;max-width:700px;width:93%;box-shadow:0 8px 32px rgba(0,0,0,0.25);position:relative;">
+  <div style="background:white;border-radius:10px;padding:1.2em 1.5em;max-width:720px;width:93%;box-shadow:0 8px 32px rgba(0,0,0,0.25);position:relative;">
     <button onclick="document.getElementById('modal-lgn-sim').style.display='none'" style="position:absolute;top:0.4em;right:0.7em;background:none;border:none;font-size:1.3em;cursor:pointer;color:#C1440E;">✕</button>
-    <div style="font-weight:700;color:#C1440E;font-size:0.85em;text-transform:uppercase;margin-bottom:0.6em;">📊 Distribution de $\bar{X}_n$ — dé à 6 faces ($m=3.5$)</div>
+    <div style="font-weight:700;color:#C1440E;font-size:0.85em;text-transform:uppercase;margin-bottom:0.6em;">📈 Convergence de $\bar{X}_n$ vers $m=3.5$ — dé à 6 faces</div>
 
     <div style="display:flex;align-items:center;gap:1em;margin-bottom:0.6em;font-size:0.85em;flex-wrap:wrap;">
-      <label>$n$ = <span id="lgn-n-val2" style="font-weight:700;color:#C1440E;">1</span></label>
-      <button onclick="lgnSetN(1)"   style="background:#EDE0D0;border:none;border-radius:4px;padding:0.2em 0.6em;cursor:pointer;">n=1</button>
-      <button onclick="lgnSetN(5)"   style="background:#EDE0D0;border:none;border-radius:4px;padding:0.2em 0.6em;cursor:pointer;">n=5</button>
-      <button onclick="lgnSetN(20)"  style="background:#EDE0D0;border:none;border-radius:4px;padding:0.2em 0.6em;cursor:pointer;">n=20</button>
-      <button onclick="lgnSetN(100)" style="background:#EDE0D0;border:none;border-radius:4px;padding:0.2em 0.6em;cursor:pointer;">n=100</button>
-      <button onclick="lgnSetN(500)" style="background:#EDE0D0;border:none;border-radius:4px;padding:0.2em 0.6em;cursor:pointer;">n=500</button>
-      <button onclick="lgnSetN(1000)" style="background:#EDE0D0;border:none;border-radius:4px;padding:0.2em 0.6em;cursor:pointer;">n=1000</button>
-      <button onclick="lgnSetN(1500)" style="background:#EDE0D0;border:none;border-radius:4px;padding:0.2em 0.6em;cursor:pointer;">n=1500</button>
-      <button onclick="lgnSimulate2()" style="background:#C1440E;color:white;border:none;border-radius:4px;padding:0.2em 0.8em;cursor:pointer;">Relancer</button>
+      <label>$n$ = <strong id="lgn-n-val2" style="color:#C1440E;">200</strong></label>
+      <input type="range" id="lgn-n-slider" min="10" max="2000" value="200" step="10" style="flex:1;min-width:180px;" oninput="lgnSetN(parseInt(this.value))"/>
+      <button onclick="lgnSimulate2()" style="background:#C1440E;color:white;border:none;border-radius:4px;padding:0.3em 0.9em;cursor:pointer;">🎲 Nouvelle simulation</button>
     </div>
 
-    <canvas id="lgn-canvas2" width="640" height="260" style="border:1px solid #EDE0D0;border-radius:6px;display:block;"></canvas>
+    <canvas id="lgn-canvas2" width="660" height="280" style="border:1px solid #EDE0D0;border-radius:6px;display:block;"></canvas>
 
     <div id="lgn-result2" style="margin-top:0.5em;font-size:0.8em;color:#2C1810;text-align:center;"></div>
   </div>
 </div>
 
 <script>
-var lgnCurrentN = 1;
+var lgnCurrentN = 200;
 
 function lgnSetN(n) {
   lgnCurrentN = n;
@@ -339,139 +333,110 @@ function lgnSetN(n) {
 
 function lgnSimulate2() {
   var n = lgnCurrentN;
-  var nbSim = 2000;
   var canvas = document.getElementById('lgn-canvas2');
   var ctx = canvas.getContext('2d');
   var W = canvas.width, H = canvas.height;
   ctx.clearRect(0, 0, W, H);
 
-  // Simulate nbSim values of X_bar_n
-  var means = [];
-  for (var s = 0; s < nbSim; s++) {
-    var sum = 0;
-    for (var i = 0; i < n; i++) sum += Math.floor(Math.random()*6)+1;
-    means.push(sum/n);
+  // Simulate one trajectory: at each step k, compute running mean X_bar_k
+  var trajectory = new Array(n);
+  var sum = 0;
+  for (var k = 0; k < n; k++) {
+    sum += Math.floor(Math.random()*6) + 1;
+    trajectory[k] = sum / (k + 1);
   }
-
-  // Build histogram
-  var xMin = 1, xMax = 6;
-  var nbBins, bins, binW;
-  if (n === 1) {
-    // 6 bars for integer values 1..6
-    nbBins = 6; binW = 1;
-    bins = [0,0,0,0,0,0];
-    means.forEach(function(v){ bins[Math.round(v)-1]++; });
-  } else {
-    nbBins = 40; binW = (xMax - xMin) / nbBins;
-    bins = new Array(nbBins).fill(0);
-    means.forEach(function(v) {
-      var b = Math.min(nbBins-1, Math.floor((v - xMin) / binW));
-      if (b >= 0) bins[b]++;
-    });
-  }
-  var maxBin = Math.max.apply(null, bins);
 
   // Layout
-  var pad = {l:45, r:25, t:20, b:35};
+  var pad = {l:50, r:20, t:20, b:40};
   var gW = W - pad.l - pad.r;
   var gH = H - pad.t - pad.b;
 
+  // Y range: adaptive but always includes 3.5 with some padding
+  var yMin = 1, yMax = 6;
+
   // Axes
   ctx.strokeStyle = '#6B3A2A'; ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, pad.t+gH); ctx.lineTo(pad.l+gW, pad.t+gH); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(pad.l, pad.t);
+  ctx.lineTo(pad.l, pad.t + gH);
+  ctx.lineTo(pad.l + gW, pad.t + gH);
+  ctx.stroke();
 
-  function xPx(v) { return pad.l + ((v - xMin) / (xMax - xMin)) * gW; }
-  function yPx(count) { return pad.t + gH - (count / maxBin) * gH * 0.92; }
+  function xPx(k) { return pad.l + (k / (n - 1)) * gW; }
+  function yPx(v) { return pad.t + gH - ((v - yMin) / (yMax - yMin)) * gH; }
 
-  // Bars
-  bins.forEach(function(count, i) {
-    var barX, bw;
-    if (n === 1) {
-      bw = gW / 6 - 4;
-      barX = pad.l + i * (gW/6) + 2;
-    } else {
-      bw = gW / nbBins - 1;
-      barX = xPx(xMin + i * binW);
-    }
-    var barY = yPx(count);
-    ctx.fillStyle = 'rgba(193,68,14,0.75)';
-    ctx.fillRect(barX, barY, bw, pad.t + gH - barY);
-    ctx.strokeStyle = '#A0320A'; ctx.lineWidth = 0.5;
-    ctx.strokeRect(barX, barY, bw, pad.t + gH - barY);
-  });
-
-  // Vertical line at m=3.5
-  ctx.setLineDash([5,4]); ctx.strokeStyle = '#2A5C8A'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(xPx(3.5), pad.t); ctx.lineTo(xPx(3.5), pad.t+gH); ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.fillStyle = '#2A5C8A'; ctx.font = 'bold 11px Inter,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('m=3.5', xPx(3.5), pad.t+12);
-
-  // X axis labels
-  ctx.fillStyle = '#6B3A2A'; ctx.font = '11px Inter,sans-serif'; ctx.textAlign='center';
-  [1,2,3,4,5,6].forEach(function(v){ ctx.fillText(v, xPx(v), pad.t+gH+18); });
-
-  // Result
-  var empMean = means.reduce(function(a,b){return a+b;},0)/means.length;
-  var empStd = Math.sqrt(means.reduce(function(a,b){return a+(b-empMean)*(b-empMean);},0)/means.length);
-  document.getElementById('lgn-result2').innerHTML =
-    '<strong>' + nbSim + '</strong> simulations — Moyenne : <strong style="color:#C1440E">' + empMean.toFixed(3) + '</strong> — Écart-type : <strong style="color:#2A5C8A">' + empStd.toFixed(3) + '</strong>';
-}
-
-  // Build histogram: for n=1 use 6 bins (integer values), otherwise 40 bins
-  var nbBins, xMin, xMax, binW;
-  if (n === 1) {
-    nbBins = 6; xMin = 0.5; xMax = 6.5; binW = 1;
-  } else {
-    nbBins = 40; xMin = 1; xMax = 6; binW = (xMax - xMin) / nbBins;
+  // Horizontal gridlines
+  ctx.strokeStyle = '#EDE0D0'; ctx.lineWidth = 0.5;
+  for (var v = 1; v <= 6; v++) {
+    ctx.beginPath();
+    ctx.moveTo(pad.l, yPx(v));
+    ctx.lineTo(pad.l + gW, yPx(v));
+    ctx.stroke();
   }
-  var bins = new Array(nbBins).fill(0);
-  means.forEach(function(v) {
-    var b = Math.min(nbBins-1, Math.floor((v - xMin) / binW));
-    if (b >= 0) bins[b]++;
-  });
-  var maxBin = Math.max.apply(null, bins);
 
-  // Draw
-  var pad = {l:45, r:20, t:20, b:35};
-  var gW = W - pad.l - pad.r;
-  var gH = H - pad.t - pad.b;
-
-  // Axes
-  ctx.strokeStyle = '#6B3A2A'; ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, pad.t+gH); ctx.lineTo(pad.l+gW, pad.t+gH); ctx.stroke();
-
-  function xPx(v) { return pad.l + ((v - xMin) / (xMax - xMin)) * gW; }
-  function yPx(count) { return pad.t + gH - (count / maxBin) * gH * 0.92; }
-
-  // Bars
-  var bw = gW / nbBins - 1;
-  bins.forEach(function(count, i) {
-    var x = xPx(xMin + i * binW);
-    var y = yPx(count);
-    ctx.fillStyle = 'rgba(193,68,14,0.7)';
-    ctx.fillRect(x, y, bw, pad.t + gH - y);
-    ctx.strokeStyle = '#A0320A'; ctx.lineWidth = 0.5;
-    ctx.strokeRect(x, y, bw, pad.t + gH - y);
-  });
-
-  // Vertical line at m=3.5
-  ctx.setLineDash([5,4]); ctx.strokeStyle = '#2A5C8A'; ctx.lineWidth = 2;
-  ctx.beginPath(); ctx.moveTo(xPx(3.5), pad.t); ctx.lineTo(xPx(3.5), pad.t+gH); ctx.stroke();
+  // Reference line at m = 3.5
+  ctx.setLineDash([6,4]);
+  ctx.strokeStyle = '#2A5C8A';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(pad.l, yPx(3.5));
+  ctx.lineTo(pad.l + gW, yPx(3.5));
+  ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = '#2A5C8A'; ctx.font = 'bold 11px Inter,sans-serif'; ctx.textAlign='center';
-  ctx.fillText('m=3.5', xPx(3.5), pad.t+10);
+  ctx.fillStyle = '#2A5C8A';
+  ctx.font = 'bold 12px Inter,sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('m = 3.5', pad.l + gW - 60, yPx(3.5) - 6);
+
+  // Trajectory line
+  ctx.strokeStyle = '#C1440E';
+  ctx.lineWidth = 1.8;
+  ctx.beginPath();
+  for (var k = 0; k < n; k++) {
+    var x = xPx(k), y = yPx(trajectory[k]);
+    if (k === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.stroke();
+
+  // Y axis labels
+  ctx.fillStyle = '#6B3A2A';
+  ctx.font = '11px Inter,sans-serif';
+  ctx.textAlign = 'right';
+  for (var v = 1; v <= 6; v++) {
+    ctx.fillText(v, pad.l - 6, yPx(v) + 4);
+  }
 
   // X axis labels
-  ctx.fillStyle = '#6B3A2A'; ctx.font = '11px Inter,sans-serif'; ctx.textAlign='center';
-  [1,2,3,4,5,6].forEach(function(v){ ctx.fillText(v, xPx(v), pad.t+gH+18); });
-  ctx.fillText('x̄ₙ', pad.l+gW, pad.t+gH+18);
+  ctx.textAlign = 'center';
+  var ticks = [1, Math.round(n*0.25), Math.round(n*0.5), Math.round(n*0.75), n];
+  ticks.forEach(function(t) {
+    ctx.fillText(t, xPx(t-1), pad.t + gH + 18);
+  });
+
+  // Axis titles
+  ctx.font = 'italic 11px Inter,sans-serif';
+  ctx.fillText('nombre de tirages k', pad.l + gW/2, pad.t + gH + 34);
+  ctx.save();
+  ctx.translate(15, pad.t + gH/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.textAlign = 'center';
+  ctx.fillText('moyenne empirique X̄ₖ', 0, 0);
+  ctx.restore();
 
   // Result
-  var empMean = means.reduce(function(a,b){return a+b;},0)/means.length;
-  var empStd = Math.sqrt(means.reduce(function(a,b){return a+(b-empMean)*(b-empMean);},0)/means.length);
+  var finalMean = trajectory[n-1];
+  var deviation = Math.abs(finalMean - 3.5);
   document.getElementById('lgn-result2').innerHTML =
-    '<strong>' + nbSim + '</strong> simulations de $\\bar{X}_{' + n + '}$ — Moyenne : <strong style="color:#C1440E">' + empMean.toFixed(3) + '</strong> — Écart-type : <strong style="color:#2A5C8A">' + empStd.toFixed(3) + '</strong>';
+    'Après <strong>' + n + '</strong> tirages : $\\bar{X}_n = $ <strong style="color:#C1440E">' + finalMean.toFixed(4) + '</strong> — écart à $m$ : <strong style="color:#2A5C8A">' + deviation.toFixed(4) + '</strong>';
+
+  // Re-render KaTeX if available
+  if (typeof renderMathInElement !== 'undefined') {
+    renderMathInElement(document.getElementById('lgn-result2'), {
+      delimiters: [{left:'$',right:'$',display:false}],
+      throwOnError: false
+    });
+  }
 }
 
 document.getElementById('modal-lgn-sim').addEventListener('click', function(e){ if(e.target===this) this.style.display='none'; });

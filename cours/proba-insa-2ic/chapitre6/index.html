@@ -52,11 +52,6 @@
     <br/>On modélise par des v.a.r. i.i.d. de Bernoulli : $X_i = 1$ si défectueux, $0$ sinon.
     <br/>Estimation naturelle : $\hat{p} = \bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$
   </div>
-  <div style="display:flex;justify-content:space-between;font-size:0.78em;padding:0 2em;margin-top:-0.2em;">
-    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
-    <span style="color:#2A5C8A;font-weight:600;">Aire centrale $= 1-\alpha$</span>
-    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
-  </div>
 
   <div class="box-rem" style="margin-top:0.5em;font-size:0.82em;">
     <div class="box-title">Paramètres typiques à estimer</div>
@@ -80,11 +75,6 @@
     <div class="box-title">Définition — Estimateur</div>
     Un <strong>estimateur</strong> de $\theta$ est une fonction $\hat{\theta}_n = g(X_1, \ldots, X_n)$ calculée à partir de l'échantillon.
     <br/>C'est une variable aléatoire qui approche le paramètre inconnu $\theta$.
-  </div>
-  <div style="display:flex;justify-content:space-between;font-size:0.78em;padding:0 2em;margin-top:-0.2em;">
-    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
-    <span style="color:#2A5C8A;font-weight:600;">Aire centrale $= 1-\alpha$</span>
-    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
   </div>
 
   <div class="box-rem" style="margin-top:0.6em;font-size:0.85em;">
@@ -120,11 +110,6 @@
   <div class="box-thm">
     <div class="box-title">Théorème — Critère de consistance</div>
     Si $\mathbb{E}[\hat{\theta}_n] \xrightarrow{} \theta$ et $\text{Var}[\hat{\theta}_n] \xrightarrow{} 0$, alors $\hat{\theta}_n$ est consistant.
-  </div>
-  <div style="display:flex;justify-content:space-between;font-size:0.78em;padding:0 2em;margin-top:-0.2em;">
-    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
-    <span style="color:#2A5C8A;font-weight:600;">Aire centrale $= 1-\alpha$</span>
-    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
   </div>
 
   <div class="box-rem" style="margin-top:0.6em;font-size:0.85em;">
@@ -341,11 +326,6 @@
   <div class="formula-key" style="margin-top:0.5em;">
     $$\text{IC}_{1-\alpha}(m) = \left[\bar{x}_n - t_{1-\alpha/2}\frac{s_n}{\sqrt{n}},\;\; \bar{x}_n + t_{1-\alpha/2}\frac{s_n}{\sqrt{n}}\right]$$
   </div>
-  <div style="display:flex;justify-content:space-between;font-size:0.78em;padding:0 2em;margin-top:-0.2em;">
-    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
-    <span style="color:#2A5C8A;font-weight:600;">Aire centrale $= 1-\alpha$</span>
-    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
-  </div>
 
   <div class="box-rem" style="margin-top:0.5em;font-size:0.82em;">
     <div class="box-title">📋 $t_{1-\alpha/2}$ se lit dans les tables de Student à $n-1$ degrés de liberté</div>
@@ -417,11 +397,6 @@
   <div class="formula-key" style="margin-top:0.5em;font-size:0.85em;">
     $$\text{IC}_{1-\alpha}(\sigma^2) = \left[\frac{(n-1)s_n^2}{v_{1-\alpha/2}},\;\; \frac{(n-1)s_n^2}{v_{\alpha/2}}\right]$$
   </div>
-  <div style="display:flex;justify-content:space-between;font-size:0.78em;padding:0 2em;margin-top:-0.2em;">
-    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
-    <span style="color:#2A5C8A;font-weight:600;">Aire centrale $= 1-\alpha$</span>
-    <span style="color:#C1440E;font-weight:600;">$z^* = z_{1-\frac{\alpha}{2}}$</span>
-  </div>
 
   <div class="box-rem" style="margin-top:0.5em;font-size:0.8em;">
     <div class="box-title">⚠️ Attention</div>
@@ -486,7 +461,7 @@
       <div class="box-exo" style="margin-bottom:0.5em;">
         <strong>Q1.</strong>
         <p style="margin:0.2em 0;">$X_1,\ldots,X_n$ i.i.d. $\sim \mathcal{N}(m, \sigma^2)$, $\sigma$ connu. Quel est l'IC à 95% pour $m$ ?</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+        <ol style="list-style-type:lower-alpha;margin-top:0.3em;margin-left:1.4em;">
           <li>$\left[\bar{x}_n \pm \frac{1.96\,\sigma}{\sqrt{n}}\right]$</li>
           <li>$\left[\bar{x}_n \pm \frac{1.96\,\sigma}{n}\right]$</li>
           <li>$\left[\bar{x}_n \pm \frac{1.64\,\sigma}{\sqrt{n}}\right]$</li>
@@ -496,7 +471,7 @@
       <div class="box-exo">
         <strong>Q2.</strong>
         <p style="margin:0.2em 0;">Un estimateur $\hat{\theta}_n$ est <strong>sans biais</strong> si :</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+        <ol style="list-style-type:lower-alpha;margin-top:0.3em;margin-left:1.4em;">
           <li>$\hat{\theta}_n \to \theta$ en probabilité</li>
           <li>$\mathbb{E}[\hat{\theta}_n] = \theta$</li>
           <li>$\text{Var}(\hat{\theta}_n) \to 0$</li>
@@ -508,7 +483,7 @@
       <div class="box-exo" style="margin-bottom:0.5em;">
         <strong>Q3.</strong>
         <p style="margin:0.2em 0;">On observe 200 composants, 14 sont défectueux. Donner un IC à 95% pour la proportion $p$.</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+        <ol style="list-style-type:lower-alpha;margin-top:0.3em;margin-left:1.4em;">
           <li>$[0.035,\; 0.105]$</li>
           <li>$[0.07,\; 0.14]$</li>
           <li>$[0.04,\; 0.11]$</li>
@@ -518,7 +493,7 @@
       <div class="box-exo">
         <strong>Q4.</strong>
         <p style="margin:0.2em 0;">$\hat{\theta}_n$ est <strong>consistant</strong> si :</p>
-        <ol type="a" style="margin-top:0.3em;margin-left:1.2em;">
+        <ol style="list-style-type:lower-alpha;margin-top:0.3em;margin-left:1.4em;">
           <li>$\mathbb{E}[\hat{\theta}_n] = \theta$</li>
           <li>$\mathbb{P}[|\hat{\theta}_n - \theta| > \varepsilon] \to 0$ pour tout $\varepsilon > 0$</li>
           <li>$\text{Var}(\hat{\theta}_n) = 0$</li>
@@ -544,7 +519,8 @@
     </div>
     <div class="box-rem">
       <strong>Q3 — Réponse : a) $[0.035,\; 0.105]$</strong><br/>
-      $\hat{p} = 14/200 = 0.07$. $\text{IC}_{95\%}(p) = 0.07 \pm 1.96\sqrt{\frac{0.07 \times 0.93}{200}} = 0.07 \pm 0.035$.
+      $\hat{p} = 14/200 = 0.07$, donc $1 - \hat{p} = 0.93$. L'IC pour une proportion utilise la variance de Bernoulli $\hat{p}(1-\hat{p})$ :
+      $$\text{IC}_{95\%}(p) = \hat{p} \pm z_{0.975}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}} = 0.07 \pm 1.96\sqrt{\frac{0.07 \times 0.93}{200}} = 0.07 \pm 0.035.$$
     </div>
     <div class="box-rem">
       <strong>Q4 — Réponse : b)</strong><br/>
