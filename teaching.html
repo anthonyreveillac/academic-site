@@ -237,10 +237,10 @@
       <div style="margin-bottom:2rem;">
         <p style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--coral);margin-bottom:0.6rem;display:flex;align-items:center;gap:10px;">
           <span style="display:block;width:24px;height:1.5px;background:var(--coral);"></span>
-          Vue d'ensemble
+          Overview
         </p>
-        <h2 style="font-family:var(--serif);font-size:1.5rem;font-weight:600;color:var(--charcoal);margin-bottom:0.4rem;">Mes enseignements</h2>
-        <p style="font-size:14px;color:var(--muted);">Filtrer par domaine, thématique ou niveau.</p>
+        <h2 style="font-family:var(--serif);font-size:1.5rem;font-weight:600;color:var(--charcoal);margin-bottom:0.4rem;">My Teaching</h2>
+        <p style="font-size:14px;color:var(--muted);">Filter by domain, topic or level.</p>
       </div>
 
       <!-- FILTER BARS -->
@@ -270,10 +270,10 @@
     <div style="margin-bottom:2rem;">
       <p style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--coral);margin-bottom:0.6rem;display:flex;align-items:center;gap:10px;">
         <span style="display:block;width:24px;height:1.5px;background:var(--coral);"></span>
-        Pour les étudiants
+        For students
       </p>
-      <h2 style="font-family:var(--serif);font-size:1.5rem;font-weight:600;color:var(--charcoal);margin-bottom:0.4rem;">Ressources pédagogiques</h2>
-      <p style="font-size:14px;color:var(--muted);">Transparents et notes de cours en libre accès.</p>
+      <h2 style="font-family:var(--serif);font-size:1.5rem;font-weight:600;color:var(--charcoal);margin-bottom:0.4rem;">Course Materials</h2>
+      <p style="font-size:14px;color:var(--muted);">Openly-accessible lecture notes and slides.</p>
     </div>
 
     <!-- ⚠ AVERTISSEMENT + COPYRIGHT -->
@@ -563,11 +563,11 @@
       const total = TEACHINGS.length;
       const hasFilter = activeFilters.domain.size || activeFilters.topic.size || activeFilters.level.size;
       document.getElementById('teach-count').textContent = hasFilter
-        ? `${filtered.length} enseignement${filtered.length > 1 ? 's' : ''} correspondant${filtered.length > 1 ? 's' : ''} aux filtres`
-        : `${total} enseignements au total`;
+        ? `${filtered.length} course${filtered.length > 1 ? 's' : ''} matching the selected filters`
+        : `${total} courses in total`;
 
       if (filtered.length === 0) {
-        list.innerHTML = '<p style="font-size:13px;color:var(--muted);padding:1rem 0;">Aucun enseignement ne correspond aux filtres sélectionnés.</p>';
+        list.innerHTML = '<p style="font-size:13px;color:var(--muted);padding:1rem 0;">No course matches the selected filters.</p>';
         return;
       }
 
