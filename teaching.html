@@ -564,7 +564,7 @@
       const hasFilter = activeFilters.domain.size || activeFilters.topic.size || activeFilters.level.size;
       document.getElementById('teach-count').textContent = hasFilter
         ? `${filtered.length} course${filtered.length > 1 ? 's' : ''} matching the selected filters`
-        : `${total} courses in total`;
+        : '';
 
       if (filtered.length === 0) {
         list.innerHTML = '<p style="font-size:13px;color:var(--muted);padding:1rem 0;">No course matches the selected filters.</p>';
