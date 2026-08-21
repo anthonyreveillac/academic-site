@@ -230,6 +230,69 @@
   </header>
 
   <main class="main">
+
+    <!-- ═══════════ SECTION 1 : CONSTELLATION DES ENSEIGNEMENTS ═══════════ -->
+    <section style="margin-bottom:3.5rem;">
+
+      <div style="margin-bottom:2rem;">
+        <p style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--coral);margin-bottom:0.6rem;display:flex;align-items:center;gap:10px;">
+          <span style="display:block;width:24px;height:1.5px;background:var(--coral);"></span>
+          Vue d'ensemble
+        </p>
+        <h2 style="font-family:var(--serif);font-size:1.5rem;font-weight:600;color:var(--charcoal);margin-bottom:0.4rem;">Mes enseignements</h2>
+        <p style="font-size:14px;color:var(--muted);">Filtrer par domaine, thématique ou niveau.</p>
+      </div>
+
+      <!-- FILTER BARS -->
+      <div style="display:flex;flex-direction:column;gap:0.9rem;margin-bottom:1.6rem;">
+        <div>
+          <span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-right:10px;">Domain</span>
+          <div class="filter-group" data-group="domain" style="display:inline-flex;flex-wrap:wrap;gap:6px;vertical-align:middle;"></div>
+        </div>
+        <div>
+          <span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-right:10px;">Topic</span>
+          <div class="filter-group" data-group="topic" style="display:inline-flex;flex-wrap:wrap;gap:6px;vertical-align:middle;"></div>
+        </div>
+        <div>
+          <span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-right:10px;">Level</span>
+          <div class="filter-group" data-group="level" style="display:inline-flex;flex-wrap:wrap;gap:6px;vertical-align:middle;"></div>
+        </div>
+      </div>
+
+      <p id="teach-count" style="font-size:12px;color:var(--muted);margin-bottom:1rem;"></p>
+
+      <!-- COURSE CARDS -->
+      <div id="teach-list" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
+
+    </section>
+
+    <!-- ═══════════ SECTION 2 : RESSOURCES ═══════════ -->
+    <div style="margin-bottom:2rem;">
+      <p style="font-size:11px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--coral);margin-bottom:0.6rem;display:flex;align-items:center;gap:10px;">
+        <span style="display:block;width:24px;height:1.5px;background:var(--coral);"></span>
+        Pour les étudiants
+      </p>
+      <h2 style="font-family:var(--serif);font-size:1.5rem;font-weight:600;color:var(--charcoal);margin-bottom:0.4rem;">Ressources pédagogiques</h2>
+      <p style="font-size:14px;color:var(--muted);">Transparents et notes de cours en libre accès.</p>
+    </div>
+
+    <!-- ⚠ AVERTISSEMENT + COPYRIGHT -->
+    <div style="background:#FDF6EC;border:1px solid #E6D3AE;border-left:3px solid #B8860B;border-radius:10px;padding:0.9rem 1.2rem;margin-bottom:1.5rem;display:flex;gap:12px;align-items:flex-start;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <div style="flex:1;">
+        <p style="font-size:13px;color:#8A6410;line-height:1.6;margin-bottom:0.4rem;">
+          <strong>Avertissement :</strong> Ces ressources sont à destination des étudiants de la PO 2IC de l'INSA Toulouse.
+        </p>
+        <p style="font-size:12px;color:#8A6410;line-height:1.6;">
+          <span style="font-size:14px;">©</span> Anthony Réveillac — Tout le contenu (slides, notes, illustrations) est protégé par le droit d'auteur. Toute reproduction, redistribution ou usage à des fins commerciales ou pédagogiques hors du cadre de ce cours est interdite sans l'accord écrit de l'auteur.
+        </p>
+      </div>
+    </div>
+
     <div class="courses">
 
       <!-- ── COURSE 1 : Proba & Stats INSA 2-IC ── -->
@@ -413,6 +476,123 @@
     // Active nav
     const page = window.location.pathname.split('/').pop() || 'index.html';
     document.querySelectorAll('.nav-links a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === page));
+
+    // ═══════════ TEACHINGS DATA & FILTERS ═══════════
+    const TEACHINGS = [
+      { title: "Introduction aux Probabilités et Statistiques", audience: "INSA · 2ᵉ année · Ing. Construction",
+        domain: "mathematics", topics: ["probability"], level: "undergraduate", ressource: true },
+      { title: "Mathématiques et Apprentissage pour l'Actuariat", audience: "INSA-N7 · 5A ModIA",
+        domain: "mathematics", topics: ["probability","ml_ai","math_finance"], level: "graduate" },
+      { title: "Deep Learning", audience: "INSA · 5A MA & 5A ModIA",
+        domain: "mathematics", topics: ["ml_ai"], level: "graduate" },
+      { title: "Machine Learning", audience: "INSA · 4A MA",
+        domain: "mathematics", topics: ["ml_ai"], level: "graduate" },
+      { title: "Financial Mathematics", audience: "INSA · 4A & 5A MA",
+        domain: "mathematics", topics: ["probability","math_finance"], level: "graduate" },
+      { title: "Stochastic Calculus and Mathematical Finance", audience: "ISAE-SupAéro · 3A",
+        domain: "mathematics", topics: ["probability","math_finance"], level: "graduate" },
+      { title: "Méthodes de travail", audience: "INSA · 1ère année · Apprendre à apprendre",
+        domain: "beyond", topics: ["pedagogy"], level: "undergraduate" },
+      { title: "Introduction à l'épistémologie", audience: "INSA · 1ère année · Apprendre à apprendre",
+        domain: "beyond", topics: ["pedagogy"], level: "undergraduate" },
+      { title: "Calculus 2", audience: "INSA · 1ère année · Global'INSA",
+        domain: "mathematics", topics: ["analysis"], level: "undergraduate" },
+      { title: "Thèse professionnelle", audience: "INSA · Master international MSIAI",
+        domain: "beyond", topics: ["pedagogy"], level: "graduate" }
+    ];
+
+    const FILTER_DEFS = {
+      domain: {
+        mathematics: { label: "Mathematics", color: "#185FA5", bg: "#E6F1FB" },
+        beyond:      { label: "Beyond Mathematics", color: "#3B6D11", bg: "#EAF3DE" }
+      },
+      topic: {
+        probability:   { label: "Probability", color: "#534AB7", bg: "#EEEDFE" },
+        ml_ai:         { label: "Machine Learning & AI", color: "#185FA5", bg: "#E6F1FB" },
+        math_finance:  { label: "Mathematical Finance", color: "#D85A30", bg: "#FAECE7" },
+        analysis:      { label: "Analysis", color: "#993C1D", bg: "#FDECE7" },
+        pedagogy:      { label: "Pedagogy & Methodology", color: "#3B6D11", bg: "#EAF3DE" }
+      },
+      level: {
+        undergraduate: { label: "Undergraduate", color: "#888780", bg: "#F0EFEA" },
+        graduate:      { label: "Graduate", color: "#2C2C2A", bg: "#E5E4DF" }
+      }
+    };
+
+    const activeFilters = { domain: new Set(), topic: new Set(), level: new Set() };
+
+    function buildFilterBars() {
+      Object.keys(FILTER_DEFS).forEach(group => {
+        const container = document.querySelector(`.filter-group[data-group="${group}"]`);
+        Object.entries(FILTER_DEFS[group]).forEach(([id, def]) => {
+          const btn = document.createElement('button');
+          const count = TEACHINGS.filter(t => {
+            if (group === 'topic') return t.topics.includes(id);
+            return t[group] === id;
+          }).length;
+          btn.dataset.filter = id;
+          btn.dataset.group = group;
+          btn.style.cssText = `border:1.5px solid ${def.color}40;background:transparent;color:${def.color};padding:5px 12px;border-radius:999px;font-size:12px;font-weight:500;cursor:pointer;transition:all 0.2s;`;
+          btn.innerHTML = `${def.label} <span style="opacity:0.55;font-size:10px;margin-left:3px;">${count}</span>`;
+          btn.addEventListener('click', () => {
+            if (activeFilters[group].has(id)) {
+              activeFilters[group].delete(id);
+              btn.style.background = 'transparent';
+              btn.style.color = def.color;
+            } else {
+              activeFilters[group].add(id);
+              btn.style.background = def.color;
+              btn.style.color = 'white';
+            }
+            renderTeachings();
+          });
+          container.appendChild(btn);
+        });
+      });
+    }
+
+    function renderTeachings() {
+      const list = document.getElementById('teach-list');
+      const filtered = TEACHINGS.filter(t => {
+        if (activeFilters.domain.size && !activeFilters.domain.has(t.domain)) return false;
+        if (activeFilters.level.size && !activeFilters.level.has(t.level)) return false;
+        if (activeFilters.topic.size && !Array.from(activeFilters.topic).every(tp => t.topics.includes(tp))) return false;
+        return true;
+      });
+
+      const total = TEACHINGS.length;
+      const hasFilter = activeFilters.domain.size || activeFilters.topic.size || activeFilters.level.size;
+      document.getElementById('teach-count').textContent = hasFilter
+        ? `${filtered.length} enseignement${filtered.length > 1 ? 's' : ''} correspondant${filtered.length > 1 ? 's' : ''} aux filtres`
+        : `${total} enseignements au total`;
+
+      if (filtered.length === 0) {
+        list.innerHTML = '<p style="font-size:13px;color:var(--muted);padding:1rem 0;">Aucun enseignement ne correspond aux filtres sélectionnés.</p>';
+        return;
+      }
+
+      list.innerHTML = filtered.map(t => {
+        const domainDef = FILTER_DEFS.domain[t.domain];
+        const levelDef = FILTER_DEFS.level[t.level];
+        const topicTags = t.topics.map(tp => {
+          const d = FILTER_DEFS.topic[tp];
+          return `<span style="font-size:10px;background:${d.bg};color:${d.color};padding:2px 7px;border-radius:999px;font-weight:600;letter-spacing:0.02em;">${d.label}</span>`;
+        }).join('');
+        return `
+          <div style="background:var(--white);border:1px solid rgba(44,44,42,0.1);border-radius:10px;padding:0.85rem 1.1rem;display:flex;flex-direction:column;gap:6px;flex:1 1 280px;min-width:260px;transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(216,90,48,0.25)';this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 18px rgba(44,44,42,0.06)';" onmouseout="this.style.borderColor='rgba(44,44,42,0.1)';this.style.transform='';this.style.boxShadow='';">
+            <div style="font-family:var(--serif);font-size:14px;font-weight:600;color:var(--charcoal);line-height:1.3;">${t.title}</div>
+            <div style="font-size:12px;color:var(--muted);">${t.audience}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;">
+              <span style="font-size:10px;background:${domainDef.bg};color:${domainDef.color};padding:2px 7px;border-radius:999px;font-weight:600;">${domainDef.label}</span>
+              ${topicTags}
+              <span style="font-size:10px;background:${levelDef.bg};color:${levelDef.color};padding:2px 7px;border-radius:999px;font-weight:600;">${levelDef.label}</span>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    buildFilterBars();
+    renderTeachings();
   </script>
 </body>
 </html>
