@@ -4,6 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Research — Anthony Réveillac</title>
+  <meta name="description" content="Publications of Anthony Réveillac (INSA Toulouse) in Mathematical Finance, Malliavin Calculus, Hawkes Processes and BSDEs — retrieved live from HAL open science." />
+  <meta name="author" content="Anthony Réveillac" />
+  <link rel="canonical" href="https://anthonyreveillac.github.io/academic-site/research.html" />
+  <meta property="og:title" content="Research — Anthony Réveillac" />
+  <meta property="og:description" content="Publications in Mathematical Finance, Malliavin Calculus, Hawkes Processes and BSDEs." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://anthonyreveillac.github.io/academic-site/research.html" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -234,6 +241,15 @@
         halIds: ['hal-03189601','hal-04726261','hal-03189614','hal-04717442','hal-04058740','hal-04554378','hal-04663022','hal-05001701','hal-04997515','hal-05558990','hal-05628543']
       },
       {
+        id: 'limit',
+        name: 'Limit Theorems',
+        icon: '∞',
+        color: '#B8860B',
+        bg: '#FDF6EC',
+        keywords: ['central limit theorem','berry-esseen','berry-essen','stein method',"stein's method",'stein-malliavin','normal approximation','gaussian approximation','kolmogorov distance','total variation distance','wasserstein distance','rate of convergence','convergence rate','cross-variation','functional clt','stable convergence','limit theorem'],
+        halIds: []
+      },
+      {
         id: 'malliavin',
         name: 'Malliavin Calculus',
         icon: 'D',
@@ -257,8 +273,8 @@
         icon: '〜',
         color: '#3B6D11',
         bg: '#EAF3DE',
-        keywords: ['regularization','strichartz','hardy-littlewood','dispersion','fractional brownian','brownian sheet','stratonovich','quadratic variation','hurst','variations','weak','semimartingale','itô-tanaka','tanaka'],
-        halIds: ['hal-01636293','hal-01178614','hal-02176741','hal-00493981','hal-00258524','hal-00976747','hal-00522801','hal-00918474','hal-00918480','hal-00635484']
+        keywords: [],
+        halIds: ['hal-01636293','hal-01178614','hal-02176741']
       }
     ];
 
@@ -303,6 +319,43 @@
       return EXCLUDE_TITLES.some(ex => t.includes(ex));
     }
 
+    // ── FORCE overrides by title substring (case-insensitive) ─────
+    // Add specific tags to specific papers matched by title
+    const FORCE_ADD_TAGS = [
+      { match: 'a new class of self-exciting point processes with finite sizes clusters', tags: ['malliavin'] },
+      { match: 'multivariate self-exciting processes with dependencies', tags: ['malliavin'] },
+      { match: 'stress scenarios of cyber loss processes with dependencies', tags: ['malliavin'] },
+      { match: 'quantification of limit theorems for hawkes processes', tags: ['malliavin'] },
+      { match: 'an expansion formula for hawkes processes and application to cyber-insurance derivatives', tags: ['malliavin'] },
+      { match: 'explicit correlations for the hawkes processes', tags: ['malliavin'] },
+      { match: 'density analysis of bsdes', tags: ['malliavin'] },
+      { match: 'convergence of finite-dimensional laws of the weighted quadratic variations process for some fractional brownian sheets', tags: ['malliavin'] },
+      { match: 'estimation of quadratic variation for two-parameter diffusions', tags: ['malliavin'] },
+    ];
+    // Remove specific tags from specific papers matched by title
+    const FORCE_REMOVE_TAGS = [
+      { match: 'convergence of finite-dimensional laws of the weighted quadratic variations process for some fractional brownian sheets', tags: ['finance'] },
+      { match: 'estimation of quadratic variation for two-parameter diffusions', tags: ['finance'] },
+    ];
+
+    function applyForceOverrides(pub) {
+      const title = pub.title.toLowerCase();
+      // Add
+      FORCE_ADD_TAGS.forEach(rule => {
+        if (title.includes(rule.match)) {
+          rule.tags.forEach(t => { if (!pub.tags.includes(t)) pub.tags.push(t); });
+        }
+      });
+      // Remove
+      FORCE_REMOVE_TAGS.forEach(rule => {
+        if (title.includes(rule.match)) {
+          pub.tags = pub.tags.filter(t => !rule.tags.includes(t));
+        }
+      });
+      // Fallback: ensure at least one tag
+      if (pub.tags.length === 0) pub.tags = ['finance'];
+    }
+
     // ── FETCH ─────────────────────────────────────────────────────
     async function fetchPubs() {
       try {
@@ -321,7 +374,7 @@
           uri: doc.uri_s,
           doi: doc.doiId_s
         })).filter(p => !isExcluded(p));
-        allPubs.forEach(p => { p.tags = assignTags(p); });
+        allPubs.forEach(p => { p.tags = assignTags(p); applyForceOverrides(p); });
         // Sort all pubs by year descending
         const yearOf = p => { const y = parseInt(p.year, 10); return isNaN(y) ? 0 : y; };
         allPubs.sort((a, b) => yearOf(b) - yearOf(a));
