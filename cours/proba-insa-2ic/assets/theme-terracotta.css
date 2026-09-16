@@ -304,3 +304,9 @@
   .reveal { font-size: 20px; }
   .reveal .cols-2, .reveal .cols-3 { grid-template-columns: 1fr; }
 }
+
+/* Protéger les formules KaTeX du text-transform: uppercase */
+.reveal .box-title .katex,
+.reveal .box-title .katex * {
+  text-transform: none !important;
+}
