@@ -42,7 +42,20 @@ body{
 .card:focus-visible{box-shadow:0 0 0 3px var(--page),0 0 0 5px var(--accent)}
 .face{
   position:absolute;inset:0;border-radius:14px;background:var(--card);
-  box-shadow:var(--shadow);backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;
+  box-shadow:var(--shadow);
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  -moz-backface-visibility:hidden;
+  transform:translateZ(0);-webkit-transform:translateZ(0);
+  overflow:hidden;
+}
+.card.flipped .front{visibility:hidden}
+.card:not(.flipped) .back{visibility:hidden}
+.card.flipped .front, .card:not(.flipped) .back{
+  transition:visibility 0s .35s;
+}
+.card:not(.flipped) .front, .card.flipped .back{
+  visibility:visible;
+  transition:visibility 0s 0s;
 }
 .front{display:flex;flex-direction:column}
 .main{flex:1;min-height:0;display:flex;align-items:center;gap:6%;padding:0 7%}
