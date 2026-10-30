@@ -322,6 +322,7 @@
     // ── FORCE overrides by title substring (case-insensitive) ─────
     // Add specific tags to specific papers matched by title
     const FORCE_ADD_TAGS = [
+      { match: 'martingale representation in counting-process filtrations via poisson embedding', tags: ['malliavin'] },
       { match: 'a new class of self-exciting point processes with finite sizes clusters', tags: ['malliavin'] },
       { match: 'multivariate self-exciting processes with dependencies', tags: ['malliavin'] },
       { match: 'stress scenarios of cyber loss processes with dependencies', tags: ['malliavin'] },
@@ -356,24 +357,54 @@
       if (pub.tags.length === 0) pub.tags = ['finance'];
     }
 
+    // ── EXTRA HAL IDS ─────────────────────────────────────────────
+    // Add here papers that are on HAL but where my IdHAL is not linked (yet).
+    // Once HAL links my IdHAL to a paper, remove its id from this list.
+    const EXTRA_HAL_IDS = [
+      'hal-05018646',  // A non-compensated Clark-Ocone formula for functionals of counting processes
+    ];
+
+    const FL = 'title_s,authFullName_s,producedDate_s,journalTitle_s,docType_s,uri_s,halId_s,doiId_s,conferenceTitle_s,volume_s,issue_s,page_s,serieTitle_s';
+
+    function mapDoc(doc) {
+      return {
+        title: Array.isArray(doc.title_s) ? doc.title_s[0] : (doc.title_s || 'Untitled'),
+        authors: doc.authFullName_s || [],
+        year: doc.producedDate_s ? doc.producedDate_s.substring(0,4) : '—',
+        venue: doc.journalTitle_s || doc.conferenceTitle_s || doc.serieTitle_s || '',
+        volume: doc.volume_s || '',
+        issue: doc.issue_s || '',
+        pages: doc.page_s || '',
+        type: TYPE_MAP[doc.docType_s] || 'PRE',
+        halId: doc.halId_s,
+        uri: doc.uri_s,
+        doi: doc.doiId_s
+      };
+    }
+
     // ── FETCH ─────────────────────────────────────────────────────
     async function fetchPubs() {
       try {
-        const res = await fetch('https://api.archives-ouvertes.fr/search/?q=authIdHal_s:anthony-reveillac&rows=100&fl=title_s,authFullName_s,producedDate_s,journalTitle_s,docType_s,uri_s,halId_s,doiId_s,conferenceTitle_s,volume_s,issue_s,page_s,serieTitle_s&sort=producedDate_s+desc&wt=json');
-        const data = await res.json();
-        allPubs = data.response.docs.map(doc => ({
-          title: Array.isArray(doc.title_s) ? doc.title_s[0] : (doc.title_s || 'Untitled'),
-          authors: doc.authFullName_s || [],
-          year: doc.producedDate_s ? doc.producedDate_s.substring(0,4) : '—',
-          venue: doc.journalTitle_s || doc.conferenceTitle_s || doc.serieTitle_s || '',
-          volume: doc.volume_s || '',
-          issue: doc.issue_s || '',
-          pages: doc.page_s || '',
-          type: TYPE_MAP[doc.docType_s] || 'PRE',
-          halId: doc.halId_s,
-          uri: doc.uri_s,
-          doi: doc.doiId_s
-        })).filter(p => !isExcluded(p));
+        // Main query: all papers linked to my IdHAL
+        const mainReq = fetch(`https://api.archives-ouvertes.fr/search/?q=authIdHal_s:anthony-reveillac&rows=100&fl=${FL}&sort=producedDate_s+desc&wt=json`).then(r => r.json());
+        // Extra query: specific halIds where my IdHAL isn't linked
+        const extraReq = EXTRA_HAL_IDS.length > 0
+          ? fetch(`https://api.archives-ouvertes.fr/search/?q=halId_s:(${EXTRA_HAL_IDS.join(' OR ')})&rows=50&fl=${FL}&wt=json`).then(r => r.json())
+          : Promise.resolve({ response: { docs: [] } });
+
+        const [mainData, extraData] = await Promise.all([mainReq, extraReq]);
+
+        // Merge, dedupe by halId
+        const seen = new Set();
+        const merged = [];
+        [...mainData.response.docs, ...extraData.response.docs].forEach(doc => {
+          const id = doc.halId_s;
+          if (!id || seen.has(id)) return;
+          seen.add(id);
+          merged.push(mapDoc(doc));
+        });
+
+        allPubs = merged.filter(p => !isExcluded(p));
         allPubs.forEach(p => { p.tags = assignTags(p); applyForceOverrides(p); });
         // Sort all pubs by year descending
         const yearOf = p => { const y = parseInt(p.year, 10); return isNaN(y) ? 0 : y; };
